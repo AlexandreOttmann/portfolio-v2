@@ -65,7 +65,7 @@
 
         <Divider class="my-9" />
 
-        <HomeFaq
+        <HomeAiChat
           style="--stagger: 6"
           data-animate
         />
