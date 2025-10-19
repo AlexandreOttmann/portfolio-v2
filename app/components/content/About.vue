@@ -29,8 +29,8 @@ const stack = await queryCollection('stack').first()
             mdc-unwrap="p"
           />
         </div>
-        <AboutSignature class="absolute -bottom-24 right-0 hidden w-40 sm:block" />
-        <AboutSignature class="black absolute -bottom-24 -right-2 w-32 sm:hidden" />
+        <AboutSignature class="absolute -bottom-24 right-0 hidden w-100 sm:block" />
+        <AboutSignature class="black absolute -bottom-24 -right-2 w-100 sm:hidden" />
       </div>
     </div>
     <Divider class="my-8" />

@@ -1,15 +1,5 @@
 ![Portfolio Social Preview](./public/og.png)
 
-<p align="center">
-    <a aria-label="Hugo's Website" href="https://hrcd.fr">
-        <img alt="" src="https://img.shields.io/badge/Website-hrcd.fr-blue?style=for-the-badge&labelColor=000000&logo=google-chrome&logoColor=white">
-  <a aria-label="License" href="https://github.com/hugorcd/canvas/blob/main/LICENSE">
-    <img alt="" src="https://img.shields.io/npm/l/vue.svg?style=for-the-badge&labelColor=000000&color=blue">
-    </a>
-  <a aria-label="Follow Hugo on Twitter" href="https://twitter.com/HugoRCD__">
-    <img alt="" src="https://img.shields.io/twitter/follow/HugoRCD__.svg?style=for-the-badge&labelColor=000000&logo=twitter&label=Follow%20Hugo&logoWidth=20&logoColor=white">
-  </a>
-</p>
 
 # Canvas template
 

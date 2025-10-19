@@ -113,13 +113,6 @@ export default defineNuxtSchema({
           icon: 'lucide:github',
           default: 'https://github.com/myusername',
         }),
-        twitter: field({
-          type: 'string',
-          title: 'Twitter',
-          description: 'Your Twitter account.',
-          icon: 'lucide:twitter',
-          default: 'https://twitter.com/myusername',
-        }),
         linkedin: field({
           type: 'string',
           title: 'Linkedin',

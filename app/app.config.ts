@@ -1,26 +1,25 @@
 export default defineAppConfig({
   global: {
-    meetingLink: 'https://cal.com/hugorcd/15min',
+    meetingLink: 'https://cal.com/petit-oni/15and30min',
     available: true,
   },
   profile: {
-    name: 'Hugo Richard',
-    job: 'Frontend Architect and Designer',
-    email: 'contact@hrcd.fr',
-    phone: '(+33) 6 21 56 22 18',
-    picture: 'https://avatars.githubusercontent.com/u/71938701?v=4',
+    name: 'Alexandre Ottmann',
+    job: 'Full Stack Developer',
+    email: 'ottmann.alexandre@gmail.com',
+    phone: '(+33) 6 31 87 08 76',
+    picture: 'https://github.com/AlexandreOttmann/Dev-Portfolio/blob/main/public/images/alex.jpg?raw=true',
   },
   socials: {
-    github: 'https://github.com/HugoRCD',
-    twitter: 'https://twitter.com/HugoRCD__',
-    linkedin: 'https://www.linkedin.com/in/hugo-richard-0801',
-    instagram: 'https://www.instagram.com/hugo.rcd_',
-    spotify: 'https://open.spotify.com/user/yuvl0zpp3bpx4hne1ag7huten?si=df7ee2777c0c4fc4',
+    github: 'https://github.com/AlexandreOttmann',
+    linkedin: 'https://www.linkedin.com/in/alexandre-ottmann/',
+    instagram: 'https://www.instagram.com/alex.ottmann/',
+    spotify: 'https://open.spotify.com/user/1133492538?si=6da7f4c7a2fa485f',
   },
   seo: {
-    title: 'Canvas a Nuxt portfolio template',
-    description: 'Canvas is a simple but beautiful portfolio template for designers and developers built with Nuxt and Tailwind CSS. Made with ❤️ by HugoRCD',
-    url: 'https://canvas.hrcd.fr',
+    title: 'Portfolio Alexandre Ottmann',
+    description: 'Portfolio of Alexandre Ottmann, fullstack developer and analys',
+    url: 'https://alexandreottmann.fr',
   },
   ui: {
     colors: {

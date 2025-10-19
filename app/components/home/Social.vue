@@ -1,7 +1,6 @@
 <script setup lang="ts">
 const socialMediaRegexMap = [
   { regex: /github\.com/, name: 'GitHub', icon: 'custom:github' },
-  { regex: /twitter\.com/, name: 'X / Twitter', icon: 'custom:x' },
   { regex: /linkedin\.com/, name: 'LinkedIn', icon: 'custom:linkedin' },
   { regex: /instagram\.com/, name: 'Instagram', icon: 'custom:instagram' },
   { regex: /spotify\.com/, name: 'Spotify', icon: 'custom:spotify' },
