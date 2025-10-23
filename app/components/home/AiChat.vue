@@ -46,14 +46,17 @@ const presetQuestions: PresetQuestion[] = [
 // Add welcome message when chat opens
 const addWelcomeMessage = () => {
   if (messages.value.length === 0) {
-    messages.value.push({
-      id: 'welcome',
-      content: locale.value === 'fr'
-        ? 'Bonjour! Je suis Petit-Oni, l\'assistant d\'Alex!  \n👹  Posez-moi des questions sur ses services, son expérience ou son portfolio!'
-        : 'Hello! I\'m Petit-Oni, Alex\'s assistant!  \n👹  Ask me anything about his services, experience, or portfolio!',
-      role: 'assistant',
-      timestamp: new Date(),
-    })
+    // Add a delay before showing the welcome message
+    setTimeout(() => {
+      messages.value.push({
+        id: 'welcome',
+        content: locale.value === 'fr'
+          ? 'Bonjour! Je suis Petit-Oni, l\'assistant d\'Alex!  \n👹  Posez-moi des questions sur ses services, son expérience ou son portfolio!'
+          : 'Hello! I\'m Petit-Oni, Alex\'s assistant!  \n👹  Ask me anything about his services, experience, or portfolio!',
+        role: 'assistant',
+        timestamp: new Date(),
+      })
+    }, 200) // 800ms delay after chat opens
   }
 }
 
@@ -119,7 +122,10 @@ const toggleChat = (isAskPreset: boolean) => {
   }
   showChat.value = !showChat.value
   if (showChat.value) {
-    addWelcomeMessage()
+    setTimeout(() => {
+      scrollToBottom()
+      addWelcomeMessage()
+    }, 500)
   }
 }
 
@@ -170,7 +176,7 @@ const handleKeyPress = (event: KeyboardEvent) => {
       >
         <div class="flex items-center gap-3">
           <Icon
-            :name="preset.icon"
+            :name="preset.icon || 'lucide:help-circle'"
             class="w-5 h-5 text-white/80"
           />
           <span class="text-sm font-medium text-left">{{ preset.question }}</span>
@@ -181,7 +187,7 @@ const handleKeyPress = (event: KeyboardEvent) => {
     <!-- Chat Toggle Button -->
     <UButton
       variant="outline"
-      color="white"
+      color="neutral"
       size="xl"
       class="border-white/20 hover:border-white/40 transition-all duration-200"
       @click="toggleChat(false)"
@@ -215,51 +221,57 @@ const handleKeyPress = (event: KeyboardEvent) => {
           id="chat-messages"
           class="h-80 overflow-y-auto space-y-4 pr-2 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent"
         >
-          <div
-            v-for="message in messages"
-            :key="message.id"
-            class="flex items-start gap-3"
-            :class="message.role === 'user' ? 'justify-end' : 'justify-start'"
+          <TransitionGroup
+            name="message"
+            tag="div"
+            class="space-y-4"
           >
-            <!-- Assistant Avatar -->
             <div
-              v-if="message.role === 'assistant'"
-              class="flex items-center justify-center flex-shrink-0 w-9 h-9 rounded-full overflow-hidden border-2 border-white/20"
+              v-for="message in messages"
+              :key="message.id"
+              class="flex items-start gap-3 message-item"
+              :class="message.role === 'user' ? 'justify-end' : 'justify-start'"
             >
-              <img
-                src="/onicon-dark.png"
-                alt="Petit-Oni"
-                height="26"
-                width="26"
+              <!-- Assistant Avatar -->
+              <div
+                v-if="message.role === 'assistant'"
+                class="flex items-center justify-center flex-shrink-0 w-9 h-9 rounded-full overflow-hidden border-2 border-white/20"
               >
-            </div>
+                <img
+                  src="/onicon-dark.png"
+                  alt="Petit-Oni"
+                  height="26"
+                  width="26"
+                >
+              </div>
 
-            <!-- Message Content -->
-            <div
-              class="max-w-[80%] rounded-2xl px-4 py-3"
-              :class="message.role === 'user'
-                ? 'bg-white/10 text-white'
-                : 'bg-white/5 text-white/90 border border-white/10'"
-            >
-              <p class="text-sm leading-relaxed whitespace-pre-wrap">
-                {{ message.content }}
-              </p>
-              <p class="text-xs text-white/50 mt-1">
-                {{ message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
-              </p>
-            </div>
+              <!-- Message Content -->
+              <div
+                class="max-w-[80%] rounded-2xl px-4 py-3 message-bubble"
+                :class="message.role === 'user'
+                  ? 'bg-white/10 text-white'
+                  : 'bg-white/5 text-white/90 border border-white/10'"
+              >
+                <p class="text-sm leading-relaxed whitespace-pre-wrap">
+                  {{ message.content }}
+                </p>
+                <p class="text-xs text-white/50 mt-1">
+                  {{ message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
+                </p>
+              </div>
 
-            <!-- User Avatar (placeholder for future) -->
-            <div
-              v-if="message.role === 'user'"
-              class="flex-shrink-0 w-8 h-8 rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center"
-            >
-              <Icon
-                name="lucide:user"
-                class="w-4 h-4 text-white/70"
-              />
+              <!-- User Avatar -->
+              <div
+                v-if="message.role === 'user'"
+                class="flex-shrink-0 w-8 h-8 rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center"
+              >
+                <Icon
+                  name="lucide:user"
+                  class="w-4 h-4 text-white/70"
+                />
+              </div>
             </div>
-          </div>
+          </TransitionGroup>
 
           <!-- Loading indicator -->
           <div
@@ -337,5 +349,73 @@ const handleKeyPress = (event: KeyboardEvent) => {
 
 .scrollbar-thin::-webkit-scrollbar {
   width: 4px;
+}
+
+/* Message animations */
+.message-enter-active {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.message-enter-from {
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+}
+
+.message-enter-to {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Staggered animation for multiple messages */
+.message-item:nth-child(1) .message-bubble {
+  animation-delay: 0ms;
+}
+
+.message-item:nth-child(2) .message-bubble {
+  animation-delay: 100ms;
+}
+
+.message-item:nth-child(3) .message-bubble {
+  animation-delay: 200ms;
+}
+
+.message-item:nth-child(4) .message-bubble {
+  animation-delay: 300ms;
+}
+
+/* Bounce effect for assistant messages */
+.message-item:has(.message-bubble:not(.bg-white\/10)) .message-bubble {
+  animation: messageBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes messageBounce {
+  0% {
+    transform: translateY(20px) scale(0.9);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(-5px) scale(1.02);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Slide in from right for user messages */
+.message-item:has(.message-bubble.bg-white\/10) .message-bubble {
+  animation: slideInRight 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes slideInRight {
+  0% {
+    transform: translateX(30px) scale(0.95);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
 }
 </style>

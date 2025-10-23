@@ -69,6 +69,13 @@
           style="--stagger: 6"
           data-animate
         />
+
+        <Divider class="my-9" />
+
+        <HomeCvDownload
+          style="--stagger: 7"
+          data-animate
+        />
       </div>
     </div>
   </section>

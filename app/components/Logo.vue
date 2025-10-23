@@ -15,10 +15,11 @@ defineProps({
     class="flex shrink-0 items-center"
     aria-label="Go back to home page"
   >
-    <UIcon
-      name="custom:onicon"
-      class="size-8"
-    />
+    <img
+      src="/onicon-dark.png"
+      alt="Petit-Oni"
+      class="size-6"
+    >
     <span
       v-if="isText"
       class="ml-1 text-xs font-semibold"

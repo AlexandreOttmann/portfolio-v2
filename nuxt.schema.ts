@@ -47,7 +47,7 @@ export default defineNuxtSchema({
           title: 'Email',
           description: 'Your email.',
           icon: 'lucide:mail',
-          default: 'contact@hrcd.fr',
+          default: 'ottmann.alexandre@gmail.com',
         }),
         phone: field({
           type: 'string',
@@ -61,7 +61,7 @@ export default defineNuxtSchema({
           title: 'Picture',
           description: 'Your picture.',
           icon: 'lucide:image',
-          default: 'https://avatars.githubusercontent.com/u/71938701?v=4',
+          default: 'https://avatars.githubusercontent.com/u/109041952?s=400&u=10080a647f2e7916c2d3d454c52552e824cc04da&v=4',
         }),
       },
     }),
