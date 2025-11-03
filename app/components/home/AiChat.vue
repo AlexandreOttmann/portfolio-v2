@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { marked } from 'marked'
+
 interface Message {
   id: string
   content: string
@@ -14,32 +16,44 @@ interface PresetQuestion {
 
 const { locale } = useI18n()
 
+// Configure marked for safe rendering
+marked.setOptions({
+  breaks: true, // Convert line breaks to <br>
+  gfm: true, // GitHub Flavored Markdown
+})
+
+// Function to render markdown to HTML
+const renderMarkdown = (text: string): string => {
+  if (!text) return ''
+  return marked.parse(text) as string
+}
+
 const messages = ref<Message[]>([])
 const inputMessage = ref('')
 const isLoading = ref(false)
 const showChat = ref(false)
 
-// Preset questions based on the original FAQ content
+// Preset questions based on Alex's background and work
 const presetQuestions: PresetQuestion[] = [
   {
-    id: 'services',
-    question: locale.value === 'fr' ? 'Quels services proposez-vous?' : 'What services do you offer?',
+    id: 'tech-stack',
+    question: locale.value === 'fr' ? 'Quelle est votre stack technique principale?' : 'What is your main tech stack?',
+    icon: 'lucide:code',
+  },
+  {
+    id: 'education',
+    question: locale.value === 'fr' ? 'Quel est votre parcours scolaire ?' : 'What is your educational background?',
+    icon: 'lucide:graduation-cap',
+  },
+  {
+    id: 'current-work',
+    question: locale.value === 'fr' ? 'Sur quoi travaillez-vous actuellement?' : 'What are you currently working on?',
     icon: 'lucide:briefcase',
   },
   {
-    id: 'pricing',
-    question: locale.value === 'fr' ? 'Combien coûte un projet?' : 'How much does a project cost?',
-    icon: 'lucide:credit-card',
-  },
-  {
-    id: 'timeline',
-    question: locale.value === 'fr' ? 'Combien de temps dure un projet?' : 'How long does a project take?',
-    icon: 'lucide:clock',
-  },
-  {
-    id: 'hobbies',
-    question: locale.value === 'fr' ? 'Quelles sont vos passions en dehors du travail?' : 'What are your hobbies outside of work?',
-    icon: 'lucide:heart',
+    id: 'projects',
+    question: locale.value === 'fr' ? 'Parlez-moi de vos derniers projets' : 'Tell me about your recent projects',
+    icon: 'lucide:folder-kanban',
   },
 ]
 
@@ -252,7 +266,15 @@ const handleKeyPress = (event: KeyboardEvent) => {
                   ? 'bg-white/10 text-white'
                   : 'bg-white/5 text-white/90 border border-white/10'"
               >
-                <p class="text-sm leading-relaxed whitespace-pre-wrap">
+                <div
+                  v-if="message.role === 'assistant'"
+                  class="text-sm leading-relaxed markdown-content max-w-none"
+                  v-html="renderMarkdown(message.content)"
+                />
+                <p
+                  v-else
+                  class="text-sm leading-relaxed whitespace-pre-wrap"
+                >
                   {{ message.content }}
                 </p>
                 <p class="text-xs text-white/50 mt-1">
@@ -417,5 +439,65 @@ const handleKeyPress = (event: KeyboardEvent) => {
     transform: translateX(0) scale(1);
     opacity: 1;
   }
+}
+
+/* Markdown content styling */
+.markdown-content :deep(p) {
+  margin: 0.5em 0;
+}
+
+.markdown-content :deep(p:first-child) {
+  margin-top: 0;
+}
+
+.markdown-content :deep(p:last-child) {
+  margin-bottom: 0;
+}
+
+.markdown-content :deep(strong) {
+  font-weight: 600;
+  color: inherit;
+}
+
+.markdown-content :deep(ol),
+.markdown-content :deep(ul) {
+  margin: 0.5em 0;
+  padding-left: 1.5em;
+}
+
+.markdown-content :deep(li) {
+  margin: 0.25em 0;
+}
+
+.markdown-content :deep(a) {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.4);
+  transition: all 0.2s ease;
+}
+
+.markdown-content :deep(a:hover) {
+  color: white;
+  text-decoration-color: rgba(255, 255, 255, 0.8);
+}
+
+.markdown-content :deep(h1),
+.markdown-content :deep(h2),
+.markdown-content :deep(h3),
+.markdown-content :deep(h4),
+.markdown-content :deep(h5),
+.markdown-content :deep(h6) {
+  font-weight: 600;
+  margin: 0.75em 0 0.5em;
+  color: inherit;
+}
+
+.markdown-content :deep(h1:first-child),
+.markdown-content :deep(h2:first-child),
+.markdown-content :deep(h3:first-child),
+.markdown-content :deep(h4:first-child),
+.markdown-content :deep(h5:first-child),
+.markdown-content :deep(h6:first-child) {
+  margin-top: 0;
 }
 </style>

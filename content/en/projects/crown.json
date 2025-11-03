@@ -1,7 +1,8 @@
 {
-  "name": "Crown",
+  "name": "Crown Procurement",
   "image": "/projects/hr-folio.webp",
   "link": "https://www.crown-procurement.com/",
-  "release": "2025",
-  "featured": true
+  "release": "2024",
+  "featured": true,
+  "content": "Nuxt4, Vuetify, Supabase, NuxtStudio, D3.js | Full-stack web application - Realtime eAuction for industries."
 }

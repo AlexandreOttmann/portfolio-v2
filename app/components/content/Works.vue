@@ -27,11 +27,30 @@ const { data: projects } = await useAsyncData('projects', async () => {
     </h2>
     <Divider class="mb-8 mt-2" />
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-      <ProjectCard
-        v-for="project in projects"
+      <Motion
+        v-for="project, index in projects"
         :key="project.name"
-        :project
-      />
+        as="div"
+        :initial="{
+          scale: 1.1,
+          opacity: 0,
+          filter: 'blur(20px)',
+        }"
+        :animate="{
+          scale: 1,
+          opacity: 1,
+          filter: 'blur(0px)',
+        }"
+        :transition="{
+          duration: 0.6,
+          delay: (0.1) * (index),
+        }"
+      >
+        <ProjectCard
+
+          :project
+        />
+      </Motion>
     </div>
   </section>
 </template>

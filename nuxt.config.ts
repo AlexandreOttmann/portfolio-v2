@@ -1,5 +1,6 @@
 export default defineNuxtConfig({
   modules: [
+    'motion-v/nuxt',
     '@vueuse/nuxt',
     '@nuxt/ui',
     '@nuxtjs/i18n',

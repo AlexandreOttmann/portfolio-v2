@@ -40,6 +40,7 @@ const localePath = useLocalePath()
               class="size-7 font-light sm:size-6"
             />
           </NuxtLink>
+          <ColorModeButton />
         </nav>
       </SpotlightButton>
     </header>

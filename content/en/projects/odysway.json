@@ -3,5 +3,6 @@
   "image": "/projects/mockline.webp",
   "link": "https://www.odysway.com/",
   "release": "2024",
-  "featured": true
+  "featured": true,
+  "content": "Nuxt4, Vuetify, Supabase, SanityCMS, NuxtStudio, Stripe | Full-stack web application for a travel agency"
 }

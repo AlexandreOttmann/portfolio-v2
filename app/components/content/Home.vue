@@ -10,73 +10,89 @@
       />
 
       <!-- profile picture -->
-      <HomeProfilePicture />
+      <Motion
+        :initial="{
+          scale: 1.1,
+          opacity: 0,
+          filter: 'blur(20px)',
+        }"
+        :animate="{
+          scale: 1,
+          opacity: 1,
+          filter: 'blur(0px)',
+        }"
+        :transition="{
+          duration: 0.6,
+        }"
+      >
+        <HomeProfilePicture />
 
-      <div class="z-20 flex flex-col items-center justify-center">
-        <!-- title -->
-        <div
-          class="font-geist"
-          style="--stagger: 1; --delay: 10ms"
-          data-animate
-        >
-          <h1 class="mx-auto font-medium text-center text-pretty bg-gradient-to-b from-white/90 to-white/30 bg-clip-text text-3xl text-transparent lg:max-w-3xl lg:text-4xl">
-            <slot
-              name="hero_title"
-              mdc-unwrap="p"
-            />
-          </h1>
+        <div class="z-20 flex flex-col items-center justify-center">
+          <!-- title -->
+          <div
+            class="font-geist"
+            style="--stagger: 1; --delay: 10ms"
+            data-animate
+          >
+            <h1 class="mx-auto font-medium text-center text-pretty bg-gradient-to-b from-white/90 to-white/30 bg-clip-text text-3xl text-transparent lg:max-w-3xl lg:text-4xl">
+              <slot
+                name="hero_title"
+                mdc-unwrap="p"
+              />
+            </h1>
 
-          <!-- subtitle -->
-          <h2 class="mx-auto mt-4 max-w-xl text-center text-lg antialiased text-white/60">
-            <slot
-              name="hero_subtitle"
-              mdc-unwrap="p"
-            />
-          </h2>
+            <!-- subtitle -->
+            <h2 class="mx-auto mt-4 max-w-xl text-center text-lg antialiased text-white/60">
+              <slot
+                name="hero_subtitle"
+                mdc-unwrap="p"
+              />
+            </h2>
+          </div>
+
+          <SettingsAvailability
+            background
+            class="mt-2"
+            style="--stagger: 2"
+            data-animate
+          />
+
+          <!-- social -->
+          <HomeSocial
+            style="--stagger: 3"
+            data-animate
+          />
+
+          <!-- cta -->
+          <HomeCTA
+            style="--stagger: 4"
+            data-animate
+          />
+
+          <div
+            style="--stagger: 5"
+            data-animate
+            class="mt-12 flex w-full max-w-3xl flex-col gap-4 lg:mt-16"
+          >
+            <!-- projects -->
+            <HomeProjects />
+          </div>
+
+          <Divider class="my-9" />
+
+          <HomeAiChat
+            style="--stagger: 6"
+            data-animate
+          />
+
+          <Divider class="my-9" />
+
+          <HomeCvDownload
+            style="--stagger: 7"
+            data-animate
+          />
         </div>
-
-        <SettingsAvailability
-          background
-          class="mt-2"
-          style="--stagger: 2"
-          data-animate
-        />
-
-        <!-- social -->
-        <HomeSocial
-          style="--stagger: 3"
-          data-animate
-        />
-
-        <!-- cta -->
-        <HomeCTA
-          style="--stagger: 4"
-          data-animate
-        />
-
-        <div
-          style="--stagger: 5"
-          data-animate
-          class="mt-12 flex w-full max-w-3xl flex-col gap-4 lg:mt-16"
-        >
-          <!-- projects -->
-          <HomeProjects />
-        </div>
-
-        <Divider class="my-9" />
-
-        <HomeAiChat
-          style="--stagger: 6"
-          data-animate
-        />
-
-        <Divider class="my-9" />
-
-        <HomeCvDownload
-          style="--stagger: 7"
-          data-animate
-        />
-      </div>
+      </Motion>
     </div>
   </section>
 </template>

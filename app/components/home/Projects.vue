@@ -10,6 +10,17 @@ const { data: projects } = await useAsyncData('projects', async () => {
 }, {
   watch: [locale],
 })
+
+const projectItems = computed(() => {
+  return projects.value?.filter(work => work.featured).map((project) => {
+    return {
+      label: (project.release + ' | ' + project.name),
+      link: project.link,
+      release: project.release,
+      content: project.content,
+    }
+  })
+})
 </script>
 
 <template>
@@ -18,7 +29,8 @@ const { data: projects } = await useAsyncData('projects', async () => {
       {{ $t("navigation.works") }}
     </h3>
     <div class="flex w-full flex-col gap-4">
-      <NuxtLink
+      <UAccordion :items="projectItems" />
+      <!-- <NuxtLink
         v-for="project in projects?.filter((work) => work.featured)"
         :key="project.name"
         role="link"
@@ -34,7 +46,7 @@ const { data: projects } = await useAsyncData('projects', async () => {
         <span class="whitespace-nowrap">
           {{ project.release === "soon" ? $t("global.soon") + "..." : project.release }}
         </span>
-      </NuxtLink>
+      </NuxtLink> -->
     </div>
     <NuxtLinkLocale to="/works">
       <span class="font-newsreader italic text-white-shadow cursor-pointer">

@@ -27,10 +27,12 @@
     "@vueuse/core": "13.9.0",
     "@vueuse/nuxt": "13.9.0",
     "better-sqlite3": "^12.4.1",
+    "marked": "^16.4.1",
+    "motion-v": "^1.7.4",
     "nuxt": "4.1.2",
     "openai": "^6.5.0",
     "resend": "6.1.0",
-    "sitemap": "8.0.0",
+    "sitemap": "^8.0.1",
     "ufo": "^1.6.1",
     "vue-sonner": "2.0.8"
   },
