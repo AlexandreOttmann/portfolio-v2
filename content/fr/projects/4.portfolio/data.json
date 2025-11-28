@@ -2,5 +2,6 @@
   "name": "Portfolio V1",
   "image": "/projects/helpr.webp",
   "link": "https://dev-portfolio-alexandreottmann.vercel.app/works",
-  "release": "2024"
+  "release": "2024",
+  "stack": []
 }

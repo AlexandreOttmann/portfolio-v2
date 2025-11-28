@@ -24,6 +24,7 @@ const commonProjectSchema = z.object({
   date: z.string().nonempty(),
   featured: z.boolean().optional(),
   content: z.string().optional(),
+  stack: z.array(z.string().nonempty()).optional(),
 })
 
 const commonFaqSchema = z.object({
@@ -71,6 +72,7 @@ export const collections = {
       source: {
         include: 'en/articles/*.md',
         prefix: '/en/articles',
+        exclude: ['en/projects/**'],
       },
       schema: commonArticleSchema,
     }),
@@ -81,6 +83,7 @@ export const collections = {
       source: {
         include: 'fr/articles/*.md',
         prefix: '/fr/articles',
+        exclude: ['fr/projects/**'],
       },
       schema: commonArticleSchema,
     }),
@@ -88,14 +91,14 @@ export const collections = {
   projects_en: defineCollection(
     asSeoCollection({
       type: 'data',
-      source: 'en/projects/*.json',
+      source: 'en/projects/**/data.json',
       schema: commonProjectSchema,
     }),
   ),
   projects_fr: defineCollection(
     asSeoCollection({
       type: 'data',
-      source: 'fr/projects/*.json',
+      source: 'fr/projects/**/data.json',
       schema: commonProjectSchema,
     }),
   ),
