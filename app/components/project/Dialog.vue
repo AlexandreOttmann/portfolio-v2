@@ -1,36 +1,3 @@
-<script setup lang="ts">
-import type { Collections } from '@nuxt/content'
-
-const props = defineProps<{
-    open: boolean
-    project: Collections['projects_en'] | Collections['projects_fr'] | null
-}>()
-
-const emit = defineEmits(['update:open'])
-
-const isOpen = computed({
-    get: () => props.open,
-    set: (value) => emit('update:open', value),
-})
-
-const { locale } = useI18n()
-
-const { data: content, status } = await useAsyncData(
-    `project-content-${props.project?.name}`,
-    async () => {
-        if (!props.project) return null
-        // project.stem is like 'fr/projects/1.quantedsquare/data'
-        // we need 'fr/projects/1.quantedsquare/content'
-        const contentPath = props.project.stem.replace('/data', '/content')
-        const collection = ('content_' + locale.value) as keyof Collections
-        return await queryCollection(collection).path(contentPath).first()
-    },
-    {
-        watch: [() => props.project],
-    }
-)
-</script>
-
 <template>
     <UModal v-model:open="isOpen" :ui="{ content: 'max-w-4xl sm:max-w-4xl' }">
         <template #content>
@@ -79,3 +46,35 @@ const { data: content, status } = await useAsyncData(
         </template>
     </UModal>
 </template>
+<script setup lang="ts">
+import type { Collections } from '@nuxt/content'
+
+const props = defineProps<{
+    open: boolean
+    project: Collections['projects_en'] | Collections['projects_fr'] | null
+}>()
+
+const emit = defineEmits(['update:open'])
+
+const isOpen = computed({
+    get: () => props.open,
+    set: (value) => emit('update:open', value),
+})
+
+const { locale } = useI18n()
+
+const { data: content, status } = await useAsyncData(
+    `project-content-${props.project?.name}`,
+    async () => {
+        if (!props.project) return null
+        // project.stem is like 'fr/projects/1.quantedsquare/data'
+        // we need 'fr/projects/1.quantedsquare/content'
+        const contentPath = props.project.stem.replace('/data', '/content')
+        const collection = ('content_' + locale.value) as keyof Collections
+        return await queryCollection(collection).path(contentPath).first()
+    },
+    {
+        watch: [() => props.project],
+    }
+)
+</script>

@@ -45,18 +45,13 @@ const startViewTransition = (event: MouseEvent) => {
 
 <template>
   <ClientOnly>
-    <button
-      :aria-label="`Switch to ${nextTheme} mode`"
-      class="flex items-center rounded-full border border-transparent px-4 py-1 text-muted transition-all duration-300 ease-in-out hover:border-white/5 hover:bg-zinc-900/50 hover:backdrop-blur-3xl sm:px-6"
-      @click="startViewTransition"
-    >
-      <UIcon
-        :name="`i-lucide-${nextTheme === 'dark' ? 'sun' : 'moon'}`"
-        class="size-7 font-light sm:size-6"
-      />
+    <button :aria-label="`Switch to ${nextTheme} mode`"
+      class="flex items-center rounded-full border border-transparent px-2 py-1 text-muted transition-all duration-300 ease-in-out hover:border-white/5 hover:bg-zinc-900/50 hover:backdrop-blur-3xl sm:px-6"
+      @click="startViewTransition">
+      <UIcon :name="`i-lucide-${nextTheme === 'dark' ? 'sun' : 'moon'}`" class="size-5 font-light sm:size-6" />
     </button>
     <template #fallback>
-      <div class="size-7" />
+      <div class="size-5 sm:size-6" />
     </template>
   </ClientOnly>
 </template>
@@ -71,6 +66,7 @@ const startViewTransition = (event: MouseEvent) => {
 ::view-transition-new(root) {
   z-index: 9999;
 }
+
 ::view-transition-old(root) {
   z-index: 1;
 }
