@@ -1,4 +1,4 @@
-## Odysway — Développeur Fullstack & Consultant Technique (2023–Aujourd’hui)
+## Odysway — Développeur Fullstack & Consultant Technique
 
 Odysway a été mon premier projet professionnel à la sortie de mes études. Depuis, j’ai travaillé plus de deux ans sur leur plateforme — en parallèle d’autres missions — et je continue aujourd’hui à collaborer avec eux en **freelance**. Ce projet a été un véritable **laboratoire technique**, me permettant d’explorer de nombreuses technologies, d’itérer rapidement et de mettre en place des solutions variées et robustes.
 

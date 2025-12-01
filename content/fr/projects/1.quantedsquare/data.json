@@ -6,6 +6,15 @@
   "featured": true,
   "content": "Agence web de consulting Tech à destination des startups et fonds d'investissement. Tech & Product Due Diligence actionable et moderne pour des private equity",
   "stack": [
-    "Nuxt"
+    "Nuxt",
+    "Supabase",
+    "Stripe",
+    "ActiveCampaign",
+    "Alma",
+    "Vuetify",
+    "D3.js",
+    "SanityCMS",
+    "NodeJs",
+    "Figma"
   ]
 }

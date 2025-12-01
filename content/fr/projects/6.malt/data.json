@@ -1,7 +1,11 @@
 {
-  "name": "Previous job as a freelancer",
+  "name": "Précédente carrière...",
   "image": "/projects/malt.png",
   "link": "https://www.malt.fr/profile/alexottmann",
-  "release": "2023",
-  "stack": []
+  "release": "2020 à 2024",
+  "stack": [
+    "Protools",
+    "Audacity",
+    "Logic Pro"
+  ]
 }

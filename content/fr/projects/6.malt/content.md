@@ -1,3 +1,3 @@
-# Previous job as a freelancer
+# Précédente carrière en freelance
 
 

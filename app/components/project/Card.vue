@@ -36,7 +36,7 @@ const img = useImage()
               <span class="whitespace-nowrap text-sm font-semibold text-white/90">
                 {{ project.name }}
               </span>
-              <span class="whitespace-nowrap text-xs text-neutral-400">
+              <span class="whitespace-nowrap text-xs text-neutral-400 text-shadow">
                 {{ project.release === "soon" ? $t("global.soon") + "..." : project.release }}
               </span>
             </div>
@@ -50,3 +50,8 @@ const img = useImage()
     </div>
   </div>
 </template>
+<style scoped>
+.text-shadow {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, .3) !important;
+}
+</style>

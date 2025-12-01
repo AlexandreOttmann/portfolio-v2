@@ -1,4 +1,4 @@
-# Quanted Square — Développeur Fullstack & Analyste (2023–2025)
+# Quanted Square — Développeur Fullstack & Analyste
 
 J’ai rejoint **Quanted Square** en 2023 dans le cadre d’une alternance à la **Wild Code School**, marquant le début de ma première expérience en tant que développeur fullstack. Après mon année de formation, j’ai poursuivi l’aventure jusqu’en décembre 2025, occupant le rôle de **premier salarié** de l’entreprise.
 
