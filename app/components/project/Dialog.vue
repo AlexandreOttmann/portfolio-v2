@@ -39,7 +39,7 @@
                 <div class="shrink-0 border-t border-white/10 p-4 flex justify-end bg-zinc-900">
                     <UButton :to="project.link" target="_blank" icon="heroicons:arrow-top-right-on-square"
                         color="neutral" variant="solid">
-                        Visit Website
+                        {{ locale === 'fr' ? 'Visiter le site' : 'Visit Website' }}
                     </UButton>
                 </div>
             </div>
@@ -64,7 +64,7 @@ const isOpen = computed({
 const { locale } = useI18n()
 
 const { data: content, status } = await useAsyncData(
-    `project-content-${props.project?.name}`,
+    `project-content-${props.project?.name}-${locale.value}`,
     async () => {
         if (!props.project) return null
         // project.stem is like 'fr/projects/1.quantedsquare/data'
@@ -74,7 +74,7 @@ const { data: content, status } = await useAsyncData(
         return await queryCollection(collection).where('stem', '=', contentPath).first()
     },
     {
-        watch: [() => props.project],
+        watch: [() => props.project, () => locale.value],
     }
 )
 </script>

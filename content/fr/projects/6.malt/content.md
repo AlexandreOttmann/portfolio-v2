@@ -4,4 +4,6 @@ Avant de me reconvertir, j'ai passé quelques années en temps qu'ingénieur son
 
 **Vous retrouverez quelques-unes de mes réalisations sur mon premier portfolio sound design, ceci étant d'ailleurs mon premier site en ligne....**
 
+[Mon profil Malt →](https://www.malt.fr/profile/alexottmann)
+
 [Le lien ici →](https://oniaudio.com/)
