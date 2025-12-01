@@ -1,7 +1,22 @@
 {
   "name": "Ecovoit",
   "image": "/projects/ecovoit.png",
-  "link": "",
+  "link": "https://github.com/AlexandreOttmann/2309-wns-jaune-eco-voit",
   "release": "2024",
-  "stack": []
+  "stack": [
+    "Next",
+    "Jest",
+    "Tailwind",
+    "MaterielUI",
+    "TypeScript",
+    "React",
+    "GraphQL",
+    "Stripe",
+    "Nodemailer",
+    "TypeORM",
+    "Cypress",
+    "Figma",
+    "Merise",
+    "Postgresql"
+  ]
 }
