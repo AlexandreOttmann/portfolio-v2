@@ -21,7 +21,7 @@ Alex is a passionate web developer and designer who specializes in creating beau
 - Abbey Road Institute - 2016 to 2018, degree in Sound Engineering
 - Exia Cesi - 2014 - 2016, degree in Computer Science
 - O'Clock School - 2022 Fullstack web developper study with a focus on NodeJs / React
-- Wild Code School - 2023 - 2024, Concepteur développeur d'applications devops - Apprenticeship at Quantedsquare company as a Fullstack web developper, 
+- Wild Code School - 2023 - 2024, Concepteur développeur d'applications devops - Apprenticeship at Quantedsquare company as a Fullstack web developper,
 
 ## What Alex Enjoys
 
@@ -29,7 +29,7 @@ Alex is a passionate web developer and designer who specializes in creating beau
 - Creating beautiful, functional things from scratch
 - Working on personal projects and side ventures
 - Cooking and baking, he loves to cook and bake for his friends and family.
-- Photography as a creative outlet, during travel most of the time. 
+- Photography as a creative outlet, during travel most of the time.
 - Playing with his dog, Yuzu, a 2 years old black Shiba Inu
 
 ## Technical Expertise
@@ -49,8 +49,8 @@ Alex is available for new projects and consultations. He's responsive to inquiri
 
 ## Last projects
 
-- Odysway - 2 years, it's a Full-stack web application for a travel agency, made with Quanted Square company, using Nuxt4, Vuetify, Supabase, SanityCMS, NuxtStudio, Stripe... [https://www.odysway.com/] Redid the full website design and redevelopped the whole website /payements funnel / Analytics dashboard / CRM /  etc...
-- Crown - 1 year, it's a Full-stack web application made with Quanted Square company, eAuctions Trusted Third Party for industries, using Nuxt4, Vuetify, Supabase, NuxtStudio... [https://www.crown.com/] Build the website from scratch. Real Time eAuction platform with live bidding and notifications, charts, dashboard.
+- Odysway - 2 years, it's a Full-stack web application for a travel agency, made with Quanted Square company, using Nuxt4, Vuetify, Supabase, SanityCMS, NuxtStudio, Stripe... [<https://www.odysway.com/>] Redid the full website design and redevelopped the whole website /payements funnel / Analytics dashboard / CRM / etc...
+- Crown - 1 year, it's a Full-stack web application made with Quanted Square company, eAuctions Trusted Third Party for industries, using Nuxt4, Vuetify, Supabase, NuxtStudio... [<https://www.crown.com/>] Build the website from scratch. Real Time eAuction platform with live bidding and notifications, charts, dashboard.
 - Quanted Square - 2 years : Web Agency doing technical consulting for startups and mostly actionable and modern Tech & Product Due Diligence for Private Equity and Growth investors.
 
 ## Important Notes
