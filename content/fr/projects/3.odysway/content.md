@@ -1,6 +1,17 @@
+---
+ogImage:
+  props: {}
+schemaOrg: {}
+head:
+  script: []
+sitemap:
+  videos: []
+  images: []
+---
+
 # Odysway
 
-Odysway a été mon premier projet professionnel en sortie d'étude. Depuis j'ai passé 2 ans en parallèle d'autres projets et continue aujourd'hui encore à travailler en freelance avec eux. Véritable bac à sable, j'ai pu manipuler et développer bon nombre d'outils, mettre en place diverses solutions plus variées les unes que les autres.
+Odysway a été mon premier projet professionnel en sortie d'étude. Depuis j'ai passé 2 ans en parallèle d'autres projets et continue aujourd'hui à travailler en freelance avec eux. Véritable bac à sable, j'ai pu manipuler et développer bon nombre d'outils, mettre en place divers solutions plus variées les unes que les autres.
 
 Voici une liste non exhaustive de mes travaux sur le site de l'agence de voyage :
 

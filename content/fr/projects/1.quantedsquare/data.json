@@ -4,6 +4,8 @@
   "link": "https://www.quantedsquare.com/",
   "release": "2023 à Aujourd'hui",
   "featured": true,
-  "content": "Agence web full-time faisant du consulting technique pour les startups et surtout des Tech & Product Due Diligence actionable et moderne pour des fonds d'investissement",
-  "stack": []
+  "content": "Agence web de consulting Tech à destination des startups et fonds d'investissement. Tech & Product Due Diligence actionable et moderne pour des private equity",
+  "stack": [
+    "Nuxt"
+  ]
 }
