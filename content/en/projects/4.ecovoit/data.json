@@ -1,9 +1,22 @@
 {
   "name": "Odysway",
-  "image": "/projects/odysway.png",
-  "link": "https://www.odysway.com/",
+  "image": "/projects/ecovoit.png",
+  "link": "https://github.com/AlexandreOttmann/2309-wns-jaune-eco-voit",
   "release": "2024",
-  "featured": true,
-  "content": "Nuxt4, Vuetify, Supabase, SanityCMS, NuxtStudio, Stripe | Full-stack web application for a travel agency",
-  "stack": []
+    "stack": [
+    "Next",
+    "Jest",
+    "Tailwind",
+    "MaterielUI",
+    "TypeScript",
+    "React",
+    "GraphQL",
+    "Stripe",
+    "Nodemailer",
+    "TypeORM",
+    "Cypress",
+    "Figma",
+    "Merise",
+    "Postgresql"
+  ]
 }
