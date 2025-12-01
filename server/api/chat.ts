@@ -1,6 +1,5 @@
 import OpenAI from 'openai'
-import { readFile } from 'fs/promises'
-import { join } from 'path'
+import { loadContentContext } from '../utils/content-loader'
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -79,9 +78,8 @@ export default defineEventHandler(async (event) => {
 
     // Try to use OpenAI API
     try {
-      // Read the AI context file
-      const contextPath = join(process.cwd(), 'content', 'ai-context.md')
-      const context = await readFile(contextPath, 'utf-8')
+      // Load dynamic content context based on locale
+      const context = await loadContentContext(locale)
 
       // Use the most cost-effective model for simple Q&A
       const completion = await openai.chat.completions.create({
