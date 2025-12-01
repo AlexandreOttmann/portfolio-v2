@@ -1,28 +1,30 @@
----
-ogImage:
-  props: {}
-schemaOrg: {}
-head:
-  script: []
-sitemap:
-  videos: []
-  images: []
----
+## Odysway — Développeur Fullstack & Consultant Technique (2023–Aujourd’hui)
 
-# Odysway
+Odysway a été mon premier projet professionnel à la sortie de mes études. Depuis, j’ai travaillé plus de deux ans sur leur plateforme — en parallèle d’autres missions — et je continue aujourd’hui à collaborer avec eux en **freelance**. Ce projet a été un véritable **laboratoire technique**, me permettant d’explorer de nombreuses technologies, d’itérer rapidement et de mettre en place des solutions variées et robustes.
 
-Odysway a été mon premier projet professionnel en sortie d'étude. Depuis j'ai passé 2 ans en parallèle d'autres projets et continue aujourd'hui à travailler en freelance avec eux. Véritable bac à sable, j'ai pu manipuler et développer bon nombre d'outils, mettre en place divers solutions plus variées les unes que les autres.
+Voici une liste non exhaustive des travaux que j’ai réalisés pour la plateforme d’Odysway :
 
-Voici une liste non exhaustive de mes travaux sur le site de l'agence de voyage :
+### 🔧 Architecture & Migrations Techniques
 
-- Refactor complet de la codebase et passage de Nuxt 2 à Nuxt 3 puis de 3 à 4
-- Remplacement et migration totale d'un ancien custom back-office vers un CRM ([ActiveCampaign](https://www.activecampaign.com/))
-- Mise en place d'outils de DataViz (Bdd Supabase + [Trevor](https://trevor.io/) pour la visualisation)
-- Mise en place d'outils de tracking (meta pixel, hotjar, Gtag...)
-- Refonte des funnels et méthodes de paiement (Stripe + Alma, paiement plusieurs fois + possibilité de virements)
-- Refonte complète visuelle, de l'identité de la marque, redesign complet de l'app (permis le passage en même temps de Nuxt 2 à 3).
-- Migration CMS ButterCMS vers Nuxt STUDIO
-- Migration CMS Nuxt STUDIO vers Sanity
-- Remplacement + migration Firebase vers Supabase
-- Optimisation SEO, accessibilité et performances
-- Mise en place d'un système custom de gestion de booking des voyages
+- **Refactor complet de la codebase** et migration successive : **Nuxt 2 → Nuxt 3 → Nuxt 4**.
+- **Remplacement d’un back-office custom** au profit d’un CRM professionnel (**ActiveCampaign**), avec migration totale des données et automatisations.
+- **Migration du CMS** : ButterCMS → Nuxt Studio → Sanity.
+- **Migration Firebase → Supabase** (authentification, base de données, stockage).
+
+### 💳 Paiement, Funnels & Expérience Utilisateur
+
+- Refonte des **funnels de conversion** et modernisation complète des parcours utilisateur.
+- Mise en place de solutions de paiement avancées : **Stripe**, **Alma**, paiements en plusieurs fois, **virements bancaires**.
+- Refonte visuelle complète de l’application, incluant l’identité de marque et l’UI globale (coïncidant avec la migration Nuxt 2 → 3).
+
+### 📊 Data & Tracking
+
+- Déploiement d’outils de **Data Visualization** : base Supabase + intégration de **Trevor**.
+- Mise en place de solutions de tracking et d’analyse comportementale : **Meta Pixel**, **Hotjar**, **Google Tag (gtag)**, événements custom.
+
+### ⚙️ Performance, SEO & Fonctionnalités métiers
+
+- Optimisation approfondie du **SEO**, de l’accessibilité et des performances.
+- Création d’un **système de booking sur mesure** adapté aux besoins spécifiques de l’agence de voyage.
+
+##
