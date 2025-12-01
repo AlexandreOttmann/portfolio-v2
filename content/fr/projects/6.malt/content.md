@@ -1,9 +1,27 @@
-# Mon passé d'ingénieur son
+## Mon passé d’ingénieur du son
 
-Avant de me reconvertir, j'ai passé quelques années en temps qu'ingénieur son. Pendant lesquelles en parallèle de mon activité salariée j'exerçais diverses missions freelance. J'ai pu accomplir une petit centaine de missions au cours de ces années et vous retrouverez une partie sur mo&#x6E;**&#x20;[profil Malt](https://www.malt.fr/profile/alexottmann).** Mon activité allait de l'édition / correction de podcast, à leur sound design et création sonore. Travaillant aussi bien sur des livres audios, des albums, de la publicité, court métrages, vidéos youtube ou des créations audios en tout genre. Parmi l'ensemble de mes missions passées j'ai été fier de travailler avec des artistes comme les *comédiens de la comédie française* pour une création d'une heure sur Molière ([Molière fou de théâtre](https://kidsono.studio/kidsono-x-gallimard-jeunesse/moliere-le-fou-de-theatre/)), réalisant par moi même l'ensemble de l'univers sonore, de même pour la réalisation et l'enregistrement du livre audio pour enfant[ les aventures de Gurty](https://www.audible.fr/series/Le-Journal-de-Gurty-Livres-Audio/B0B8DV9XDL) avec **Audrey Lamy.**
+Avant ma reconversion dans le développement, j’ai travaillé plusieurs années en tant qu’**ingénieur du son**, tout en menant en parallèle une activité soutenue de **freelance**. Durant cette période, j’ai réalisé près d’une centaine de missions, dont une sélection est présentée sur mon **profil Malt**.
 
-**Vous retrouverez quelques-unes de mes réalisations sur mon premier portfolio sound design, ceci étant d'ailleurs mon premier site en ligne....**
+Mon travail couvrait un large spectre de prestations audio :
 
-[Mon profil Malt →](https://www.malt.fr/profile/alexottmann)
+- édition, nettoyage et **corrections de podcasts**,
+- sound design, créations sonores et habillages audio,
+- production de **livres audio**, albums, publicités, courts-métrages, vidéos YouTube,
+- conception d’univers sonores complets pour projets narratifs ou immersifs.
 
-[Le lien ici →](https://oniaudio.com/)
+### 🎧 Réalisations marquantes
+
+Parmi les missions dont je suis le plus fier :
+
+- Une **création sonore d’une heure** autour de Molière, réalisée avec les *comédiens de la Comédie-Française*, pour le projet **Molière, le fou de théâtre**. J’y ai conçu l’intégralité de l’univers audio : ambiances, bruitages, mixage et montage.
+- L’enregistrement, la direction artistique et la post-production du livre audio jeunesse **Les aventures de Gurty**, interprété par **Audrey Lamy**, publié sur Audible.
+
+Cette période a été pour moi un véritable terrain d’apprentissage : gestion de clients, rigueur technique, sens du détail, compréhension fine du storytelling audio et des besoins artistiques.
+
+### 🌐 Mon portfolio sound design
+
+Avant de coder mes premières applications, j’avais déjà créé mon premier site : un portfolio rassemblant certaines de mes réalisations audio.
+
+👉[ Découvrir mon portfolio sound design](https://oniaudio.com/)
+
+👉 [Voir mon profil Malt](https://www.malt.fr/profile/alexottmann)
