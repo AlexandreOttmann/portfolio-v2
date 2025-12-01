@@ -29,14 +29,14 @@ const img = useImage()
     </div>
     <div class="absolute bottom-0 flex w-full justify-center">
       <div
-        class="rounded-t-lg border-x border-t border-white/10 border-b-transparent px-4 py-[5px] shadow-md backdrop-blur-md sm:w-2/3">
+        class="rounded-t-lg border-x border-t border-white/10 border-b-transparent px-4 py-[5px] shadow-md backdrop-blur-md sm:w-2/3 bg-zinc-900/40">
         <div class="flex items-center justify-between gap-2">
           <div class="flex items-center gap-2">
             <div class="flex items-center gap-2">
               <span class="whitespace-nowrap text-sm font-semibold text-white/90">
                 {{ project.name }}
               </span>
-              <span class="whitespace-nowrap text-xs text-neutral-500">
+              <span class="whitespace-nowrap text-xs text-neutral-400">
                 {{ project.release === "soon" ? $t("global.soon") + "..." : project.release }}
               </span>
             </div>

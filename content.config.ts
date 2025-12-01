@@ -102,6 +102,26 @@ export const collections = {
       schema: commonProjectSchema,
     }),
   ),
+  projects_content_en: defineCollection(
+    asSeoCollection({
+      type: 'page',
+      source: {
+        include: 'en/projects/**/content.md',
+        prefix: '/en/projects',
+      },
+      schema: commonContentSchema,
+    }),
+  ),
+  projects_content_fr: defineCollection(
+    asSeoCollection({
+      type: 'page',
+      source: {
+        include: 'fr/projects/**/content.md',
+        prefix: '/fr/projects',
+      },
+      schema: commonContentSchema,
+    }),
+  ),
   stack: defineCollection({
     type: 'data',
     source: 'stack.json',

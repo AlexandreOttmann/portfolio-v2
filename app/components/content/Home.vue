@@ -52,8 +52,6 @@
 
           <Divider class="my-9" />
 
-          <Divider class="my-9" />
-
           <HomeCvDownload style="--stagger: 7" data-animate />
         </div>
       </Motion>

@@ -14,7 +14,7 @@ const { data: projects } = await useAsyncData('projects', async () => {
 const projectItems = computed(() => {
   return projects.value?.filter(work => work.featured).map((project) => {
     return {
-      label: (project.release + ' | ' + project.name),
+      label: project.name,
       link: project.link,
       release: project.release,
       content: project.content,
@@ -48,8 +48,8 @@ const projectItems = computed(() => {
         </span>
       </NuxtLink> -->
     </div>
-    <NuxtLinkLocale to="/works">
-      <span class="font-newsreader italic text-white-shadow cursor-pointer">
+    <NuxtLinkLocale to="/works" class="flex items-center justify-center">
+      <span class="font-newsreader italic text-white-shadow cursor-pointer hover:bg-neutral-900 p-2 rounded">
         {{ $t("global.see_more") }}
       </span>
     </NuxtLinkLocale>
