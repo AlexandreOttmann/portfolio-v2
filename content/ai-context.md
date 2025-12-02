@@ -18,8 +18,8 @@ Alex is a passionate web developer and designer who specializes in creating beau
 
 # Education
 
+- Exia Cesi - 2014 - 2015, degree in Computer Science
 - Abbey Road Institute - 2016 to 2018, degree in Sound Engineering
-- Exia Cesi - 2014 - 2016, degree in Computer Science
 - O'Clock School - 2022 Fullstack web developper study with a focus on NodeJs / React
 - Wild Code School - 2023 - 2024, Concepteur développeur d'applications devops - Apprenticeship at Quantedsquare company as a Fullstack web developper,
 
