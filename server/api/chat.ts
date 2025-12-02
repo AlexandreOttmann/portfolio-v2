@@ -109,6 +109,17 @@ export default defineEventHandler(async (event) => {
       if (!response) {
         throw new Error('No response from OpenAI')
       }
+
+      // Log token usage for monitoring
+      const usage = completion.usage
+      if (usage) {
+        console.log('[AI Chat] Token Usage:')
+        console.log(`  - Prompt tokens (context): ${usage.prompt_tokens}`)
+        console.log(`  - Completion tokens (response): ${usage.completion_tokens}`)
+        console.log(`  - Total tokens: ${usage.total_tokens}`)
+        console.log(`  - Estimated cost: $${((usage.total_tokens / 1000) * 0.002).toFixed(6)}`) // GPT-3.5-turbo pricing
+      }
+
       console.log(response)
       return {
         response,
