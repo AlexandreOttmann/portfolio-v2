@@ -26,6 +26,11 @@
       "icon": "custom:supabase"
     },
     {
+      "name": "Docker",
+      "link": "https://docker.com/",
+      "icon": "custom:docker"
+    },
+    {
       "name": "GraphQL",
       "link": "https://graphql.org/",
       "icon": "custom:graphql"

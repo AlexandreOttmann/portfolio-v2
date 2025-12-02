@@ -81,6 +81,10 @@ export default defineEventHandler(async (event) => {
       // Load dynamic content context based on locale
       const context = await loadContentContext(locale)
 
+      // Debug: Log first 500 chars of context to verify it's correct
+      console.log('[AI Chat] Context preview:', context.substring(0, 500))
+      console.log('[AI Chat] Context length:', context.length, 'characters')
+
       // Use the most cost-effective model for simple Q&A
       const completion = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo', // Most cost-effective model
@@ -94,7 +98,7 @@ export default defineEventHandler(async (event) => {
             content: message,
           },
         ],
-        max_tokens: 300, // Limit tokens to control costs
+        max_tokens: 500, // Increased to prevent cut-off responses
         temperature: 0.7,
         presence_penalty: 0.1,
         frequency_penalty: 0.1,

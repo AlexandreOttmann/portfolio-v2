@@ -30,7 +30,20 @@ async function loadMarkdownFiles(dirPath: string, basePath: string = ''): Promis
             }
             else if (entry.isFile() && entry.name.endsWith('.md')) {
                 try {
-                    const content = await readFile(fullPath, 'utf-8')
+                    let content = await readFile(fullPath, 'utf-8')
+
+                    // Strip YAML frontmatter to avoid confusing the AI with JSON-like syntax
+                    content = content.replace(/^---[\s\S]*?---\n/, '')
+
+                    // Remove any potential invisible characters or encoding issues
+                    content = content.replace(/\u0000/g, '') // Remove null bytes
+                    content = content.trim()
+
+                    // Skip empty files after frontmatter removal
+                    if (content.length === 0) {
+                        continue
+                    }
+
                     // Add a header with the file path for context
                     const formattedContent = `\n## Content from: ${relativePath}\n\n${content}\n`
                     contents.push(formattedContent)
@@ -75,7 +88,7 @@ export async function loadContentContext(locale: string = 'en'): Promise<string>
         console.warn('Failed to load base AI context:', error)
     }
 
-    // Combine everything
+    // Combine everything with a clear instruction
     const fullContext = `${baseContext}
 
 ---
@@ -83,7 +96,7 @@ export async function loadContentContext(locale: string = 'en'): Promise<string>
 # Additional Context from Portfolio Content
 
 The following sections contain detailed information about Alex's work, projects, and experience.
-Use this information to provide accurate and detailed responses to user questions.
+Use ONLY this information to provide accurate responses. Never make up information not present in this context.
 
 ${markdownFiles.join('\n---\n')}
 `
@@ -93,6 +106,9 @@ ${markdownFiles.join('\n---\n')}
         content: fullContext,
         timestamp: Date.now(),
     })
+
+    // Debug: Log context size
+    console.log(`[Content Loader] Loaded context for locale '${locale}': ${fullContext.length} characters, ${markdownFiles.length} files`)
 
     return fullContext
 }

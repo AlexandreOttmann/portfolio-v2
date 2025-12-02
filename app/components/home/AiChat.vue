@@ -142,7 +142,6 @@
           <div class="relative group">
             <div
               class="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 rainbow-border" />
-
             <div
               class="relative bg-neutral-900/80 backdrop-blur-xl border border-white/10 group-hover:border-transparent rounded-full p-1.5 pl-5 pr-1.5 flex items-center gap-3 shadow-2xl transition-all duration-300 hover:shadow-white/5 hover:scale-[1.02] cursor-text z-10"
               @click.stop="bottomInput?.focus()">
@@ -299,6 +298,14 @@ watch(messages, () => {
 .markdown-content :deep(h5:first-child),
 .markdown-content :deep(h6:first-child) {
   margin-top: 0;
+}
+
+.markdown-content :deep(img) {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  margin: 0.75em 0;
+  display: block;
 }
 
 /* Rainbow border animation */
