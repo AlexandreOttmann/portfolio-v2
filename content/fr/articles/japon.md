@@ -8,12 +8,19 @@ description: Dans le domaine du développement web, où l'efficacité est aussi
   avec les frameworks Nuxt et Vue. Mais qu'est-ce que ces extraits de code, et
   comment peuvent-ils transformer votre expérience de développement ?
 tags:
-  - Nuxt
-  - Vue
-  - Raycast
-  - Productivité
+  - Japon
+  - Voyage
+  - Photographie
 image: https://canvas.hrcd.fr/articles/5-raycast-snippets.jpg
 readingTime: "10"
+ogImage:
+  props: {}
+schemaOrg: {}
+head:
+  script: []
+sitemap:
+  videos: []
+  images: []
 ---
 
-Arrive bientôt !
+# ~~Arrive bientôt !~~
