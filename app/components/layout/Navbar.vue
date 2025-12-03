@@ -25,9 +25,9 @@ const { locale } = useI18n()
 <template>
   <div class="mx-auto my-2 flex w-full flex items-center justify-center">
     <header class="rounded-full w-full flex items-center justify-center">
-      <SpotlightButton rounded transparent :animate="false" is-navbar class="border border-white/10">
+      <SpotlightButton rounded transparent :animate="false" class="border border-white/10">
         <nav
-          class="z-10 flex flex-col sm:flex-row h-auto sm:h-[45px] justify-around gap-2  transition-all duration-300 ease-in-out sm:pb-0 pb-1 mx-4 mt-1 mb-1  sm:m-0">
+          class="z-10 flex flex-col sm:flex-row h-auto sm:h-[45px] justify-around gap-2  transition-all duration-300 ease-in-out sm:pb-0 pb-1 mx-8 mt-1 mb-1  sm:m-0">
           <!-- Navigation Icons Row -->
           <div
             class="flex h-[50px] sm:h-[45px] justify-around gap-2 sm:hover:gap-4 transition-all duration-300 ease-in-out">
@@ -37,8 +37,8 @@ const { locale } = useI18n()
                   ? 'border border-white/5 bg-zinc-900/10 text-white/75 shadow-2xl shadow-white/50 backdrop-blur-3xl text-shadow-sm'
                   : 'text-muted',
               ]" :to="localePath(item.to)"
-              class="flex items-center rounded-full border border-transparent  px-2 sm:px-4 py-1 transition-all duration-300 ease-in-out hover:border-white/5 hover:bg-zinc-900/50 hover:backdrop-blur-3xl sm:px-6">
-              <UIcon :name="item.icon" class="size-5 font-light sm:size-6" />
+              class="flex items-center rounded-full border border-transparent px-4 py-1 transition-all duration-300 ease-in-out hover:border-white/5 hover:bg-zinc-900/50 hover:backdrop-blur-3xl sm:px-6">
+              <UIcon :name="item.icon" class="size-7 font-light sm:size-6" />
             </NuxtLink>
             <ColorModeButton />
           </div>
@@ -60,7 +60,7 @@ const { locale } = useI18n()
 
                   <input v-model="inputMessage" type="text"
                     :placeholder="locale === 'fr' ? 'Demandez-moi quelque chose...' : 'Ask me anything...'"
-                    class="flex-1 bg-transparent border-none outline-none text-white text-md placeholder-white/40 sm:h-8 h-4 "
+                    class="flex-1 bg-transparent border-none outline-none text-white text-sm placeholder-white/40 sm:h-8 h-4 "
                     @keydown.enter="sendMessage(inputMessage)" @click.stop />
 
                   <button

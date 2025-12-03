@@ -100,9 +100,9 @@
             <div
               class="flex gap-3 items-center bg-black/20 rounded-full border border-white/10 px-2 py-2 focus-within:border-white/30 transition-colors">
               <UInput v-model="inputMessage"
-                :placeholder="locale === 'fr' ? 'Posez votre question...' : 'Ask your question...'" class="flex-1"
-                variant="none" :disabled="isLoading" :ui="{ base: 'bg-transparent focus:ring-0 p-0 pl-2' }"
-                @keypress="handleKeyPress" />
+                :placeholder="locale === 'fr' ? 'Posez votre question...' : 'Ask your question...'"
+                class="flex-1 text-md" variant="none" :disabled="isLoading"
+                :ui="{ base: 'bg-transparent focus:ring-0 p-0 pl-2' }" @keypress="handleKeyPress" />
               <UButton :disabled="!inputMessage.trim() || isLoading" color="neutral" variant="solid"
                 class="rounded-full w-8 h-8 flex items-center justify-center p-0" @click="sendMessage(inputMessage)">
                 <Icon name="lucide:arrow-up" class="w-4 h-4 text-black" />
@@ -147,7 +147,6 @@
               @click.stop="bottomInput?.focus()">
 
               <Icon name="lucide:sparkles" class="w-4 h-4 text-white/40 group-hover:text-white/80 transition-colors" />
-              a
               <input ref="bottomInput" v-model="inputMessage" type="text"
                 :placeholder="locale === 'fr' ? 'Demandez-moi quelque chose...' : 'Ask me anything...'"
                 class="flex-1 bg-transparent border-none outline-none text-white text-md placeholder-white/40 h-10"
