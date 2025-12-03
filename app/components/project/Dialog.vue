@@ -79,4 +79,7 @@ const { data: content, status } = await useAsyncData(
         watch: [() => props.project, () => locale.value],
     }
 )
+watch(() => props.project, () => {
+    console.log('project changed', props.project)
+})
 </script>

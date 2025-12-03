@@ -6,10 +6,13 @@ const localePath = useLocalePath()
 
 const { data: projects } = await useAsyncData('projects', async () => {
   const collection = ('projects_' + locale.value) as keyof Collections
+  console.log('collection', collection)
+  console.log('locale', locale.value)
   return await queryCollection(collection).all() as Collections['projects_en'][] | Collections['projects_fr'][]
 }, {
   watch: [locale],
 })
+console.log('projects', projects.value)
 
 const projectItems = computed(() => {
   return projects.value?.filter(work => work.featured).map((project) => {

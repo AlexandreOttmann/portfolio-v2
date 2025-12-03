@@ -105,20 +105,14 @@ export const collections = {
   projects_content_en: defineCollection(
     asSeoCollection({
       type: 'page',
-      source: {
-        include: 'en/projects/**/content.md',
-        prefix: '/en/projects',
-      },
+      source: 'en/projects/**/content.md',
       schema: commonContentSchema,
     }),
   ),
   projects_content_fr: defineCollection(
     asSeoCollection({
       type: 'page',
-      source: {
-        include: 'fr/projects/**/content.md',
-        prefix: '/fr/projects',
-      },
+      source: 'fr/projects/**/content.md',
       schema: commonContentSchema,
     }),
   ),
