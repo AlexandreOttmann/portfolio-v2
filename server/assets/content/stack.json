@@ -1,0 +1,79 @@
+{
+  "items": [
+    {
+      "name": "Nuxt",
+      "link": "https://nuxt.com/",
+      "icon": "custom:nuxt"
+    },
+    {
+      "name": "Vue",
+      "link": "https://vuejs.org/",
+      "icon": "custom:vue"
+    },
+    {
+      "name": "Next",
+      "link": "https://nextjs.org/",
+      "icon": "custom:nextjs"
+    },
+    {
+      "name": "Vuetify",
+      "link": "https://vuetifyjs.com/",
+      "icon": "custom:vuetify"
+    },
+    {
+      "name": "Supabase",
+      "link": "https://supabase.com/",
+      "icon": "custom:supabase"
+    },
+    {
+      "name": "Docker",
+      "link": "https://docker.com/",
+      "icon": "custom:docker"
+    },
+    {
+      "name": "GraphQL",
+      "link": "https://graphql.org/",
+      "icon": "custom:graphql"
+    },
+    {
+      "name": "Postgresql",
+      "link": "https://www.postgresql.org/",
+      "icon": "custom:postgresql"
+    },
+    {
+      "name": "SanityCMS",
+      "link": "https://www.sanity.io/",
+      "icon": "custom:sanitycms"
+    },
+    {
+      "name": "TailwindCSS",
+      "link": "https://tailwindcss.com/",
+      "icon": "custom:tailwind"
+    },
+    {
+      "name": "Vercel",
+      "link": "https://vercel.com/",
+      "icon": "custom:vercel"
+    },
+    {
+      "name": "Notion",
+      "link": "https://www.notion.so/",
+      "icon": "custom:notion"
+    },
+    {
+      "name": "Figma",
+      "link": "https://www.figma.com/",
+      "icon": "custom:figma"
+    },
+    {
+      "name": "After Effects",
+      "link": "https://www.adobe.com/products/after-effects.html",
+      "icon": "custom:after-effects"
+    },
+    {
+      "name": "Lightroom",
+      "link": "https://www.adobe.com/products/photoshop-lightroom.html",
+      "icon": "custom:lightroom"
+    }
+  ]
+}

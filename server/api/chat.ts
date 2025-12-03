@@ -1,5 +1,5 @@
 import OpenAI from 'openai'
-import { loadContentContext } from '../utils/content-loader'
+import { loadContentFromStorage } from '../utils/storage-content-loader'
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -78,9 +78,9 @@ export default defineEventHandler(async (event) => {
 
     // Try to use OpenAI API
     try {
-      // Load dynamic content context based on locale
-      const context = await loadContentContext(locale)
-
+      // Load dynamic content context from storage based on locale
+      const context = await loadContentFromStorage(locale, event)
+      console.log('Context loaded from storage:', context)
       // Debug: Log first 500 chars of context to verify it's correct
       console.log('[AI Chat] Context preview:', context.substring(0, 500))
       console.log('[AI Chat] Context length:', context.length, 'characters')

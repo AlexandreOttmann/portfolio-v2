@@ -147,10 +147,10 @@
               @click.stop="bottomInput?.focus()">
 
               <Icon name="lucide:sparkles" class="w-4 h-4 text-white/40 group-hover:text-white/80 transition-colors" />
-
+              a
               <input ref="bottomInput" v-model="inputMessage" type="text"
                 :placeholder="locale === 'fr' ? 'Demandez-moi quelque chose...' : 'Ask me anything...'"
-                class="flex-1 bg-transparent border-none outline-none text-white text-sm placeholder-white/40 h-10"
+                class="flex-1 bg-transparent border-none outline-none text-white text-md placeholder-white/40 h-10"
                 @keydown.enter="sendMessage(inputMessage)" />
 
               <button

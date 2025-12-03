@@ -60,7 +60,7 @@ const { locale } = useI18n()
 
                   <input v-model="inputMessage" type="text"
                     :placeholder="locale === 'fr' ? 'Demandez-moi quelque chose...' : 'Ask me anything...'"
-                    class="flex-1 bg-transparent border-none outline-none text-white text-xs xs:text-sm placeholder-white/40 sm:h-8 h-4 "
+                    class="flex-1 bg-transparent border-none outline-none text-white text-md placeholder-white/40 sm:h-8 h-4 "
                     @keydown.enter="sendMessage(inputMessage)" @click.stop />
 
                   <button

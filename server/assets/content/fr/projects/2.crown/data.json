@@ -1,0 +1,15 @@
+{
+  "name": "Crown",
+  "image": "/projects/crown.png",
+  "link": "https://www.crown-procurement.com/",
+  "release": "2025",
+  "featured": false,
+  "content": "Nuxt4, Vuetify, Supabase, NuxtStudio, D3.js | Full-stack web application - Enchères en temps réel pour les industries ",
+  "stack": [
+    "Nuxt",
+    "Vuetify",
+    "Supabase",
+    "Figma",
+    "D3.js"
+  ]
+}

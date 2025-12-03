@@ -135,6 +135,11 @@ export const collections = {
       ),
     }),
   }),
+  ai_context: defineCollection({
+    type: 'page',
+    source: 'ai-context.md',
+    schema: commonContentSchema,
+  }),
   faq_en: defineCollection({
     type: 'data',
     source: 'en/faq.json',
@@ -145,4 +150,5 @@ export const collections = {
     source: 'fr/faq.json',
     schema: commonFaqSchema,
   }),
+
 }

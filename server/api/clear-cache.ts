@@ -1,9 +1,9 @@
-import { clearContentCache } from '../utils/content-loader'
+import { clearStorageContentCache } from '../utils/storage-content-loader'
 
 export default defineEventHandler(async () => {
-    clearContentCache()
+    clearStorageContentCache()
     return {
         success: true,
-        message: 'Content cache cleared successfully',
+        message: 'Storage content cache cleared successfully',
     }
 })

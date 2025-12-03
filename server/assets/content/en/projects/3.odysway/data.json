@@ -1,0 +1,19 @@
+{
+  "name": "Odysway",
+  "image": "/projects/odysway.png",
+  "link": "https://www.odysway.com/",
+  "release": "2024",
+  "featured": true,
+  "content": "Nuxt4, Vuetify, Supabase, SanityCMS, NuxtStudio, Stripe | Full-stack web application for a travel agency",
+   "stack": [
+    "Nuxt",
+    "Vuetify",
+    "Supabase",
+    "SanityCMS",
+    "NuxtStudio",
+    "Stripe",
+    "Alma",
+    "ActiveCampaign",
+    "Trevor"
+  ]
+}

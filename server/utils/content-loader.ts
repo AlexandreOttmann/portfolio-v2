@@ -1,95 +1,71 @@
-import { readdir, readFile } from 'fs/promises'
-import { join } from 'path'
+import type { H3Event } from 'h3'
 
 interface ContentCache {
     content: string
     timestamp: number
 }
 
+
 // Cache for loaded content (in-memory)
 const contentCache = new Map<string, ContentCache>()
 const CACHE_TTL = 1000 * 60 * 60 // 1 hour
 
 /**
- * Recursively loads all markdown files from a directory
- */
-async function loadMarkdownFiles(dirPath: string, basePath: string = ''): Promise<string[]> {
-    const contents: string[] = []
-
-    try {
-        const entries = await readdir(dirPath, { withFileTypes: true })
-
-        for (const entry of entries) {
-            const fullPath = join(dirPath, entry.name)
-            const relativePath = basePath ? `${basePath}/${entry.name}` : entry.name
-
-            if (entry.isDirectory()) {
-                // Recursively load from subdirectories
-                const subContents = await loadMarkdownFiles(fullPath, relativePath)
-                contents.push(...subContents)
-            }
-            else if (entry.isFile() && entry.name.endsWith('.md')) {
-                try {
-                    let content = await readFile(fullPath, 'utf-8')
-
-                    // Strip YAML frontmatter to avoid confusing the AI with JSON-like syntax
-                    content = content.replace(/^---[\s\S]*?---\n/, '')
-
-                    // Remove any potential invisible characters or encoding issues
-                    content = content.replace(/\u0000/g, '') // Remove null bytes
-                    content = content.trim()
-
-                    // Skip empty files after frontmatter removal
-                    if (content.length === 0) {
-                        continue
-                    }
-
-                    // Add a header with the file path for context
-                    const formattedContent = `\n## Content from: ${relativePath}\n\n${content}\n`
-                    contents.push(formattedContent)
-                }
-                catch (error) {
-                    console.warn(`Failed to read file ${fullPath}:`, error)
-                }
-            }
-        }
-    }
-    catch (error) {
-        console.warn(`Failed to read directory ${dirPath}:`, error)
-    }
-
-    return contents
-}
-
-/**
- * Loads all content for a given locale and returns it as a formatted string
+ * Loads all content for a given locale using Nuxt Content queryCollection
+ * This works on both local and Vercel deployments
  * Results are cached for performance
  */
-export async function loadContentContext(locale: string = 'en'): Promise<string> {
+export async function loadContentContext(locale: string = 'en', event: H3Event): Promise<string> {
     const cacheKey = `content_${locale}`
 
     // Check cache
     const cached = contentCache.get(cacheKey)
     if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+        // console.log(`[Content Loader] Using cached context for locale '${locale}'`)
         return cached.content
     }
 
-    // Load content from filesystem
-    const contentDir = join(process.cwd(), 'content', locale)
-    const markdownFiles = await loadMarkdownFiles(contentDir)
+    // console.log(`[Content Loader] Loading fresh content for locale '${locale}'`)
 
-    // Also load the base AI context
-    const baseContextPath = join(process.cwd(), 'content', 'ai-context.md')
-    let baseContext = ''
     try {
-        baseContext = await readFile(baseContextPath, 'utf-8')
-    }
-    catch (error) {
-        console.warn('Failed to load base AI context:', error)
-    }
+        // Load base AI context
+        let baseContext = ''
+        try {
+            const aiContextDoc = await queryCollection(event, 'ai_context').first()
+            if (aiContextDoc?.body) {
+                baseContext = extractTextFromAST(aiContextDoc.body)
+            }
+        }
+        catch (error) {
+            console.warn('[Content Loader] Failed to load base AI context:', error)
+        }
 
-    // Combine everything with a clear instruction
-    const fullContext = `${baseContext}
+        // Load all content for the locale
+        const contents: string[] = []
+
+        try {
+            // Query all content documents for this locale
+            const docs = await queryCollection(event, `content_${locale}`).all()
+
+            // console.log(`[Content Loader] Found ${docs.length} documents for locale '${locale}'`)
+            // console.log('first doc', docs)
+            for (const doc of docs) {
+                if (doc.body) {
+                    const textContent = extractTextFromAST(doc.body)
+
+                    if (textContent.trim().length > 0) {
+                        const formattedContent = `\n## Content from: ${doc._path}\n\n${textContent}\n`
+                        contents.push(formattedContent)
+                    }
+                }
+            }
+        }
+        catch (error) {
+            console.warn('[Content Loader] Failed to load locale content:', error)
+        }
+
+        // Combine everything
+        const fullContext = `${baseContext}
 
 ---
 
@@ -98,19 +74,88 @@ export async function loadContentContext(locale: string = 'en'): Promise<string>
 The following sections contain detailed information about Alex's work, projects, and experience.
 Use ONLY this information to provide accurate responses. Never make up information not present in this context.
 
-${markdownFiles.join('\n---\n')}
+${contents.join('\n---\n')}
 `
 
-    // Cache the result
-    contentCache.set(cacheKey, {
-        content: fullContext,
-        timestamp: Date.now(),
-    })
+        // Cache the result
+        contentCache.set(cacheKey, {
+            content: fullContext,
+            timestamp: Date.now(),
+        })
 
-    // Debug: Log context size
-    console.log(`[Content Loader] Loaded context for locale '${locale}': ${fullContext.length} characters, ${markdownFiles.length} files`)
 
-    return fullContext
+        return fullContext
+    }
+    catch (error) {
+        console.error('[Content Loader] Critical error loading content:', error)
+
+        // Return minimal context on error
+        return `# AI Assistant Context
+
+You are an AI assistant on Alex's portfolio website. Due to a technical issue, detailed context is unavailable. 
+Please inform users that you're experiencing technical difficulties and suggest they contact Alex directly.`
+    }
+}
+
+/**
+ * Recursively extracts plain text from Nuxt Content AST (minimark format)
+ */
+function extractTextFromAST(body: any): string {
+    if (!body) return ''
+
+    // Handle minimark format (Nuxt Content v3)
+    if (body.type === 'minimark' && Array.isArray(body.value)) {
+        return body.value
+            .map((node: any) => extractTextFromNode(node))
+            .filter(Boolean)
+            .join('\n\n')
+    }
+
+    // Fallback for other formats
+    if (body.children && Array.isArray(body.children)) {
+        return body.children
+            .map((child: any) => extractTextFromNode(child))
+            .join('')
+    }
+
+    return ''
+}
+
+/**
+ * Extracts text from individual content nodes
+ */
+function extractTextFromNode(node: any): string {
+    if (!node) return ''
+
+    // Handle text nodes
+    if (typeof node === 'string') {
+        return node
+    }
+
+    if (node.type === 'text') {
+        return node.value || node.content || ''
+    }
+
+    // Handle nodes with children
+    if (node.children && Array.isArray(node.children)) {
+        const text = node.children
+            .map((child: any) => extractTextFromNode(child))
+            .join('')
+
+        // Add spacing for block elements
+        if (node.tag === 'p' || node.tag === 'div' || node.tag === 'li') {
+            return text + '\n'
+        }
+
+        return text
+    }
+
+    // Handle nodes with content
+    if (node.content) {
+        return node.content
+    }
+
+    return ''
 }
 
 /**
@@ -118,4 +163,5 @@ ${markdownFiles.join('\n---\n')}
  */
 export function clearContentCache() {
     contentCache.clear()
+    console.log('[Content Loader] Cache cleared')
 }

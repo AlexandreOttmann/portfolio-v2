@@ -1,0 +1,20 @@
+{
+  "name": "Quanted Square",
+  "image": "/projects/quantedsquare.png",
+  "link": "https://www.quantedsquare.com/",
+  "release": "2023 à Aujourd'hui",
+  "featured": true,
+  "content": "Agence web de consulting Tech à destination des startups et fonds d'investissement. Tech & Product Due Diligence actionable et moderne pour des private equity",
+  "stack": [
+    "Nuxt",
+    "Supabase",
+    "Stripe",
+    "ActiveCampaign",
+    "Alma",
+    "Vuetify",
+    "D3.js",
+    "SanityCMS",
+    "NodeJs",
+    "Figma"
+  ]
+}
