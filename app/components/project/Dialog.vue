@@ -71,13 +71,15 @@ const { data: content, status } = await useAsyncData(
         // project.stem is like 'fr/projects/1.quantedsquare/data'
         // we need 'fr/projects/1.quantedsquare/content'
         const contentPath = props.project.stem.replace('/data', '/content')
+        console.log('contentPath', contentPath)
         const collection = ('project_content_' + locale.value) as keyof Collections
+        console.log('collection', collection)
         const content = await queryCollection(collection).where('stem', '=', contentPath).first()
         console.log('content fetched', content)
         return content
     },
     {
-        watch: [() => props.project, () => locale.value],
+        watch: [() => props.project, locale],
     }
 )
 watch(() => props.project, () => {
