@@ -119,8 +119,7 @@
         enter-from-class="opacity-0 translate-y-20" enter-to-class="opacity-100 translate-y-0"
         leave-active-class="transition-all duration-300 ease-in" leave-from-class="opacity-100 translate-y-0"
         leave-to-class="opacity-0 translate-y-20">
-        <div v-if="!showChat"
-          class="hidden sm:block fixed bottom-8 left-1/2 -translate-x-1/2 z-40 w-full max-w-md px-6">
+        <div v-if="!showChat" class="block fixed bottom-8 left-1/2 -translate-x-1/2 z-40 w-full max-w-md px-2 sm:px-5">
           <!-- Bubble Hint -->
           <Transition enter-active-class="transition-all duration-500 ease-out"
             enter-from-class="opacity-0 transform translate-y-4 scale-95"

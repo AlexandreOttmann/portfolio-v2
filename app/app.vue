@@ -11,12 +11,12 @@ const { locale } = useI18n()
 
   <Body>
     <LayoutScrollToTop />
-    <NuxtLayout>
-      <UApp :locale="locales[locale]">
+    <UApp :locale="locales[locale]" :tooltip="{ delayDuration: 0 }" class="relative">
+      <NuxtLayout>
         <NuxtPage />
         <HomeAiChat />
-      </UApp>
-    </NuxtLayout>
+      </NuxtLayout>
+    </UApp>
     <Toaster close-button />
     <DotPattern
       class="absolute inset-0 -z-10 size-full fill-white/5 [mask-image:radial-gradient(white,transparent_85%)]" />

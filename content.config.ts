@@ -102,20 +102,20 @@ export const collections = {
       schema: commonProjectSchema,
     }),
   ),
-  projects_content_en: defineCollection(
-    asSeoCollection({
-      type: 'page',
-      source: 'en/projects/**/content.md',
-      schema: commonContentSchema,
-    }),
-  ),
-  projects_content_fr: defineCollection(
-    asSeoCollection({
-      type: 'page',
-      source: 'fr/projects/**/content.md',
-      schema: commonContentSchema,
-    }),
-  ),
+  // projects_content_en: defineCollection(
+  //   asSeoCollection({
+  //     type: 'page',
+  //     source: 'en/projects/**/content.md',
+  //     schema: commonContentSchema,
+  //   }),
+  // ),
+  // projects_content_fr: defineCollection(
+  //   asSeoCollection({
+  //     type: 'page',
+  //     source: 'fr/projects/**/content.md',
+  //     schema: commonContentSchema,
+  //   }),
+  // ),
   stack: defineCollection({
     type: 'data',
     source: 'stack.json',

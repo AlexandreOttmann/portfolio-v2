@@ -93,24 +93,24 @@ export default defineNuxtConfig({
       }
     },
     // Copy content files to server/assets during build
-    'nitro:build:before': async () => {
-      const { copyContentFiles } = await import('./server/utils/copy-content-files')
-      const { resolve } = await import('path')
+    // 'nitro:build:before': async () => {
+    //   const { copyContentFiles } = await import('./server/utils/copy-content-files')
+    //   const { resolve } = await import('path')
 
-      const contentDir = resolve('./content')
-      const targetDir = resolve('./server/assets/content')
+    //   const contentDir = resolve('./content')
+    //   const targetDir = resolve('./server/assets/content')
 
-      // Specify which directories/files to copy
-      // You can customize this list based on your needs
-      const dirsToCopy = [
-        'en',           // English content
-        'fr',           // French content
-        'ai-context.md', // AI context file
-        'stack.json',   // Stack data
-      ]
+    //   // Specify which directories/files to copy
+    //   // You can customize this list based on your needs
+    //   const dirsToCopy = [
+    //     'en',           // English content
+    //     'fr',           // French content
+    //     'ai-context.md', // AI context file
+    //     'stack.json',   // Stack data
+    //   ]
 
-      await copyContentFiles(contentDir, targetDir, dirsToCopy)
-    },
+    //   await copyContentFiles(contentDir, targetDir, dirsToCopy)
+    // },
   },
 
   i18n: {
@@ -124,7 +124,7 @@ export default defineNuxtConfig({
       redirectOn: 'root',
     },
     strategy: 'prefix',
-    defaultLocale: 'en',
+    defaultLocale: 'fr',
   },
 
   icon: {

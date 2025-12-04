@@ -10,6 +10,7 @@
         class="absolute -top-8 left-1/2 size-72 -translate-x-1/2 rounded-full bg-white/25 blur-[120px] lg:-top-8 lg:size-[32rem] lg:blur-[200px]" />
 
       <!-- profile picture -->
+      <HomeProfilePicture />
       <Motion :initial="{
         scale: 1.1,
         opacity: 0,
@@ -21,7 +22,6 @@
       }" :transition="{
         duration: 0.6,
       }">
-        <HomeProfilePicture />
 
         <div class="z-20 flex flex-col items-center justify-center">
           <!-- title -->

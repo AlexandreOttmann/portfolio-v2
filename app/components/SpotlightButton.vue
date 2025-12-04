@@ -20,7 +20,7 @@ defineProps({
 </script>
 
 <template>
-  <component :is="as" :class="`group relative inline-flex items-center overflow-hidden transition ${rounded ? 'rounded-full' : 'rounded-md px-8 '} ${transparent ? '' : 'bg-zinc-800'
+  <component :is="as" :class="`group relative inline-flex items-center overflow-hidden transition ${rounded ? 'rounded-full' : 'rounded-md px-8 py-1'} ${transparent ? '' : 'bg-zinc-800'
     }`">
     <div v-if="animate" class="absolute inset-0 flex items-center [container-type:inline-size]">
       <div
