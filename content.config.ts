@@ -43,6 +43,12 @@ const commonFaqSchema = z.object({
   ),
 })
 
+const projectContentSchema = z.object({
+  title: z.string().optional(),
+  description: z.string().optional(),
+  date: z.string().optional(),
+})
+
 export const collections = {
   content_en: defineCollection(
     asSeoCollection({
@@ -163,7 +169,7 @@ export const collections = {
         include: 'en/projects/**/content.md',
         prefix: '/en/projects',
       },
-      schema: commonContentSchema,
+      schema: projectContentSchema,
     }),
   ),
   project_content_fr: defineCollection(
@@ -173,7 +179,7 @@ export const collections = {
         include: 'fr/projects/**/content.md',
         prefix: '/fr/projects',
       },
-      schema: commonContentSchema,
+      schema: projectContentSchema,
     }),
   ),
 
