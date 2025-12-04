@@ -62,10 +62,11 @@ const isOpen = computed({
 })
 
 const { locale } = useI18n()
-
+console.log('collection', props.project)
 const { data: content, status } = await useAsyncData(
     `project-content-${props.project?.name}-${locale.value}`,
     async () => {
+        console.log('In AsyncData', props, locale.value)
         if (!props.project) return null
         // project.stem is like 'fr/projects/1.quantedsquare/data'
         // we need 'fr/projects/1.quantedsquare/content'
@@ -80,6 +81,6 @@ const { data: content, status } = await useAsyncData(
     }
 )
 watch(() => props.project, () => {
-    console.log('project changed', props.project)
+    console.log('project changed', props.project, 'CONTENT', content.value)
 })
 </script>
