@@ -51,7 +51,7 @@ import type { Collections } from '@nuxt/content'
 
 const props = defineProps<{
     open: boolean
-    project: Collections['projects_en'] | Collections['projects_fr'] | null
+    project: Collections['projects_en'] | Collections['projects_fr']
 }>()
 
 const emit = defineEmits(['update:open'])
@@ -64,14 +64,14 @@ const isOpen = computed({
 const { locale } = useI18n()
 console.log('collection', props.project)
 const { data: content, status } = await useAsyncData(
-    `project-content-${props.project?.name}-${locale.value}`,
+    `project-content-${props.project.name}-${locale.value}`,
     async () => {
         console.log('In AsyncData', props, locale.value)
         if (!props.project) return null
         // project.stem is like 'fr/projects/1.quantedsquare/data'
         // we need 'fr/projects/1.quantedsquare/content'
         const contentPath = props.project.stem.replace('/data', '/content')
-        const collection = ('content_' + locale.value) as keyof Collections
+        const collection = ('project_content_' + locale.value) as keyof Collections
         const content = await queryCollection(collection).where('stem', '=', contentPath).first()
         console.log('content fetched', content)
         return content

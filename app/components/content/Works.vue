@@ -44,6 +44,6 @@ function openProject(project: any) {
         <ProjectCard :project="project" @select="openProject" />
       </Motion>
     </div>
-    <ProjectDialog v-model:open="isDialogOpen" :project="selectedProject" />
+    <ProjectDialog v-if="selectedProject" v-model:open="isDialogOpen" :project="selectedProject" />
   </section>
 </template>
