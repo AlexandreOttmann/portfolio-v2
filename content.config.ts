@@ -102,20 +102,6 @@ export const collections = {
       schema: commonProjectSchema,
     }),
   ),
-  // projects_content_en: defineCollection(
-  //   asSeoCollection({
-  //     type: 'page',
-  //     source: 'en/projects/**/content.md',
-  //     schema: commonContentSchema,
-  //   }),
-  // ),
-  // projects_content_fr: defineCollection(
-  //   asSeoCollection({
-  //     type: 'page',
-  //     source: 'fr/projects/**/content.md',
-  //     schema: commonContentSchema,
-  //   }),
-  // ),
   stack: defineCollection({
     type: 'data',
     source: 'stack.json',
@@ -143,6 +129,32 @@ export const collections = {
     type: 'data',
     source: 'fr/faq.json',
     schema: commonFaqSchema,
+  }),
+  timeline_en: defineCollection({
+    type: 'data',
+    source: 'en/timeline.json',
+    schema: z.array(
+      z.object({
+        year: z.number(),
+        icon: z.string(),
+        title: z.string(),
+        description: z.string(),
+        active: z.boolean().optional(),
+      }),
+    ),
+  }),
+  timeline_fr: defineCollection({
+    type: 'data',
+    source: 'fr/timeline.json',
+    schema: z.array(
+      z.object({
+        year: z.number(),
+        icon: z.string(),
+        title: z.string(),
+        description: z.string(),
+        active: z.boolean().optional(),
+      }),
+    ),
   }),
 
 }
