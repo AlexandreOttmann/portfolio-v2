@@ -71,6 +71,7 @@ const { data: content, status } = await useAsyncData(
         // project.stem is like 'fr/projects/1.quantedsquare/data'
         // we need 'fr/projects/1.quantedsquare/content'
         const contentPath = props.project.stem.replace('/data', '/content')
+        console.log('props.project', props.project)
         console.log('contentPath', contentPath)
         const collection = ('project_content_' + locale.value) as keyof Collections
         console.log('collection', collection)

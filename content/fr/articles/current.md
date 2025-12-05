@@ -6,7 +6,7 @@ description: Dans quelle situation je suis actuellement à la suite de la fin de
 tags:
   - Création
   - Productivité
-image: /480536524-18486310042013288-8259063081293723909-n.webp
+image: /sunset-yuzu.webp
 readingTime: "3"
 ogImage:
   props: {}

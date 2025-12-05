@@ -25,10 +25,10 @@
                     <div class="absolute left-0 transition-all duration-300 ease-out transform origin-top"
                         :style="{ top: timelineHorizontalLineTop }" :class="[
                             displayAsActiveIndex === index
-                                ? `${props.mainTickHeightActive} ${props.tickThicknessActive} bg-greeb-200`
+                                ? `${props.mainTickHeightActive} ${props.tickThicknessActive} rainbow-gradient`
                                 : `${props.mainTickHeightBase} group-hover:${props.mainTickHeightHover}`,
                             index <= displayAsActiveIndex
-                                ? `${props.tickThicknessActive} bg-green-600`
+                                ? `${props.tickThicknessActive} rainbow-gradient`
                                 : `${props.tickThicknessBase} bg-accented`
                         ]" />
 
@@ -36,7 +36,7 @@
                         <div v-for="tickNumber in numberOfIntermediateTicks" :key="`subtick-${index}-${tickNumber}`"
                             class="absolute transition-colors duration-300 ease-out" :class="[
                                 props.intermediateTickHeight,
-                                index < displayAsActiveIndex ? `${props.tickThicknessActive} bg-green-600 group-hover:bg-green-200` : `${props.tickThicknessBase} bg-accented`
+                                index < displayAsActiveIndex ? `${props.tickThicknessActive} rainbow-gradient` : `${props.tickThicknessBase} bg-accented`
                             ]"
                             :style="{ top: timelineHorizontalLineTop, left: `${(tickNumber * props.itemWidth / (numberOfIntermediateTicks + 1))}px` }" />
                     </div>
@@ -151,5 +151,29 @@ const detailsActivePushedTop = computed(() => `calc(${iconActivePushedTop.value}
 <style scoped>
 .group:focus {
     outline: none;
+}
+
+/* Rainbow gradient animation */
+@keyframes rainbow-slide {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 200% 50%;
+    }
+}
+
+.rainbow-gradient {
+    background: linear-gradient(90deg,
+            #ff0080,
+            #ff8c00,
+            #40e0d0,
+            #4169e1,
+            #9370db,
+            #ff1493,
+            #ff0080);
+    background-size: 200% 100%;
+    animation: rainbow-slide 3s linear infinite;
 }
 </style>

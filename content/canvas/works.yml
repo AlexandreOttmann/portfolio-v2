@@ -1,0 +1,109 @@
+title: Works Canvas
+description: A canvas featuring all my works that i'm proud of.
+items:
+  - title: Quanted Square
+    link: https://shelve.cloud
+    image: /projects/quantedsquare.png
+    width: 480
+    height: 270
+  - title: Crown
+    link: https://nuxt.com
+    image: /projects/crown.png
+    width: 500
+    height: 290
+  - title: Odysway
+    link: https://shelve.cloud
+    image: /projects/odysway.png
+    width: 680
+    height: 240
+  - title: Ecovoit'
+    link: https://shelve.cloud
+    image: /projects/ecovoit.png
+    width: 480
+    height: 270
+  - title: Portfolio v1
+    link: https://portfolio-template.nuxt.dev/
+    image: /projects/portfolio-v1.png
+    width: 480
+    height: 270
+  - title: Précédente carrière
+    link: https://canvas.cloud
+    image: /projects/malt.png
+    width: 480
+    height: 270
+  - title: Koober
+    link: https://ui.nuxt.com
+    image: /projects/koober.png
+    width: 480
+    height: 270
+  - title: What's next?
+    link: https://nuxt.com/modules
+    image: /sunset-yuzu.webp
+    width: 480
+    height: 270
+  # - title: NuxtLabs is Joining Vercel
+  #   link: https://nuxtlabs.com
+  #   image: /projects/crown.png
+  #   width: 480
+  #   height: 270
+  # - title: Nuxt UI Raycast Clone
+  #   link: https://raycast-nuxt-ui-clone.vercel.app/
+  #   image: /projects/crown.png
+  #   width: 480
+  #   height: 270
+  # - title: Nuxt Ship
+  #   image: /projects/crown.png
+  #   width: 480
+  #   height: 270
+  # - title: Nuxt Raycast Extension
+  #   link: https://github.com/nuxt/raycast-extension
+  #   image: /projects/crown.png
+  #   width: 480
+  #   height: 270
+  # - title: Inkly OG Image
+  #   link: https://inkly.hrcd.fr
+  #   image: /projects/crown.png
+  #   width: 480
+  #   height: 270
+  # - title: Nuxt 100k Followers Post
+  #   image: /projects/crown.png
+  #   width: 480
+  #   height: 270
+  # - title: NuxtHub x Cloudflare Workers
+  #   link: https://hub.nuxt.com/changelog/workers
+  #   image: /projects/crown.png
+  #   width: 480
+  #   height: 270
+  # - title: Shelve Ripple Loader
+  #   link: https://app.shelve.cloud
+  #   image: /projects/crown.png
+  #   width: 480
+  #   height: 270
+  # - title: Nuxt Logo Blueprint
+  #   image: /projects/crown.png
+  #   width: 480
+  #   height: 270
+  # - title: Nuxt.com Feedbacks Admin
+  #   link: https://nuxt.com/feedbacks
+  #   image: /projects/crown.png
+  #   width: 480
+  #   height: 270
+  # - title: Concept for a Nuxt Metro Ad
+  #   image: /projects/crown.png
+  #   width: 680
+  #   height: 240
+  # - title: Nuxt UI Figma Kit
+  #   image: /projects/crown.png
+  #   link: https://go.nuxt.com/figma-ui
+  #   width: 480
+  #   height: 270
+  # - title: Nuxt UI MCP Server
+  #   image: /projects/crown.png
+  #   link: https://ui.nuxt.com/docs/getting-started/ai/mcp
+  #   width: 480
+  #   height: 270
+  # - title: NuxtL.com new mobile navigation
+  #   image: /projects/crown.png
+  #   link: https://nuxt.com
+  #   width: 480
+  #   height: 270

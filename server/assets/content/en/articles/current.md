@@ -11,7 +11,7 @@ sitemap:
 title: "Looking for a New Opportunity: A Year to Grow"
 description: "Looking for a New Opportunity: A Year to Grow"
 date: 02/12/2025
-image: /480536524-18486310042013288-8259063081293723909-n.webp
+image: /sunset-yuzu.webp
 ---
 
 # Looking for a New Opportunity: A Year to Grow

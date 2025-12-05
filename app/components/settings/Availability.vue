@@ -6,9 +6,9 @@ const currentAvailability = computed(() => {
     {
       status: 'available',
       message: 'Available for hire',
-      color: 'bg-green-600/80',
-      bgColor: 'bg-green-500/80',
-      textColor: 'text-green-500/80',
+      color: 'rainbow-gradient',
+      bgColor: 'rainbow-gradient',
+      textColor: 'rainbow-gradient-text',
     },
     {
       status: 'unavailable',
@@ -41,3 +41,45 @@ defineProps({
     </span>
   </div>
 </template>
+
+<style scoped>
+/* Rainbow gradient animation */
+@keyframes rainbow-slide {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.rainbow-gradient {
+  background: linear-gradient(90deg,
+      #ff0080,
+      #ff8c00,
+      #40e0d0,
+      #4169e1,
+      #9370db,
+      #ff1493,
+      #ff0080);
+  background-size: 200% 100%;
+  animation: rainbow-slide 3s linear infinite;
+}
+
+.rainbow-gradient-text {
+  background: linear-gradient(90deg,
+      #ff0080,
+      #ff8c00,
+      #40e0d0,
+      #4169e1,
+      #9370db,
+      #ff1493,
+      #ff0080);
+  background-size: 200% 100%;
+  animation: rainbow-slide 3s linear infinite;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+</style>

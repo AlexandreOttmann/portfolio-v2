@@ -182,5 +182,20 @@ export const collections = {
       schema: projectContentSchema,
     }),
   ),
+  canvas: defineCollection({
+    type: 'page',
+    source: 'canvas/*.yml',
+    schema: z.object({
+      title: z.string().nonempty(),
+      description: z.string().nonempty(),
+      image: z.string().nonempty(),
+      items: z.array(z.object({
+        title: z.string().nonempty(),
+        description: z.string().nonempty(),
+        link: z.string().nonempty(),
+        image: z.string().nonempty(),
+      })),
+    })
+  }),
 
 }

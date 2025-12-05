@@ -27,6 +27,7 @@
     "@vueuse/core": "13.9.0",
     "@vueuse/nuxt": "13.9.0",
     "better-sqlite3": "^12.4.1",
+    "capture-website": "^5.1.0",
     "marked": "^16.4.1",
     "motion-v": "^1.7.4",
     "nuxt": "4.1.2",
