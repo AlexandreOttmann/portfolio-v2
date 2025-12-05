@@ -6,7 +6,7 @@
     <div class="relative mx-auto flex max-w-7xl flex-col justify-center gap-4 px-4 py-8 sm:px-6 lg:px-8 lg:py-16">
       <!-- spotlight -->
       <div
-        class="absolute -top-8 left-1/2 size-72 -translate-x-1/2 rounded-full bg-[var(--spotlight)] blur-[120px] lg:-top-8 lg:size-[32rem] lg:blur-[200px]" />
+        class="rainbow-spotlight absolute -top-8 left-1/2 size-72 -translate-x-1/2 rounded-full blur-[120px] lg:-top-8 lg:size-[32rem] lg:blur-[200px]" />
 
       <!-- profile picture -->
       <HomeProfilePicture />
@@ -64,3 +64,30 @@
 const color = useColorMode()
 const isDark = computed(() => color.value === 'dark')
 </script>
+
+<style scoped>
+/* Rainbow spotlight animation for light mode */
+@keyframes rainbow-rotate {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.rainbow-spotlight {
+  background: linear-gradient(90deg,
+      #ff0080,
+      #ff8c00,
+      #40e0d0,
+      #4169e1,
+      #9370db,
+      #ff1493,
+      #ff0080);
+  background-size: 200% 100%;
+  animation: rainbow-rotate 3s linear infinite;
+  opacity: 0.3;
+}
+</style>
