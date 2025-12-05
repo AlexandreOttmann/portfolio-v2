@@ -28,9 +28,20 @@
       </div>
     </div>
     <TransitionGroup v-if="filteredArticles.length" name="list" tag="ul" class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-      <li v-for="article of filteredArticles" :key="article.path">
+      <Motion v-for="article, index in filteredArticles" :key="article.path" as="li" :initial="{
+        scale: 1.1,
+        opacity: 0,
+        filter: 'blur(20px)',
+      }" :animate="{
+        scale: 1,
+        opacity: 1,
+        filter: 'blur(0px)',
+      }" :transition="{
+        duration: 0.6,
+        delay: (0.1) * (index),
+      }">
         <ArticleCard :title="article.title" :date="article.date" :image="article.image" :path="article.path" />
-      </li>
+      </Motion>
     </TransitionGroup>
     <div v-else class="flex h-64 flex-col items-center justify-center gap-2">
       <span class="text-2xl">
