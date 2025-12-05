@@ -17,7 +17,6 @@ sitemap:
   videos: []
   images: []
 ---
-
 ## En recherche d’une nouvelle opportunité : une année pour évoluer
 
 Mon portfolio indique que je suis actuellement à la recherche d’un nouvel emploi. Cette situation fait suite à deux ans et demi passés au sein de **Quanted Square**, l’agence où j’ai fait mes débuts et où j’ai eu la chance de me former à un grand nombre d’outils, de méthodes et de technologies. Je garde une profonde gratitude pour la confiance qu’ils m’ont accordée et pour le rôle essentiel qu’ils ont joué dans le lancement de ma carrière.

@@ -194,8 +194,40 @@ export const collections = {
         description: z.string().nonempty(),
         link: z.string().nonempty(),
         image: z.string().nonempty(),
+        src: z.string().optional(),
       })),
     })
   }),
-
+  canvas_en: defineCollection({
+    type: 'page',
+    source: 'en/canvas/*.yml',
+    schema: z.object({
+      title: z.string().nonempty(),
+      description: z.string().nonempty(),
+      image: z.string().nonempty(),
+      items: z.array(z.object({
+        title: z.string().nonempty(),
+        description: z.string().nonempty(),
+        link: z.string().nonempty(),
+        image: z.string().nonempty(),
+        src: z.string().optional(),
+      })),
+    })
+  }),
+  canvas_fr: defineCollection({
+    type: 'page',
+    source: 'fr/canvas/*.yml',
+    schema: z.object({
+      title: z.string().nonempty(),
+      description: z.string().nonempty(),
+      image: z.string().nonempty(),
+      items: z.array(z.object({
+        title: z.string().nonempty(),
+        description: z.string().nonempty(),
+        link: z.string().nonempty(),
+        image: z.string().nonempty(),
+        src: z.string().optional(),
+      })),
+    })
+  }),
 }

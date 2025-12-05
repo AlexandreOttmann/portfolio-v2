@@ -1,5 +1,5 @@
 title: Works Canvas
-description: A canvas featuring all my works that i'm proud of.
+description: Un canvas présentant toutes mes réalisations.
 items:
   - title: Quanted Square
     link: https://shelve.cloud
@@ -8,41 +8,48 @@ items:
     height: 270
     src: fr/projects/1.quantedsquare/data
   - title: Crown
-    link: https://nuxt.com
+    link: https://www.crown-procurement.com/
     image: /projects/crown.png
     width: 500
     height: 290
+    src: fr/projects/2.crown/data
   - title: Odysway
-    link: https://shelve.cloud
+    link: https://www.odysway.com/
     image: /projects/odysway.png
     width: 680
     height: 240
+    src: fr/projects/3.odysway/data
   - title: Ecovoit'
-    link: https://shelve.cloud
+    link:  'https://github.com/AlexandreOttmann/2309-wns-jaune-eco-voit'
     image: /projects/ecovoit.png
     width: 480
     height: 270
+    src: fr/projects/4.ecovoit/data
   - title: Portfolio v1
     link: https://portfolio-template.nuxt.dev/
     image: /projects/portfolio-v1.png
     width: 480
     height: 270
+    src: fr/projects/5.portfolio/data
   - title: Précédente carrière
-    link: https://canvas.cloud
+    link: https://www.malt.fr/profile/alexottmann
     image: /projects/malt.png
     width: 480
     height: 270
+    src: fr/projects/6.malt/data
   - title: Koober
-    link: https://ui.nuxt.com
+    link: https://kooberr.com
     image: /projects/koober.png
     width: 480
     height: 270
-  - title: What's next?
-    link: https://nuxt.com/modules
+    src: fr/projects/7.koober/data
+  - title: Prochaine étape ?
+    link: https://alexottmann.com
     image: /sunset-yuzu.webp
     width: 480
     height: 270
-    src: /fr/articles/current
+    # Need to redirect to article 
+    src: fr/articles/current
   # - title: NuxtLabs is Joining Vercel
   #   link: https://nuxtlabs.com
   #   image: /projects/crown.png

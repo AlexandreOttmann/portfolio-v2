@@ -1,10 +1,15 @@
 <template>
-    <UModal v-model:open="isOpen" :ui="{ content: 'max-w-4xl sm:max-w-4xl' }">
+    <UModal v-model:open="isOpen" :ui="{ content: 'max-w-4xl sm:max-w-4xl bg-muted/80 backdrop-blur-xs' }">
         <template #content>
             <div v-if="project"
-                class="relative flex flex-col overflow-hidden rounded-lg bg-dialog-bg shadow-xl max-h-[90vh]">
+                class="relative flex flex-col overflow-hidden rounded-lg bg-dialog-bg shadow-xl max-h-[100vh]">
+                <!-- Noise -->
+                <div class="pointer-events-none fixed inset-0 z-40 size-full overflow-hidden">
+                    <div
+                        class="noise pointer-events-none absolute inset-[-200%] z-50 size-[400%] bg-[url('/noise.png')] opacity-[4%]" />
+                </div>
                 <!-- Header Image -->
-                <div class="relative h-64 w-full shrink-0 overflow-hidden sm:h-80">
+                <div class="relative h-64 w-full shrink-0 overflow-hidden sm:h-50 ">
                     <NuxtImg :src="project.image" :alt="project.name" class="h-full w-full object-cover" />
                     <div class="absolute inset-0 bg-gradient-to-t from-zinc-900 to-transparent" />
                     <div class="absolute bottom-4 left-4 right-4">
@@ -15,7 +20,7 @@
                         @click="isOpen = false" />
                 </div>
 
-                <div class="flex-1 overflow-y-auto p-6">
+                <div class="flex-1 overflow-y-auto p-6 bg-card-bg/50">
                     <!-- Stack -->
                     <div v-if="project.stack && project.stack.length" class="mb-6 flex flex-wrap gap-2">
                         <UBadge v-for="tech in project.stack" :key="tech" color="neutral" variant="outline">
@@ -24,7 +29,7 @@
                     </div>
 
                     <!-- Content -->
-                    <div class="prose prose-invert max-w-none">
+                    <div class="prose prose-invert max-w-none mb-10">
                         <div v-if="status === 'pending'" class="py-10 text-center">
                             <UIcon name="heroicons:arrow-path" class="animate-spin text-2xl" />
                         </div>
@@ -36,7 +41,8 @@
                 </div>
 
                 <!-- Footer Link -->
-                <div class="shrink-0 border-t border-white/10 p-4 flex justify-end bg-zinc-900">
+                <div
+                    class="fixed bottom-0 left-0 right-0 shrink-0 border-t border-white/10 p-4 flex justify-end bg-card/50 backdrop-blur-xs">
                     <UButton :to="project.link" target="_blank" icon="heroicons:arrow-top-right-on-square"
                         color="neutral" variant="solid">
                         {{ locale === 'fr' ? 'Visiter le site' : 'Visit Website' }}
@@ -70,14 +76,24 @@ const { data: content, status } = await useAsyncData(
         if (!props.project) return null
         // project.stem is like 'fr/projects/1.quantedsquare/data'
         // we need 'fr/projects/1.quantedsquare/content'
-        const contentPath = props.project.stem.replace('/data', '/content')
-        console.log('props.project', props.project)
-        console.log('contentPath', contentPath)
-        const collection = ('project_content_' + locale.value) as keyof Collections
-        console.log('collection', collection)
-        const content = await queryCollection(collection).where('stem', '=', contentPath).first()
-        console.log('content fetched', content)
-        return content
+        if (props.project?.src?.includes('/articles/')) {
+            console.log('In articles', props.project.src)
+            const collection = 'articles_' + locale.value
+            const article = await queryCollection(collection).where('stem', '=', props.project.src).first()
+            console.log('article fetched', article)
+            return article
+
+        } else {
+
+            const contentPath = props.project.stem.replace('/data', '/content')
+            console.log('props.project', props.project)
+            console.log('contentPath', contentPath)
+            const collection = ('project_content_' + locale.value) as keyof Collections
+            console.log('collection', collection)
+            const content = await queryCollection(collection).where('stem', '=', contentPath).first()
+            console.log('content fetched', content)
+            return content
+        }
     },
     {
         watch: [() => props.project, locale],

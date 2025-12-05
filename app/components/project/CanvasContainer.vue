@@ -124,13 +124,24 @@
 
 <script setup lang="ts">
 import type { CanvasItem } from '~~/modules/infinite-canvas/types'
+import type { Collections } from '@nuxt/content'
 
-const route = useRoute()
+const props = defineProps({
+    projects: {
+        type: Array as () => (Collections['projects_en'] | Collections['projects_fr'])[],
+        required: true
+    }
+})
+
+const { locale } = useI18n()
 const slug = 'works'
-
-const { data } = await useAsyncData(`canvas-${slug}`, () =>
-    queryCollection('canvas').path(`/canvas/${slug}`).first()
-)
+const emit = defineEmits(['select'])
+const { data } = await useAsyncData(`canvas-${slug}-${locale.value}`, () => {
+    const collection = ('canvas_' + locale.value) as keyof Collections
+    return queryCollection(collection).first()
+}, {
+    watch: [locale]
+})
 console.log('data', data.value)
 if (!data.value) {
     throw createError({
@@ -153,11 +164,18 @@ const handleItemClick = (item: CanvasItem) => {
     // Desktop-only click handling
     if (import.meta.client) {
         console.log('item', item)
-        // window.open(item.link, '_blank', 'noopener,noreferrer')
+        if (item.src.includes('/articles/')) {
+            emit('select', item)
+            return
+        } else {
+            const selectedProject = props.projects.find((project: Collections['projects_en'] | Collections['projects_fr']) => project.stem === item.src)
+            console.log('selectedProject', selectedProject)
+            emit('select', selectedProject)
+        }
     }
 }
 
-const imageUrls = computed(() => data.value?.items.map(item => item.image))
+const imageUrls = computed(() => data.value?.items.map((item: any) => item.image))
 
 const loaderProgress = ref(0)
 const showLoader = ref(true)

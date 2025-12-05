@@ -4,7 +4,7 @@ import { withLeadingSlash, joinURL } from 'ufo'
 
 const route = useRoute()
 const { locale, t, localeProperties } = useI18n()
-
+const img = useImage()
 const slug = computed(() => Array.isArray(route.params.slug) ? route.params.slug as string[] : [route.params.slug as string])
 const path = computed(() => withLeadingSlash(joinURL(locale.value, 'articles', ...slug.value)))
 const collection = computed(() => `articles_${locale.value}` as keyof Collections)
@@ -12,7 +12,7 @@ const collection = computed(() => `articles_${locale.value}` as keyof Collection
 const { data: page } = await useAsyncData(path.value, async () =>
   await queryCollection(collection.value).path(path.value).first() as Collections['articles_en'] | Collections['articles_fr'],
 )
-
+console.log('page', page.value)
 if (!page.value)
   throw createError({ statusCode: 404, statusMessage: 'Page not found' })
 
@@ -40,22 +40,16 @@ defineOgImage({
 
 <template>
   <div v-if="page">
-    <FolioMeta
-      :page
-      :is-writing="route.path.includes('/articles/')"
-    />
-    <NuxtLinkLocale
-      to="/writing"
-      class="mx-auto my-8 flex cursor-pointer items-center gap-2 px-4 text-muted hover:text-primary transition-colors duration-200 sm:max-w-2xl md:max-w-3xl lg:max-w-4xl"
-    >
-      <UIcon
-        name="lucide:arrow-left"
-        class="size-4"
-      />
-      <span class="text-sm font-extralight">
-        {{ $t("navigation.writing") }}
-      </span>
-    </NuxtLinkLocale>
+    <FolioMeta :page :is-writing="route.path.includes('/articles/')" />
+    <div class="mx-auto mt-8 sm:mt-20 px-4 sm:max-w-2xl md:max-w-3xl lg:max-w-4xl">
+      <NuxtLinkLocale to="/writing"
+        class="inline-flex items-center gap-2 text-muted hover:text-primary transition-colors duration-200 cursor-pointer group">
+        <UIcon name="lucide:arrow-left" class="size-4 transition-transform duration-200 group-hover:-translate-x-1" />
+        <span class="text-sm font-extralight">
+          {{ $t("navigation.writing") }}
+        </span>
+      </NuxtLinkLocale>
+    </div>
     <article class="writing mx-auto px-4 sm:max-w-2xl md:max-w-3xl lg:max-w-4xl">
       <h1 class="text-2xl font-bold">
         {{ page?.title }}
@@ -69,23 +63,19 @@ defineOgImage({
         <p class="hidden sm:block">
           |
         </p>
-        <UTooltip
-          :text="$t('writing.copy_link')"
-          :shortcuts="['⌘', 'K']"
-        >
-          <p
-            class="flex cursor-pointer select-none items-center gap-1 transition-colors duration-200 hover:text-primary"
-            @click="copyArticleLink"
-          >
+        <UTooltip :text="$t('writing.copy_link')" :shortcuts="['⌘', 'K']">
+          <p class="flex cursor-pointer select-none items-center gap-1 transition-colors duration-200 hover:text-primary"
+            @click="copyArticleLink">
             {{ $t("writing.share") }}
           </p>
         </UTooltip>
       </div>
-      <ContentRenderer
-        v-if="page"
-        :dir="localeProperties?.dir ?? 'ltr'"
-        :value="page"
-      />
+      <div class="flex h-70 justify-center overflow-hidden rounded-lg border border-primary/10 mt-4">
+        <NuxtImg :placeholder="img(`${page.image}`)" width="1536" :alt="page.title + ' article image'"
+          class="h-full rounded-lg object-cover transition-all duration-300 hover:scale-105" :src="page.image"
+          :aria-label="page.title + ' article image'" />
+      </div>
+      <ContentRenderer v-if="page" :dir="localeProperties?.dir ?? 'ltr'" :value="page" />
     </article>
   </div>
 </template>

@@ -6,43 +6,50 @@ items:
     image: /projects/quantedsquare.png
     width: 480
     height: 270
-    src: fr/projects/1.quantedsquare/data
+    src: en/projects/1.quantedsquare/data
   - title: Crown
-    link: https://nuxt.com
+    link: https://www.crown-procurement.com/
     image: /projects/crown.png
     width: 500
     height: 290
+    src: en/projects/2.crown/data
   - title: Odysway
-    link: https://shelve.cloud
+    link: https://www.odysway.com/
     image: /projects/odysway.png
     width: 680
     height: 240
+    src: en/projects/3.odysway/data
   - title: Ecovoit'
-    link: https://shelve.cloud
+    link:  'https://github.com/AlexandreOttmann/2309-wns-jaune-eco-voit'
     image: /projects/ecovoit.png
     width: 480
     height: 270
+    src: en/projects/4.ecovoit/data
   - title: Portfolio v1
     link: https://portfolio-template.nuxt.dev/
     image: /projects/portfolio-v1.png
     width: 480
     height: 270
-  - title: Précédente carrière
-    link: https://canvas.cloud
+    src: en/projects/5.portfolio-v1/data
+  - title: Previous career
+    link: https://www.malt.fr/profile/alexottmann
     image: /projects/malt.png
     width: 480
     height: 270
+    src: en/projects/6.malt/data
   - title: Koober
-    link: https://ui.nuxt.com
+    link: https://kooberr.com
     image: /projects/koober.png
     width: 480
     height: 270
+    src: en/projects/7.koober/data
   - title: What's next?
-    link: https://nuxt.com/modules
+    link: https://alexottmann.com
     image: /sunset-yuzu.webp
     width: 480
     height: 270
-    src: /fr/articles/current
+    # Need to redirect to article 
+    src: en/projects/8.alexottmann/data
   # - title: NuxtLabs is Joining Vercel
   #   link: https://nuxtlabs.com
   #   image: /projects/crown.png

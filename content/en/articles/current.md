@@ -12,6 +12,7 @@ title: "Looking for a New Opportunity: A Year to Grow"
 description: "Looking for a New Opportunity: A Year to Grow"
 date: 02/12/2025
 image: /sunset-yuzu.webp
+readingTime: "3"
 ---
 
 # Looking for a New Opportunity: A Year to Grow
