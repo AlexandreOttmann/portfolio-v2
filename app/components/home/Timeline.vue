@@ -1,5 +1,5 @@
 <template>
-    <div class="pb-16">
+    <div>
         <div class="max-w-full mx-auto overflow-x-auto overflow-y-hidden select-none px-6"
             :class="[timelineTrackHeightClass]" style="padding-bottom: 18rem;">
             <div class="relative mx-auto" :class="[timelineTrackHeightClass]"

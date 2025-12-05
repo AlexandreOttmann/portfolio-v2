@@ -13,12 +13,12 @@
     {
       "name": "Next",
       "link": "https://nextjs.org/",
-      "icon": "custom:nextjs"
+      "icon": "devicon:nextjs"
     },
     {
       "name": "Vuetify",
       "link": "https://vuetifyjs.com/",
-      "icon": "custom:vuetify"
+      "icon": "devicon:vuetify"
     },
     {
       "name": "Supabase",
