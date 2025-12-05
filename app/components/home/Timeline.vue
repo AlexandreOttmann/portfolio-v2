@@ -1,7 +1,7 @@
 <template>
-    <div class="py-16">
+    <div class="pb-16">
         <div class="max-w-full mx-auto overflow-x-auto overflow-y-hidden select-none px-6"
-            :class="[timelineTrackHeightClass]" style="padding-bottom: 10rem;">
+            :class="[timelineTrackHeightClass]" style="padding-bottom: 18rem;">
             <div class="relative mx-auto" :class="[timelineTrackHeightClass]"
                 :style="{ width: `${timelineInnerWidth}px` }">
                 <template v-if="props.showHorizontalLines">
@@ -25,10 +25,10 @@
                     <div class="absolute left-0 transition-all duration-300 ease-out transform origin-top"
                         :style="{ top: timelineHorizontalLineTop }" :class="[
                             displayAsActiveIndex === index
-                                ? `${props.mainTickHeightActive} ${props.tickThicknessActive} bg-primary`
+                                ? `${props.mainTickHeightActive} ${props.tickThicknessActive} bg-greeb-200`
                                 : `${props.mainTickHeightBase} group-hover:${props.mainTickHeightHover}`,
                             index <= displayAsActiveIndex
-                                ? `${props.tickThicknessActive} bg-primary`
+                                ? `${props.tickThicknessActive} bg-green-600`
                                 : `${props.tickThicknessBase} bg-accented`
                         ]" />
 
@@ -36,7 +36,7 @@
                         <div v-for="tickNumber in numberOfIntermediateTicks" :key="`subtick-${index}-${tickNumber}`"
                             class="absolute transition-colors duration-300 ease-out" :class="[
                                 props.intermediateTickHeight,
-                                index < displayAsActiveIndex ? `${props.tickThicknessActive} bg-primary group-hover:bg-primary` : `${props.tickThicknessBase} bg-accented`
+                                index < displayAsActiveIndex ? `${props.tickThicknessActive} bg-green-600 group-hover:bg-green-200` : `${props.tickThicknessBase} bg-accented`
                             ]"
                             :style="{ top: timelineHorizontalLineTop, left: `${(tickNumber * props.itemWidth / (numberOfIntermediateTicks + 1))}px` }" />
                     </div>
@@ -99,7 +99,7 @@ const props = withDefaults(defineProps<{
     mainTickHeightHover: 'h-8',
     mainTickHeightActive: 'h-12',
     showHorizontalLines: false,
-    itemWidth: 60,
+    itemWidth: 55,
 })
 
 const initialActivePropIndex = computed(() => {
@@ -131,7 +131,7 @@ const shouldDisplayYear = (eventYear: number, index: number): boolean => {
 }
 
 const detailsContainerWidthClass = 'w-[240px]'
-const timelineTrackHeightClass = 'h-55'
+const timelineTrackHeightClass = 'h-60'
 const numberOfIntermediateTicks = 7
 
 const timelineInnerWidth = computed(() => {

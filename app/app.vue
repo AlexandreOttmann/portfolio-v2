@@ -2,6 +2,8 @@
 import { Toaster } from 'vue-sonner'
 import * as locales from '@nuxt/ui/locale'
 
+const color = useColorMode()
+const isDark = computed(() => color.value === 'dark')
 const { locale } = useI18n()
 </script>
 
@@ -18,8 +20,10 @@ const { locale } = useI18n()
       </NuxtLayout>
     </UApp>
     <Toaster close-button />
-    <DotPattern
-      class="absolute inset-0 -z-10 size-full fill-white/5 [mask-image:radial-gradient(white,transparent_85%)]" />
+    <DotPattern class="absolute inset-0 -z-10 size-full "
+      :class="isDark ? 'fill-white/5 [mask-image:radial-gradient(white,transparent_85%)]' : 'fill-green-500 [mask-image:radial-gradient(white,transparent_85%)]'" />
+
+
   </Body>
 
   </Html>

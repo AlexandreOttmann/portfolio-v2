@@ -27,8 +27,8 @@ defineProps({
         class="absolute size-[100cqw] animate-spin bg-[conic-gradient(from_0_at_50%_50%,rgba(255,255,255,0.5)_0deg,transparent_60deg,transparent_300deg,rgba(255,255,255,0.5)_360deg)] opacity-0 transition duration-300 group-hover:opacity-100" />
     </div>
 
-    <div class="absolute inset-0.5 bg-zinc-900 sm:bg-zinc-900/80 sm:backdrop-blur-md"
-      :class="`${transparent ? '' : 'bg-zinc-800'} ${rounded ? 'rounded-full' : 'rounded-md'}`" />
+    <div class="absolute inset-0.5 bg-muted sm:backdrop-blur-md"
+      :class="`${transparent ? '' : 'bg-muted'} ${rounded ? 'rounded-full' : 'rounded-md'}`" />
 
     <div
       class="absolute bottom-0 left-1/2 h-1/3 w-4/5 -translate-x-1/2 bg-white/10 opacity-50 blur-md transition-all duration-500 group-hover:h-2/3 group-hover:opacity-100"

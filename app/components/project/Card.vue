@@ -8,21 +8,23 @@ defineProps<{
   }
 }>()
 const img = useImage()
+const color = useColorMode()
+const isDark = computed(() => color.value === 'dark')
 </script>
 
 <template>
   <div :aria-label="project.name + ' project details'"
-    class="group relative flex cursor-pointer flex-col gap-1 rounded-lg border border-white/10 bg-zinc-900/80 p-1 shadow-2xl shadow-zinc-950/50 backdrop-blur-sm"
-    @click="$emit('select', project)">
+    class="group relative flex cursor-pointer flex-col gap-1 rounded-lg border bg-muted p-1 shadow-2xl shadow-zinc-950/50 backdrop-blur-sm"
+    :class="isDark ? 'border-white/10' : 'border-inverted/10'" @click="$emit('select', project)">
     <div class="flex gap-1 px-1 py-[2px]">
       <div
-        class="size-2 rounded-full bg-red-500/90 transition-all duration-300 group-hover:bg-red-500/90 sm:bg-white/10" />
+        class="size-2 rounded-full bg-red-500/90 transition-all duration-300 group-hover:bg-red-500/90 sm:bg-inverted/10" />
       <div
-        class="size-2 rounded-full bg-yellow-500/90 transition-all duration-300 group-hover:bg-yellow-500/90 sm:bg-white/10" />
+        class="size-2 rounded-full bg-yellow-500/90 transition-all duration-300 group-hover:bg-yellow-500/90 sm:bg-inverted/10" />
       <div
-        class="size-2 rounded-full bg-green-500/90 transition-all duration-300 group-hover:bg-green-500/90 sm:bg-white/10" />
+        class="size-2 rounded-full bg-green-500/90 transition-all duration-300 group-hover:bg-green-500/90 sm:bg-inverted/10" />
     </div>
-    <div class="flex h-56 justify-center overflow-hidden rounded-lg">
+    <div class="flex h-56 justify-center overflow-hidden rounded-lg border border-primary/10">
       <NuxtImg :placeholder="img(`${project.image}`)" width="1536" :alt="project.name + ' project image'"
         class="h-full rounded-lg object-cover transition-all duration-300 hover:scale-105" :src="project.image"
         :aria-label="project.name + ' project image'" />
@@ -36,7 +38,7 @@ const img = useImage()
               <span class="whitespace-nowrap text-sm font-semibold text-white/90">
                 {{ project.name }}
               </span>
-              <span class="whitespace-nowrap text-xs text-neutral-400 text-shadow">
+              <span class="whitespace-nowrap text-xs text-white/60 text-shadow">
                 {{ project.release === "soon" ? $t("global.soon") + "..." : project.release }}
               </span>
             </div>

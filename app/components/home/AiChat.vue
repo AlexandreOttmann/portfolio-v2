@@ -10,7 +10,7 @@
 
         <!-- Modal Card -->
         <div
-          class="relative w-full max-w-2xl h-[80vh] bg-neutral-950 border border-white/10 rounded-3xl shadow-2xl flex flex-col overflow-hidden">
+          class="relative w-full max-w-2xl h-[80vh] bg-ai-chat-bg/80 border border-white/10 rounded-3xl shadow-2xl flex flex-col overflow-hidden">
           <!-- Header -->
           <div class="p-4 border-b border-white/10 flex items-center justify-between bg-white/5">
             <div class="flex items-center gap-3">
@@ -65,7 +65,7 @@
                 <!-- Message Content -->
                 <div class="max-w-[85%] sm:max-w-[75%] rounded-2xl px-5 py-3.5 message-bubble shadow-sm" :class="message.role === 'user'
                   ? 'bg-white text-black rounded-tr-sm'
-                  : 'bg-white/10 text-white/90 border border-white/10 rounded-tl-sm'">
+                  : 'bg-white/20 text-white/90  border border-white/10 rounded-tl-sm'">
                   <div v-if="message.role === 'assistant'" class="text-sm leading-relaxed markdown-content max-w-none"
                     v-html="renderMarkdown(message.content)" />
                   <p v-else class="text-sm leading-relaxed whitespace-pre-wrap font-medium">
@@ -105,7 +105,7 @@
                 :ui="{ base: 'bg-transparent focus:ring-0 p-0 pl-2' }" @keypress="handleKeyPress" />
               <UButton :disabled="!inputMessage.trim() || isLoading" color="neutral" variant="solid"
                 class="rounded-full w-8 h-8 flex items-center justify-center p-0" @click="sendMessage(inputMessage)">
-                <Icon name="lucide:arrow-up" class="w-4 h-4 text-black" />
+                <Icon name="lucide:arrow-up" class="w-4 h-4 text-muted" />
               </UButton>
             </div>
           </div>
@@ -119,7 +119,7 @@
         enter-from-class="opacity-0 translate-y-20" enter-to-class="opacity-100 translate-y-0"
         leave-active-class="transition-all duration-300 ease-in" leave-from-class="opacity-100 translate-y-0"
         leave-to-class="opacity-0 translate-y-20">
-        <div v-if="!showChat" class="block fixed bottom-8 left-1/2 -translate-x-1/2 z-40 w-full max-w-md px-2 sm:px-5">
+        <div v-if="!showChat" class="block fixed bottom-8 left-1/2 -translate-x-1/2 z-40 w-full max-w-md px-2 sm:px-">
           <!-- Bubble Hint -->
           <Transition enter-active-class="transition-all duration-500 ease-out"
             enter-from-class="opacity-0 transform translate-y-4 scale-95"
@@ -138,17 +138,17 @@
           </Transition>
 
           <!-- Input Bar -->
-          <div class="relative group">
+          <div class="relative group ">
             <div
               class="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 rainbow-border" />
             <div
-              class="relative bg-neutral-900/80 backdrop-blur-xl border border-white/10 group-hover:border-transparent rounded-full p-1.5 pl-5 pr-1.5 flex items-center gap-3 shadow-2xl transition-all duration-300 hover:shadow-white/5 hover:scale-[1.02] cursor-text z-10"
+              class="relative bg-muted/70 backdrop-blur-xl border border-white/10 group-hover:border-transparent rounded-full p-1.5 pl-5 pr-1.5 flex items-center gap-3 shadow-2xl transition-all duration-300 hover:shadow-white/5 hover:scale-[1.02] cursor-text z-10"
               @click.stop="bottomInput?.focus()">
 
-              <Icon name="lucide:sparkles" class="w-4 h-4 text-white/40 group-hover:text-white/80 transition-colors" />
+              <Icon name="lucide:sparkles" class="w-4 h-4 text-muted/80 group-hover:text-white transition-colors" />
               <input ref="bottomInput" v-model="inputMessage" type="text"
                 :placeholder="locale === 'fr' ? 'Demandez-moi quelque chose...' : 'Ask me anything...'"
-                class="flex-1 bg-transparent border-none outline-none text-white text-md placeholder-white/40 h-10"
+                class="flex-1 bg-transparent border-none outline-none text-white text-md placeholder-inverted/40 h-10 group-hover:placeholder-white"
                 @keydown.enter="sendMessage(inputMessage)" />
 
               <button

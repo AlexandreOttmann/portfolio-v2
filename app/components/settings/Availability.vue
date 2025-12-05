@@ -29,24 +29,14 @@ defineProps({
 </script>
 
 <template>
-  <div
-    class="flex items-center rounded-full"
-    :class="{ 'border border-white/10 bg-zinc-900/80 px-5 py-2 backdrop-blur-3xl': background }"
-  >
+  <div class="flex items-center rounded-full"
+    :class="{ 'border border-muted/50 bg-secondary/80 px-5 py-2 backdrop-blur-3xl': background }">
     <span class="relative flex size-3">
-      <span
-        class="absolute inline-flex size-full animate-ping rounded-full opacity-75"
-        :class="currentAvailability!.color"
-      />
-      <span
-        class="relative inline-flex size-3 scale-90 rounded-full"
-        :class="currentAvailability!.bgColor"
-      />
+      <span class="absolute inline-flex size-full animate-ping rounded-full opacity-75"
+        :class="currentAvailability!.color" />
+      <span class="relative inline-flex size-3 scale-90 rounded-full" :class="currentAvailability!.bgColor" />
     </span>
-    <span
-      class="ml-2 text-sm font-medium"
-      :class="currentAvailability!.textColor"
-    >
+    <span class="ml-2 text-sm font-medium" :class="currentAvailability!.textColor">
       {{ $t("global." + currentAvailability!.status) }}
     </span>
   </div>

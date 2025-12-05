@@ -2,7 +2,7 @@
     <UModal v-model:open="isOpen" :ui="{ content: 'max-w-4xl sm:max-w-4xl' }">
         <template #content>
             <div v-if="project"
-                class="relative flex flex-col overflow-hidden rounded-lg bg-zinc-900 shadow-xl max-h-[90vh]">
+                class="relative flex flex-col overflow-hidden rounded-lg bg-dialog-bg shadow-xl max-h-[90vh]">
                 <!-- Header Image -->
                 <div class="relative h-64 w-full shrink-0 overflow-hidden sm:h-80">
                     <NuxtImg :src="project.image" :alt="project.name" class="h-full w-full object-cover" />

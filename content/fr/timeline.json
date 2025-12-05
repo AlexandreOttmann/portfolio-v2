@@ -1,81 +1,81 @@
 [
     {
-        "year": 2017,
+        "year": 2010,
+        "icon": "i-heroicons-paint-brush",
+        "title": "Des débuts artistiques",
+        "description": "Je commence mes premières études par le conservatoire nationale en clarinette, bien loin de m'imaginer les futurs rebondissements"
+    },
+    {
+        "year": 2014,
         "icon": "i-heroicons-code-bracket-square",
-        "title": "The Coding Spark",
-        "description": "My first dive into the world of programming, igniting a passion for building with code."
+        "title": "L'étincelle du code",
+        "description": "Mon premier contact avec le monde du développement, un an au sein de l'école d'ingénieursEXIA CESI"
+    },
+    {
+        "year": 2016,
+        "icon": "i-material-symbols:looks-one-outline",
+        "title": "Turning Point #1, ingénieurie du son",
+        "description": "Changement de carrière, bachelor en ingénieurie du son à l'Abbey Road Institue Paris/Londre"
+    },
+    {
+        "year": 2018,
+        "icon": "i-solar:headphones-round-bold",
+        "title": "Début de freelancing",
+        "description": "En 2018 je commence le freelancing comme ingénieur du son, à travailler sur podcast, pubs, musique, livres audios... J'y ai passé 4-5 ans à travers de multiples missions variées ! "
     },
     {
         "year": 2019,
-        "icon": "i-heroicons-paint-brush",
-        "title": "Freelance Beginnings: Design & Early Dev",
-        "description": "Started freelancing, focusing on design and early development projects with WordPress & PHP."
+        "icon": "i-material-symbols:book-2-outline-rounded",
+        "title": "Ma première startup",
+        "description": "3 ans à Koober, une app mobile comme reponsable audiovisuel à gérer la création et une équipe de voix off"
     },
     {
-        "year": 2020,
-        "icon": "i-heroicons-academic-cap",
-        "title": "Epitech & Full Commitment to Dev",
-        "description": "Joined Epitech, solidifying my decision to fully commit to a career in development."
+        "year": 2022,
+        "icon": "i-material-symbols:looks-two-outline",
+        "title": "Turning Point #2, Web development & O'Clock",
+        "description": "Malheureusement Koober a été liquidée, et j'ai décidé sans hésitation de me tourner vers le développement web à l'école O'Clock"
     },
     {
-        "year": 2020,
-        "icon": "i-simple-icons-vuedotjs",
-        "title": "Discovering Vue.js at \"360&1\"",
-        "description": "My first professional role at \"360&1\" where I encountered Vue.js and instantly loved its ecosystem. (Huge thanks to Guillaume 🫶)"
+        "year": 2023,
+        "icon": "i-material-symbols:japanese-flag-rounded",
+        "title": "Japon",
+        "description": "Mon diplôme empauché, mon alternance pour l'année suivante trouvée, je n'ai pas longtemps réfléchi avant de décider à partir un mois au Japon"
     },
     {
-        "year": 2021,
-        "icon": "i-simple-icons-nuxtdotjs",
-        "title": "The Nuxt.js Revelation",
-        "description": "Mid-2021, I discovered Nuxt.js and was blown away. Started working with it 24/7 – an incredible framework!"
-    },
-    {
-        "year": 2024,
-        "icon": "i-heroicons-globe-alt",
-        "title": "Embracing Full Open Source",
-        "description": "Pivoted to make all my repositories open source, and began developing my key projects: Shelve and Canvas."
-    },
-    {
-        "year": 2024,
-        "icon": "i-simple-icons-twitter",
-        "title": "Building in Public & Social Engagement",
-        "description": "Intensified my presence on social media, especially Twitter, sharing my development journey and projects."
-    },
-    {
-        "year": 2024,
+        "year": 2023,
         "icon": "i-heroicons-rocket-launch",
-        "title": "Shelve & Canvas Development",
-        "description": "Dedicated focus on building Shelve, my flagship CLI tool, and Canvas, a premium portfolio template."
+        "title": "Wild Code School, Quanted Square et Alternance",
+        "description": "De retour du Japon j'ai commencé directement mon alternance de 1an à Quanted Square tout en étant en formation à la Wild Code School pour préparer le title de Concepteur d'application"
+    },
+    {
+        "year": 2024,
+        "icon": "i-streamline-flex:dog-1",
+        "title": "Yuzu",
+        "description": "2024 est l'année de l'arrivée de Yuzu ! Ma petite Shiba Inu qui a changé ma vie !"
+    },
+    {
+        "year": 2024,
+        "icon": "i-material-symbols:crop-square-outline",
+        "title": "QuantedSquare",
+        "description": "Je ne serai jamais assez reconnaissant envers QuantedSquare, Julien et Fabien pour m'avoir embauché après 1 an d'alternanceet fait confiance tout en me permettant d'apprendre à un rythme effréné ! 🫶"
     },
     {
         "year": 2025,
-        "icon": "i-simple-icons-nuxtdotjs",
-        "title": "Joined NuxtLabs!",
-        "description": "Achieved a dream goal by joining NuxtLabs in January, I can't even express how grateful I am to Sebastian for this opportunity 💚"
+        "icon": "i-material-symbols:travel",
+        "title": "Odysway",
+        "description": "Mon premier grand projet en tant que développeur, contribuer au développement de Odysway, une agence de voyage en ligne"
     },
     {
         "year": 2025,
-        "icon": "i-heroicons-puzzle-piece",
-        "title": "Nuxt UI & UI Pro v3 Contributions",
-        "description": "Contributed significantly to the V3 releases of Nuxt UI and Nuxt UI Pro, enhancing the Nuxt ecosystem."
+        "icon": "i-material-symbols:crown-outline",
+        "title": "Crown",
+        "description": "Premier projet de zéro avec QuantedSquare, nous avons construit Crown, une app d'enchère en temps réel pour le procurement / les industriels"
     },
     {
         "year": 2025,
-        "icon": "i-heroicons-pencil-square",
-        "title": "Redesigning Nuxt.com",
-        "description": "An amazing opportunity in March to lead the redesign of the official Nuxt.com website."
-    },
-    {
-        "year": 2025,
-        "icon": "i-heroicons-pencil-square",
-        "title": "Shelve v2.0",
-        "description": "The first major update to Shelve bringing the project to the next level."
-    },
-    {
-        "year": 2025,
-        "icon": "i-simple-icons-vercel",
-        "title": "Vercel × NuxtLabs",
-        "description": "Mind-blowing milestone: our whole team joined Vercel to push the boundaries of web development even further!",
+        "icon": "i-material-symbols:brightness-5-rounded",
+        "title": "Aujourd'hui x Nous",
+        "description": "L'aventure QuantedSquare se termine, et je me dirige vers de nouveaux horizons, à la recherche d'une nouvelle opportunité de carrière !",
         "active": true
     }
 ]

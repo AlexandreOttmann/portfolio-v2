@@ -8,9 +8,9 @@
   --font-geist: "Geist", sans-serif;
 
   --color-main: var(--ui-bg);
-  --color-secondary: var(--color-secondary);
-  --color-card: var(--color-card);
-  --color-card-hover: var(--color-card-hover);
+  --color-secondary: var(--bg-secondary);
+  --color-card: var(--bg-card);
+  --color-card-hover: var(--bg-card-hover);
   --color-primary: var(--font-primary);
   --color-muted: var(--font-muted);
   --color-inverted: var(--font-inverted);
@@ -19,13 +19,55 @@
   --color-border-primary-hover: var(--border-primary-hover);
   --color-border-muted: var(--border-muted);
   --color-placeholder: var(--font-placeholder);
+
+  --color-spotlight: var(--spotlight);
 }
 
+/* Light theme (default) */
+html {
+  --ui-bg: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --bg-card: #f9f9f9;
+  --bg-card-hover: #eeeeee;
+
+  --card-bg: var(--color-zinc-200);
+
+  --font-primary: #1a1a1a;
+  --font-muted: #737373;
+  --font-inverted: #ffffff;
+
+  --border-primary: #e5e5e5;
+  --border-primary-hover: #d4d4d4;
+  --border-muted: #f0f0f0;
+  --font-placeholder: #a3a3a3;
+
+  --spotlight: rgba(252, 255, 220, 0.773);
+
+  /* Glass morphism effects for light theme */
+  --glass-light: rgba(0, 0, 0, 0.03);
+  --glass-medium: rgba(0, 0, 0, 0.05);
+  --glass-strong: rgba(0, 0, 0, 0.08);
+
+  --glass-border-light: rgba(0, 0, 0, 0.08);
+  --glass-border-medium: rgba(0, 0, 0, 0.1);
+  --glass-border-strong: rgba(0, 0, 0, 0.15);
+
+  /* Overlay effects for light theme */
+  --overlay-light: rgba(0, 0, 0, 0.05);
+  --overlay-medium: rgba(0, 0, 0, 0.1);
+  --overlay-strong: rgba(0, 0, 0, 0.15);
+  /* AiChat Colors */
+  --ai-chat-bg: rgb(10 10 10);
+}
+
+/* Dark theme */
 html.dark {
   --ui-bg: var(--color-neutral-950);
   --bg-secondary: #282828;
   --bg-card: #282828;
   --bg-card-hover: #343434;
+
+  --card-bg: var(--color-zinc-900);
 
   --font-primary: #ededed;
   --font-muted: #808080;
@@ -35,10 +77,29 @@ html.dark {
   --border-primary-hover: #3E3E3E;
   --border-muted: #1C1822;
   --font-placeholder: #707070;
+
+  --spotlight: rgba(255, 255, 255, 0.25);
+
+  /* Glass morphism effects for dark theme */
+  --glass-light: rgba(255, 255, 255, 0.05);
+  --glass-medium: rgba(255, 255, 255, 0.075);
+  --glass-strong: rgba(255, 255, 255, 0.1);
+
+  --glass-border-light: rgba(255, 255, 255, 0.1);
+  --glass-border-medium: rgba(255, 255, 255, 0.15);
+  --glass-border-strong: rgba(255, 255, 255, 0.2);
+
+  /* Overlay effects for dark theme */
+  --overlay-light: rgba(255, 255, 255, 0.1);
+  --overlay-medium: rgba(255, 255, 255, 0.15);
+  --overlay-strong: rgba(255, 255, 255, 0.25);
 }
 
 
-html, body, #__nuxt, #__layout {
+html,
+body,
+#__nuxt,
+#__layout {
   height: 100% !important;
   width: 100% !important;
 
@@ -67,6 +128,35 @@ html, body, #__nuxt, #__layout {
   }
 
   .text-white-shadow {
-    text-shadow: 0 4px 10px rgba(0, 87, 255, .2), 0 -4px 10px rgba(255, 90, 0, .15), 0 0 30px rgba(255, 255, 255, .2);
+    text-shadow: 0 3px 5px rgba(0, 87, 255, .2), 0 -3px 5px rgba(255, 90, 0, .15), 0 0 30px rgba(255, 255, 255, .2);
+  }
+
+  /* Theme-aware glass effects */
+  .glass-light {
+    background-color: var(--glass-light);
+    border-color: var(--glass-border-light);
+  }
+
+  .glass-medium {
+    background-color: var(--glass-medium);
+    border-color: var(--glass-border-medium);
+  }
+
+  .glass-strong {
+    background-color: var(--glass-strong);
+    border-color: var(--glass-border-strong);
+  }
+
+  /* Theme-aware overlay effects */
+  .overlay-light {
+    background-color: var(--overlay-light);
+  }
+
+  .overlay-medium {
+    background-color: var(--overlay-medium);
+  }
+
+  .overlay-strong {
+    background-color: var(--overlay-strong);
   }
 }
