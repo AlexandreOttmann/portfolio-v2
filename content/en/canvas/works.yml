@@ -30,7 +30,7 @@ items:
     image: /projects/portfolio-v1.png
     width: 480
     height: 270
-    src: en/projects/5.portfolio-v1/data
+    src: en/projects/5.portfolio/data
   - title: Previous career
     link: https://www.malt.fr/profile/alexottmann
     image: /projects/malt.png
@@ -38,7 +38,7 @@ items:
     height: 270
     src: en/projects/6.malt/data
   - title: Koober
-    link: https://kooberr.com
+    link: https://koober.com
     image: /projects/koober.png
     width: 480
     height: 270
