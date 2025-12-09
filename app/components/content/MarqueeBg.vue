@@ -1,7 +1,7 @@
 <template>
-    <div class="relative w-full h-full overflow-hidden">
+    <div class="relative w-full h-full overflow-hidden bg-red-500/20">
         <UMarquee reverse orientation="vertical" :overlay="false" :ui="{
-            root: '[--duration:40s] absolute w-[460px] left-[200px] -top-[300px] h-[940px] transform-3d rotate-x-55 rotate-y-0 rotate-z-30'
+            root: '[--duration:40s] absolute w-[460px] left-[250px] -top-[300px] h-[940px] transform-3d rotate-x-55 rotate-y-0 rotate-z-30'
         }">
             <img v-for="i in 4" :key="i" :src="`/blocks/images${i}.jpg`" width="460" height="258"
                 :alt="`Nuxt UI Screenshot ${i}`" class="aspect-video border border-default rounded-lg bg-white" />
@@ -13,7 +13,7 @@
                 :alt="`Nuxt UI Screenshot ${i}`" class="aspect-video border border-default rounded-lg bg-white" />
         </UMarquee>
         <UMarquee reverse orientation="vertical" :overlay="false" :ui="{
-            root: 'hidden md:flex [--duration:40s] absolute w-[460px] -top-[300px] left-[1280px] h-[1060px] transform-3d rotate-x-55 rotate-y-0 rotate-z-30'
+            root: 'hidden md:flex [--duration:40s] absolute w-[460px] -top-[300px] left-[1270px] h-[1060px] transform-3d rotate-x-55 rotate-y-0 rotate-z-30'
         }">
             <img v-for="i in [9, 10, 11, 12]" :key="i" :src="`/blocks/images${i}.jpg`" width="460" height="258"
                 :alt="`Nuxt UI Screenshot ${i}`" class="aspect-video border border-default rounded-lg bg-white" />
