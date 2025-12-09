@@ -21,7 +21,8 @@
         <UiViewToggle v-model="isCanvasView" />
       </div>
     </template>
-    <ProjectCanvasContainer v-if="isCanvasView && projects" @select="openProject" :projects="projects" />
+    <ProjectCanvasContainer v-if="isCanvasView && projects" @select="openProject"
+      :projects="projects.filter((p) => !p.home)" />
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2" v-else>
       <Motion v-for="project, index in projects" :key="project.name" as="div" :initial="{
         scale: 1.1,
