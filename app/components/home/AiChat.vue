@@ -10,7 +10,11 @@
 
         <!-- Modal Card -->
         <div
-          class="relative w-full max-w-2xl h-[80vh] bg-ai-chat-bg/80 border border-white/10 rounded-3xl shadow-2xl flex flex-col overflow-hidden">
+          class="relative w-full max-w-2xl h-[80vh] bg-card/50 border border-white/10 rounded-3xl shadow-2xl flex flex-col overflow-hidden">
+          <div class="pointer-events-none fixed inset-0 z-40 size-full overflow-hidden">
+            <div
+              class="noise pointer-events-none absolute inset-[-200%] z-50 size-[400%] bg-[url('/noise.png')] opacity-[4%]" />
+          </div>
           <!-- Header -->
           <div class="p-4 border-b border-white/10 flex items-center justify-between bg-white/5">
             <div class="flex items-center gap-3">
@@ -102,10 +106,11 @@
               <UInput v-model="inputMessage"
                 :placeholder="locale === 'fr' ? 'Posez votre question...' : 'Ask your question...'"
                 class="flex-1 text-md" variant="none" :disabled="isLoading"
-                :ui="{ base: 'bg-transparent focus:ring-0 p-0 pl-2' }" @keypress="handleKeyPress" />
+                :ui="{ base: 'bg-transparent focus:ring-0 p-0 pl-2 placeholder:text-ui-bg' }"
+                @keypress="handleKeyPress" />
               <UButton :disabled="!inputMessage.trim() || isLoading" color="neutral" variant="solid"
                 class="rounded-full w-8 h-8 flex items-center justify-center p-0" @click="sendMessage(inputMessage)">
-                <Icon name="lucide:arrow-up" class="w-4 h-4 text-muted" />
+                <Icon name="lucide:arrow-up" class="w-4 h-4 text-ui-bg" />
               </UButton>
             </div>
           </div>

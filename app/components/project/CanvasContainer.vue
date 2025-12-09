@@ -156,20 +156,13 @@ const isMobile = computed(() => {
 })
 
 const handleItemClick = (item: CanvasItem) => {
-    // Disable clicks on mobile devices
-    if (isMobile.value) {
-        return
-    }
-
     // Desktop-only click handling
     if (import.meta.client) {
-        console.log('item', item)
         if (item.src.includes('/articles/')) {
             emit('select', item)
             return
         } else {
             const selectedProject = props.projects.find((project: Collections['projects_en'] | Collections['projects_fr']) => project.stem === item.src)
-            console.log('selectedProject', selectedProject)
             emit('select', selectedProject)
         }
     }

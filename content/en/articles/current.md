@@ -1,5 +1,7 @@
 ---
-tags: []
+tags:
+  - Creativity
+  - Productivity
 ogImage:
   props: {}
 schemaOrg: {}
@@ -17,7 +19,7 @@ readingTime: "3"
 
 # Looking for a New Opportunity: A Year to Grow
 
-My portfolio reflects the fact that I am currently seeking a new full-time position. This follows two and a half years at **Quanted Square**, the agency where I began my career and where I had the chance to learn a wide range of tools, processes, and technologies. I’m deeply grateful for the trust they placed in me and the role they played in shaping the early stages of my professional journey.
+I am currently seeking a new full-time position. This follows two and a half years at **Quanted Square**, the agency where I began my career and where I had the chance to learn a wide range of tools, processes, and technologies. I’m deeply grateful for the trust they placed in me and the role they played in shaping the early stages of my professional journey.
 
 Unfortunately, as the company shifted away from its core activity, it was forced to close its operations, leading to an **economic layoff**. I now find myself in a transitional period, with an entire year — starting December 1st, 2025 — to **search for a new role** and **upskill in key emerging domains**.
 

@@ -1,0 +1,10 @@
+{
+  "name": "Odysway",
+  "image": "/projects/quantedsquare.png",
+  "link": "https://github.com/QuantedSquare/odysway-v2",
+  "release": "09/12/2025",
+  "featured": true,
+  "home": true,
+  "content": "Indexage et mise en place d'Algolia pour Odysway, plan de taggage GA4 / Meta",
+  "stack": []
+}

@@ -2,7 +2,7 @@
     <UModal v-model:open="isOpen" :ui="{ content: 'max-w-4xl sm:max-w-4xl bg-muted/80 backdrop-blur-xs' }">
         <template #content>
             <div v-if="project"
-                class="relative flex flex-col overflow-hidden rounded-lg bg-dialog-bg shadow-xl max-h-[100vh]">
+                class="relative flex flex-col overflow-hidden rounded-lg bg-card-bg/50 shadow-xl max-h-[100vh]">
                 <!-- Noise -->
                 <div class="pointer-events-none fixed inset-0 z-40 size-full overflow-hidden">
                     <div

@@ -48,7 +48,6 @@ items:
     image: /sunset-yuzu.webp
     width: 480
     height: 270
-    # Need to redirect to article 
     src: fr/articles/current
   # - title: NuxtLabs is Joining Vercel
   #   link: https://nuxtlabs.com

@@ -1,0 +1,10 @@
+{
+  "name": "Portfolio",
+  "image": "/projects/quantedsquare.png",
+  "link": "https://github.com/AlexandreOttmann/portfolio-v2",
+  "release": "10/12/2025",
+  "featured": true,
+  "home": true,
+  "content": "Writing articles and publishing my portfolio",
+  "stack": []
+}

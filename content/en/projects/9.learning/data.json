@@ -1,0 +1,10 @@
+{
+  "name": "Learning",
+  "image": "/projects/quantedsquare.png",
+  "link": "https://tryhackme.com/",
+  "release": "10/12/2025",
+  "featured": true,
+  "home": true,
+  "stack": [],
+  "content": "Learning CyberSecurity via TryHackMe and Python to approach AI and Data Science"
+}

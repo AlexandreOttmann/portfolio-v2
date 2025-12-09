@@ -1,0 +1,10 @@
+{
+    "name": "Odysway",
+    "image": "/projects/quantedsquare.png",
+    "link": "https://github.com/QuantedSquare/odysway-v2",
+    "release": "Today",
+    "featured": true,
+    "home": true,
+    "content": "Indexing and setting up Algolia for Odysway, GA4 / Meta tag plan",
+    "stack": []
+}

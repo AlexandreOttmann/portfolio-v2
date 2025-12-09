@@ -1,5 +1,5 @@
 ---
-title: Ma situation actuelle (Décembre 2025)
+title: "Nouvelle opportunité : une année pour évoluer"
 date: 02/12/2025
 description: Dans quelle situation je suis actuellement à la suite de la fin de
   mon contrat avec Quanted Square
@@ -19,9 +19,9 @@ sitemap:
 ---
 ## En recherche d’une nouvelle opportunité : une année pour évoluer
 
-Mon portfolio indique que je suis actuellement à la recherche d’un nouvel emploi. Cette situation fait suite à deux ans et demi passés au sein de **Quanted Square**, l’agence où j’ai fait mes débuts et où j’ai eu la chance de me former à un grand nombre d’outils, de méthodes et de technologies. Je garde une profonde gratitude pour la confiance qu’ils m’ont accordée et pour le rôle essentiel qu’ils ont joué dans le lancement de ma carrière.
+Je suis actuellement à la recherche d’un nouvel emploi. Cette situation fait suite à deux ans et demi passés au sein de **Quanted Square**, l’agence où j’ai fait mes débuts et où j’ai eu la chance de me former à un grand nombre d’outils, de méthodes et de technologies. Je garde une profonde gratitude pour la confiance qu’ils m’ont accordée et pour le rôle essentiel qu’ils ont joué dans le lancement de ma carrière.
 
-Malheureusement, l’entreprise a dû cesser son activité pour se diriger vers d’autres secteurs, ce qui a conduit à un **licenciement économique**. Je me retrouve donc dans une période transitoire, avec une année entière — à partir du 1er décembre 2025 — pour **trouver une nouvelle opportunité professionnelle** et **me former davantage** sur des technologies émergentes.
+Malheureusement, l’entreprise a dû cesser son activité pour se diriger vers d’autres secteurs, ce qui a conduit à un **licenciement économique**. Je me retrouve donc dans une période transitoire, avec une année entière — à partir du 1er décembre 2025 — pour **trouver une nouvelle opportunité professionnelle** et **me former davantage** sur des technologies actuelles.
 
 ## Une année de formation et de montée en compétences
 

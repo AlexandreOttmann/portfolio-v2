@@ -26,12 +26,14 @@
           <!-- title -->
           <div class="font-geist" style="--stagger: 1; --delay: 10ms" data-animate>
             <h1 :class="isDark ? 'from-white/90 to-white/30' : 'from-black/80 to-black/50'"
-              class="mx-auto font-medium text-center text-pretty bg-gradient-to-b bg-clip-text text-3xl text-transparent lg:max-w-3xl lg:text-4xl">
+              class="flex justify-center mx-auto font-medium text-center text-pretty bg-gradient-to-b bg-clip-text text-3xl text-transparent lg:max-w-3xl lg:text-4xl ">
+              <!-- <HomeTypewriterTitle> -->
               <slot name="hero_title" mdc-unwrap="p" />
+              <!-- </HomeTypewriterTitle> -->
             </h1>
 
             <!-- subtitle -->
-            <h2 class="mx-auto mt-4 max-w-xl text-center text-lg antialiased text-muted">
+            <h2 class="mx-auto max-w-xl text-center text-lg antialiased text-muted">
               <slot name="hero_subtitle" mdc-unwrap="p" />
             </h2>
           </div>
@@ -50,6 +52,8 @@
             <!-- projects -->
             <HomeProjects />
           </div>
+
+
 
           <Divider class="my-9" />
 

@@ -1,5 +1,5 @@
 ---
-title: "Le Japon: un voyage comme renouveau"
+title: "Un voyage comme un renouveau: Japon"
 date: 22/07/2023
 description: Le Japon a toujours été un centre d'intérêt culturel fort pour moi,
   à travers son esthétisme, ses paysages, ses mentalités
