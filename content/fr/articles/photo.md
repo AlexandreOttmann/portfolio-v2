@@ -7,7 +7,7 @@ tags:
 - Japon
 - Voyage
 - Photographie
-image: /articles_photo/DSCF4828.jpg
+image: /articles_photo/DSCF4828.JPG
 readingTime: "10"
 ogImage:
   props: {}

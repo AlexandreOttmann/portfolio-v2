@@ -6,7 +6,7 @@ tags:
   - Chien
   - Photographie
   - Life style
-image: /articles_photo/DSCF9619.jpg
+image: /articles_photo/DSCF9619.JPG
 readingTime: "5"
 ogImage:
   props: {}
