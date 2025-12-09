@@ -27,7 +27,7 @@ Ce récit est celui d’un mois d’été au Japon, entre festivals, sentō brû
 
 Mon premier diplôme de développeur web validé en mai 2023, une alternance signé en même temps, sous l'impulsion de mes parents et avec 4 mois devant mois avant ma prochaine itération professionnelle, je réserve mes billets d'avion pour le Japon un mois plus tard, pour fin juillet.
 
-# **TOKYO — 27 juillet → 10 août**
+# **TOKYO — 27 juillet au 10 août**
 
 ![DSCF9443.JPG](/articles_photo/DSCF9362.JPG)
 
@@ -43,9 +43,9 @@ Tokyo, c’est un chaos organisé… mais aussi une douceur qu’on ne soupçonn
 
 Osaka est un feu d’artifice permanent. Kuromon Ichiba, ses étals et ses brochettes fumantes ; les ruelles de Hozenji Yokocho, paisibles et pavées ; puis Shinsekai, éclatant, rétro, vivant.
 
-![DSCF9283.JPG](/articles_photo/DSCF9283.JPG)![DSCF9041.JPG](/articles_photo/DSCF9041.JPG)![DSCF9404.JPG](/articles_photo/DSCF9404.JPG)
+![DSCF9283.JPG](/articles_photo/DSCF9283.JPG)![DSCF9041.JPG](/articles_photo/DSCF9041.JPG)![DSCF9404.JPG](/articles_photo/DSCF9404.JPG){:height='700' :width='400'}
 
-# **HAKONE — (5 août)**
+# **HAKONE — 5 août**
 
 ### *Brume, volcans et premier onsen profond*
 
@@ -55,7 +55,7 @@ C’est là que j’ai compris la puissance des **onsens** : le corps se délest
 
 ![DSCF9671.JPG](/articles_photo/DSCF9671.JPG)
 
-# **ENOSHIMA — (6 août)**
+# **ENOSHIMA — 6 août**
 
 ### *Le vent salé et la pause d'été*
 
@@ -63,7 +63,7 @@ Une journée les pieds dans le sable, le bruit des vagues, les serviettes dépos
 
 ![DSCF9362.JPG](/articles_photo/DSCF9362.JPG)
 
-# **TOKYO, encore — (7 → 10 août)**
+# **TOKYO, encore — 7 au 10 août**
 
 ### *teamLab, cafés, et dernier tourbillon urbain*
 
@@ -73,7 +73,7 @@ J’ai revu le Gundam géant, marché à Ginza, bu un café à Shibuya, mangé d
 
 ![DSCF1378.JPG](/articles_photo/DSCF1378.JPG)![DSCF1393.JPG](/articles_photo/DSCF1393.JPG)![DSCF9985.JPG](/articles_photo/DSCF9985.JPG)
 
-# **KYOTO — (10 → 16 août)**
+# **KYOTO — 10 au 16 août**
 
 ### *Torii rouges, ruelles anciennes et montagnes en feu*
 
@@ -87,14 +87,14 @@ Et puis il y a eu l’un de mes coups de cœur du voyage : **Funaoka Onsen**. Un
 
 ![DSCF0067.JPG](/articles_photo/DSCF0067.JPG)
 
-# **ŌTSU — (17 août)**
+# **ŌTSU — 17 août**
 
 ### *Le lac, le Mont Hiei et une journée suspendue*
 
 Au bord du lac Biwa, tout semble plus calme. Le Mont Hiei, enveloppé de brume, offrait des temples flottants entre ciel et sol. Une transition douce, presque silencieuse, avant l’énergie d’Osaka.
 ![DSCF1580.JPG](/articles_photo/DSCF1580.JPG)
 
-# **OSAKA — (18 → 21 août)**
+# **OSAKA — 18 → 21 août**
 
 ### *Nourriture, néons et chaleur humaine*
 
@@ -102,7 +102,7 @@ Une randonnée jusqu’aux chutes de Minoh, un street-food tour qui m’a rassas
 
 ![DSCF0053.JPG](/articles_photo/DSCF0053.JPG)
 
-# **NARA — (20 août)**
+# **NARA — 20 août**
 
 ### *Les daims et le silence au loin*
 
@@ -110,7 +110,7 @@ Les daims inclinent la tête pour un biscuit, puis me regardent comme si j’ét
 
 ![DSCF9553.JPG](/articles_photo/DSCF9553.JPG)
 
-# **RETOUR À TOKYO — (21 → 24 août)**
+# **RETOUR À TOKYO — 21 → 24 août**
 
 ### *Derniers instants, derniers bains, derniers regards*
 
