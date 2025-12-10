@@ -159,10 +159,12 @@ const handleItemClick = (item: CanvasItem) => {
     // Desktop-only click handling
     if (import.meta.client) {
         if (item.src.includes('/articles/')) {
+            console.log('selection article', item)
             emit('select', item)
             return
         } else {
             const selectedProject = props.projects.find((project: Collections['projects_en'] | Collections['projects_fr']) => project.stem === item.src)
+            console.log('selection project', item, props.projects, selectedProject)
             emit('select', selectedProject)
         }
     }

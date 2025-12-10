@@ -21,8 +21,7 @@
         <UiViewToggle v-model="isCanvasView" />
       </div>
     </template>
-    <ProjectCanvasContainer v-if="isCanvasView && projects" @select="openProject"
-      :projects="projects.filter((p) => !p.home)" />
+    <ProjectCanvasContainer v-if="isCanvasView" @select="openProject" :projects="projects.filter((p) => !p.home)" />
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2" v-else>
       <Motion v-for="project, index in projects" :key="project.name" as="div" :initial="{
         scale: 1.1,
@@ -50,11 +49,11 @@ const { locale } = useI18n()
 const { data: projects } = await useAsyncData('projects_home_' + locale.value, async () => {
   const collection = ('projects_' + locale.value) as keyof Collections
   console.log('collection', collection)
-  return await queryCollection(collection).where('home', '=', false).all() as Collections['projects_en'][] | Collections['projects_fr'][]
+  return await queryCollection(collection).all() as Collections['projects_en'][] | Collections['projects_fr'][]
 }, {
   watch: [locale],
 })
-
+console.log('projects', projects.value)
 const selectedProject = ref<Collections['projects_en'] | Collections['projects_fr'] | null>(null)
 const isDialogOpen = ref(false)
 

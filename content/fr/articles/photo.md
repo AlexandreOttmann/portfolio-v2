@@ -1,5 +1,5 @@
 ---
-title: La photo comme expression
+title: La photo comme expression (WIP)
 date: 01/12/2025
 description: 
 tags:

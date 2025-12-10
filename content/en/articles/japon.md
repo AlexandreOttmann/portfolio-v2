@@ -1,12 +1,11 @@
 ---
-title: "Un voyage comme un renouveau: Japon"
+title: "A Journey Like a Renewal: Japan"
 date: 22/07/2023
-description: Le Japon a toujours été un centre d'intérêt culturel fort pour moi,
-  à travers son esthétisme, ses paysages, ses mentalités
+description: Japan has always been a strong cultural interest for me, through its aesthetics, its landscapes, and its mindset.
 tags:
-  - Japon
-  - Voyage
-  - Photographie
+  - Japan
+  - Travel
+  - Photography
 image: /articles_photo/DSCF9443.JPG
 readingTime: "5"
 ogImage:
@@ -19,109 +18,110 @@ sitemap:
   images: []
 ---
 
-# 🇯🇵 **Un été au Japon — quatre semaines de chaleur douce et de lumière**
+# 🇯🇵 **A Summer in Japan — Four Weeks of Gentle Heat and Light**
 
-Il y a des voyages qu’on planifie pendant des mois. Et puis il y a ceux qu’on décide presque sur un souffle, juste après une fin de formation, juste avant une nouvelle aventure professionnelle. Le mien est né comme ça : un billet pris sans réfléchir, une valise légère, un Fuji x100v autour du cou… et quatre semaines devant moi pour me laisser porter.
+Some trips are planned for months. And then there are those decided almost on a breath — just after finishing a training program, right before starting a new professional adventure. Mine was born like that: a ticket bought without thinking, a light suitcase, a Fuji x100v hanging from my neck… and four weeks ahead of me to just drift along.
 
-Ce récit est celui d’un mois d’été au Japon, entre festivals, sentō brûlants, cafés cachés, montagnes brumeuses, et villes qui ne dorment jamais.
+This is the story of a summer month in Japan — between festivals, steaming sentō, hidden cafés, misty mountains, and cities that never sleep.
 
-Mon premier diplôme de développeur web validé en mai 2023, une alternance signé en même temps, sous l'impulsion de mes parents et avec 4 mois devant mois avant ma prochaine itération professionnelle, je réserve mes billets d'avion pour le Japon un mois plus tard, pour fin juillet.
+With my first web developer diploma validated in May 2023, an apprenticeship signed at the same time, prompted by my parents and with four months ahead of me before my next professional chapter, I booked my flight tickets to Japan a month later, for the end of July.
 
-# **TOKYO — 27 juillet au 10 août**
+# **TOKYO — July 27 to August 10**
 
 ![DSCF9443.JPG](/articles_photo/DSCF9362.JPG)
 
-### *Néons, festivals et premiers bains chauds*
+### *Neon lights, festivals, and my first hot baths*
 
-Tokyo a été ma porte d’entrée, un chaos lumineux que l’on apprivoise doucement. Kuramae, Asakusa, Ginza, Harajuku, Ikebukuro… la ville m’a avalé puis recraché dans des atmosphères toujours différentes.
+Tokyo was my entry point — a luminous chaos you slowly learn to navigate. Kuramae, Asakusa, Ginza, Harajuku, Ikebukuro… the city swallowed me whole and spat me back into atmospheres that never felt the same twice.
 
-J’y ai vu le **Sumidagawa Fireworks Festival**, un ciel où les couleurs semblaient dériver au rythme de la chaleur. J’ai dansé — maladroitement mais sincèrement — au **Bon Odori d’Ebisu**, tournant autour de la tour éclairée au centre, emporté par lamusique.
+I witnessed the **Sumidagawa Fireworks Festival** — a sky where colors drifted with the heat. I danced — clumsily but sincerely — at the **Ebisu Bon Odori**, turning around the glowing tower at the center, carried by the music.
 
-J’ai goûté mes premiers véritables sushis à Tsukiji, mangé un omurice fondant en cherchant l’ombre, marché dans des ruelles rétro à Shibamata, et erré dans les temples plus silencieux qu’on ne l’imagine. J’ai passé des heures dans les cafés, et déjà, **je découvrais les sentō**, ces bains publics où l’on laisse la fatigue se dissoudre dans l’eau chaude.
+I tasted my first real sushi in Tsukiji, ate a melting omurice while searching for shade, wandered retro streets in Shibamata, and roamed through temples quieter than you would imagine. I spent hours in cafés and discovered **sentō**, those public baths where fatigue dissolves in hot water.
 
-Tokyo, c’est un chaos organisé… mais aussi une douceur qu’on ne soupçonne pas.
+Tokyo is organized chaos… but also a softness you wouldn’t expect.
 
-Osaka est un feu d’artifice permanent. Kuromon Ichiba, ses étals et ses brochettes fumantes ; les ruelles de Hozenji Yokocho, paisibles et pavées ; puis Shinsekai, éclatant, rétro, vivant.
+Osaka is a permanent firework. Kuromon Ichiba with its stalls and sizzling skewers; the peaceful, stone-paved alleys of Hozenji Yokocho; and Shinsekai — bright, retro, alive.
 
 ![DSCF9283.JPG](/articles_photo/DSCF9283.JPG)![DSCF9041.JPG](/articles_photo/DSCF9041.JPG)![DSCF9404.JPG](/articles_photo/DSCF9404.JPG){:height='700' :width='200'}
 
-# **HAKONE — 5 août**
+# **HAKONE — August 5**
 
-### *Brume, volcans et premier onsen profond*
+### *Mist, volcanoes, and my first deep onsen*
 
-Hakone a été comme une respiration après la densité de Tokyo. Entre les sculptures du musée en plein air, les fumerolles d’Owakudani, la Ropeway suspendue au-dessus de la vallée… tout semblait appartenir à un autre monde.
+Hakone felt like a breath of air after Tokyo’s density. Between the open-air museum sculptures, the Owakudani fumes, and the Ropeway suspended above the valley… everything seemed to belong to another world.
 
-C’est là que j’ai compris la puissance des **onsens** : le corps se déleste, l’esprit s’ouvre, la lumière revient. Une cérémonie silencieuse et essentielle.
+It’s there that I understood the power of **onsen**: the body sheds its weight, the mind opens, the light comes back. A quiet, essential ceremony.
 
 ![DSCF9671.JPG](/articles_photo/DSCF9671.JPG)
 
-# **ENOSHIMA — 6 août**
+# **ENOSHIMA — August 6**
 
-### *Le vent salé et la pause d'été*
+### *Salted wind and a summer break*
 
-Une journée les pieds dans le sable, le bruit des vagues, les serviettes déposées au hasard. Rien de spectaculaire — juste l’endroit parfait pour souffler.
+A day with my feet in the sand, the sound of waves, towels spread randomly on the shore. Nothing spectacular — just the perfect place to breathe.
 
 ![DSCF9362.JPG](/articles_photo/DSCF9362.JPG)
 
-# **TOKYO, encore — 7 au 10 août**
+# **TOKYO, again — August 7 to 10**
 
-### *teamLab, cafés, et dernier tourbillon urbain*
+### *teamLab, cafés, and a final urban whirlwind*
 
-De retour à Tokyo, je me suis laissé absorber par les salles d’eau et de lumière de **teamLab Planets**, une expérience presque méditative.
+Back in Tokyo, I was absorbed by the water-and-light rooms of **teamLab Planets**, an almost meditative experience.
 
-J’ai revu le Gundam géant, marché à Ginza, bu un café à Shibuya, mangé des sushis qui fondaient comme des souvenirs… Avant de laisser la capitale derrière moi.
+I saw the giant Gundam again, walked through Ginza, had coffee in Shibuya, ate sushi that melted like memories… before leaving the capital behind.
 
 ![DSCF1378.JPG](/articles_photo/DSCF1378.JPG)![DSCF1393.JPG](/articles_photo/DSCF1393.JPG)![DSCF9985.JPG](/articles_photo/DSCF9985.JPG)
 
-# **KYOTO — 10 au 16 août**
+# **KYOTO — August 10 to 16**
 
-### *Torii rouges, ruelles anciennes et montagnes en feu*
+### *Red torii, ancient alleys, and mountains on fire*
 
-Kyoto a été un tournant. La ville respire plus lentement, avec élégance et profondeur.
+Kyoto was a turning point. The city breathes more slowly, with elegance and depth.
 
-J’y ai gravi les torii rouges de Fushimi Inari à l’aube, bu un thé frais près de la rivière Kamo, traversé les ruelles de Gion et de Pontocho où le temps semble retenir son souffle. J’ai flâné sur le Philosopher’s Path, gravi le Mont Daimonji, et marché entre les pavillons d’or et d’argent.
+I climbed the red torii of Fushimi Inari at dawn, drank cold tea by the Kamo River, walked the alleys of Gion and Pontocho where time seems to hold its breath. I strolled along the Philosopher’s Path, climbed Mount Daimonji, and wandered between the Golden and Silver Pavilions.
 
-C’est aussi à Kyoto que j’ai vécu un moment fort : le **Daimonji**, ces immenses kanji en feu allumés sur les montagnes. Un rituel puissant, grave, presque hypnotique.
+Kyoto was also where I experienced something powerful: **Daimonji**, the giant kanji lit on the mountains. A ritual that is intense, solemn, almost hypnotic.
 
-Et puis il y a eu l’un de mes coups de cœur du voyage : **Funaoka Onsen**. Un vieux sentō en bois, un bain chaud brûlant, une atmosphère si authentique qu’elle vous traverse entièrement. J’y ai ressenti quelque chose comme un retour à soi.
+And then came one of my favorites of the whole trip: **Funaoka Onsen**. An old wooden sentō, a scalding hot bath, an atmosphere so authentic it goes straight through you. I felt something like a return to myself there.
 
 ![DSCF0067.JPG](/articles_photo/DSCF0067.JPG)
 
-# **ŌTSU — 17 août**
+# **ŌTSU — August 17**
 
-### *Le lac, le Mont Hiei et une journée suspendue*
+### *The lake, Mount Hiei, and a suspended day*
 
-Au bord du lac Biwa, tout semble plus calme. Le Mont Hiei, enveloppé de brume, offrait des temples flottants entre ciel et sol. Une transition douce, presque silencieuse, avant l’énergie d’Osaka.
+By the shores of Lake Biwa, everything feels calmer. Mount Hiei, wrapped in mist, offered temples floating between sky and earth. A gentle, almost silent transition before Osaka’s energy.
+
 ![DSCF1580.JPG](/articles_photo/DSCF1580.JPG)
 
-# **OSAKA — 18 → 21 août**
+# **OSAKA — August 18 → 21**
 
-### *Nourriture, néons et chaleur humaine*
+### *Food, neon lights, and human warmth*
 
-Une randonnée jusqu’aux chutes de Minoh, un street-food tour qui m’a rassasié pour la semaine, des néons qui bourdonnent… Osaka est joyeuse, directe, généreuse.
+A hike to the Minoh waterfalls, a street-food tour that fed me for a week, buzzing neon signs… Osaka is joyful, direct, generous.
 
 ![DSCF0053.JPG](/articles_photo/DSCF0053.JPG)
 
-# **NARA — 20 août**
+# **NARA — August 20**
 
-### *Les daims et le silence au loin*
+### *Deer and distant silence*
 
-Les daims inclinent la tête pour un biscuit, puis me regardent comme si j’étais l’invité du jour. En m’enfonçant plus profondément dans le parc, j’ai trouvé un calme presque absolu, des collines baignées de lumière. Une parenthèse douce.
+The deer bow their heads for a biscuit, then look at me as if I were the day’s guest. Venturing deeper into the park, I found an almost absolute calm — hills bathed in light. A gentle parenthesis.
 
 ![DSCF9553.JPG](/articles_photo/DSCF9553.JPG)
 
-# **RETOUR À TOKYO — 21 → 24 août**
+# **BACK TO TOKYO — August 21 → 24**
 
-### *Derniers instants, derniers bains, derniers regards*
+### *Last moments, last baths, last glances*
 
-Un dernier curry, un dernier quartier, un dernier verre d’eau glacée dans un kombini. Je regarde la ville une dernière fois depuis Roppongi, puis depuis la plateforme d’Haneda. La chaleur est toujours là — mais je sais déjà qu’elle me manquera.
+One last curry, one last neighborhood, one last glass of iced water from a kombini. I look at the city one last time from Roppongi, then from Haneda’s platform. The heat is still there — but I already know I’ll miss it.
 
 ![DSCF9428.JPG](/articles_photo/DSCF9428.JPG)
 
-# ✨ **Ce que le Japon m’a laissé**
+# ✨ **What Japan Left Me**
 
-Des bains brûlants qui effacent la fatigue. Le bruit des festivals d’été. Les lanternes qui dansent au-dessus des ruelles. Le goût du riz encore chaud. La douceur du vent sur les torii rouges. Le silence des temples. Les néons, les montagnes, les cerfs, la mer.
+Scalding baths that erase exhaustion. The sound of summer festivals. Lanterns dancing above the alleys. The taste of warm rice. The soft wind brushing the red torii. The silence of temples. The neon lights, the mountains, the deer, the sea.
 
-Et surtout : l’envie d’y retourner. Parce qu’un mois ne suffit pas. Parce qu’un été là-bas vous marque pour longtemps.
+And above all: the desire to return. Because a month isn’t enough. Because a summer there marks you for a long time.
 
 ![DSCF9711.JPG](/articles_photo/DSCF9711.JPG)

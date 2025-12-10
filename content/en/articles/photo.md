@@ -1,12 +1,12 @@
 ---
-title: La photo comme expression
+title: Photography as an expression (WIP)
 date: 01/12/2025
 description: 
 tags:
 - Life style
-- Japon
-- Voyage
-- Photographie
+- Japan
+- Travel
+- Photography
 image: /articles_photo/DSCF4828.JPG
 readingTime: "10"
 ogImage:
@@ -19,4 +19,4 @@ sitemap:
   images: []
 ---
 
-# ~~Arrive bientôt !~~
+# ~~Coming Soon !~~
