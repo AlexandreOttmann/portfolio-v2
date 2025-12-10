@@ -24,7 +24,7 @@ console.log(route)
     <Toaster close-button />
 
     <MarqueeBg v-if="!route.path.includes('works')"
-      class="opacity-50 [mask-image:linear-gradient(to_bottom,transparent,black)]" />
+      class="opacity-50 [mask-image:linear-gradient(to_bottom,transparent,black)] inset-0 -z-10 pointer-events-none" />
     <div class="fixed inset-0 -z-10 pointer-events-none">
       <div v-if="!route.path.includes('works')"
         class="pointer-events-none fixed inset-0 z-40 size-full overflow-hidden">
