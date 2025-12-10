@@ -23,6 +23,8 @@ console.log(route)
     </UApp>
     <Toaster close-button />
 
+    <MarqueeBg v-if="!route.path.includes('works')"
+      class="opacity-50 [mask-image:linear-gradient(to_bottom,transparent,black)]" />
     <div class="fixed inset-0 -z-10 pointer-events-none">
       <div v-if="!route.path.includes('works')"
         class="pointer-events-none fixed inset-0 z-40 size-full overflow-hidden">
@@ -31,8 +33,6 @@ console.log(route)
       </div>
       <DotPattern class="absolute inset-0 size-full"
         :class="isDark ? 'fill-white/10 [mask-image:radial-gradient(white,transparent_85%)]' : 'rainbow-spotlight [mask-image:radial-gradient(white,transparent_85%)]'" />
-      <MarqueeBg v-if="!route.path.includes('works')"
-        class="absolute bottom-0 top-200 left-0 h-[50vh] w-full opacity-50 [mask-image:linear-gradient(to_bottom,transparent,black)]" />
     </div>
   </Body>
 
