@@ -32,6 +32,8 @@ useSeoMeta({
   twitterTitle: pageSEO.value.title,
   twitterDescription: pageSEO.value.description,
   twitterCard: 'summary_large_image',
+  ogImage: 'https://alexottmann.com/og_image.png',
+  twitterImage: 'https://alexottmann.com/og_image.png',
 })
 
 useHead({
@@ -46,7 +48,7 @@ useHead({
   link,
 })
 
-// defineOgImage({ url: 'https://canvas.hrcd.fr/og.png', width: 1200, height: 630, alt: 'Home image' })
+defineOgImage({ url: 'http://localhost:3001//og_image.png', width: 1200, height: 630, alt: 'Home image' })
 </script>
 
 <template>

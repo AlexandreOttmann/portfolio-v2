@@ -19,7 +19,7 @@ export default defineAppConfig({
   seo: {
     title: 'Portfolio Alexandre Ottmann',
     description: 'Portfolio of Alexandre Ottmann, fullstack developer and analyst',
-    url: 'https://alexandreottmann.fr',
+    url: 'https://alexottmann.com',
   },
   ui: {
     colors: {
