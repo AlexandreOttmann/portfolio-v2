@@ -2,7 +2,7 @@
 const { locale } = useI18n()
 
 const cvFiles = {
-  en: '/CV ALEXANDRE OTTMANN - ENG.pdf.pdf',
+  en: '/CV ALEXANDRE OTTMANN - ENG.pdf',
   fr: '/CV ALEXANDRE OTTMANN - FR.pdf',
 }
 
@@ -31,18 +31,10 @@ const downloadCv = () => {
       </p>
     </div>
 
-    <UButton
-      variant="outline"
-      color="neutral"
-      size="xl"
-      class="border-white/20 hover:border-white/40 transition-all duration-200 px-8 py-4"
-      @click="downloadCv"
-    >
+    <UButton variant="outline" color="neutral" size="xl"
+      class="border-white/20 hover:border-white/40 transition-all duration-200 px-8 py-4" @click="downloadCv">
       <div class="flex items-center gap-4">
-        <Icon
-          name="lucide:file-text"
-          class="w-6 h-6"
-        />
+        <Icon name="lucide:file-text" class="w-6 h-6" />
         <div class="flex flex-col items-start">
           <span class="font-medium text-base">
             {{ locale === 'fr' ? 'CV Alexandre Ottmann' : 'Alexandre Ottmann CV' }}
@@ -51,10 +43,7 @@ const downloadCv = () => {
             {{ locale === 'fr' ? 'Format PDF' : 'PDF Format' }}
           </span>
         </div>
-        <Icon
-          name="lucide:download"
-          class="w-5 h-5"
-        />
+        <Icon name="lucide:download" class="w-5 h-5" />
       </div>
     </UButton>
   </div>
