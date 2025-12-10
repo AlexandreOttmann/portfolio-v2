@@ -111,7 +111,7 @@ export default defineNuxtSchema({
           title: 'Github',
           description: 'Your Github account.',
           icon: 'lucide:github',
-          default: 'https://github.com/myusername',
+          default: 'https://github.com/AlexandreOttmann',
         }),
         linkedin: field({
           type: 'string',

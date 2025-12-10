@@ -26,7 +26,7 @@
           <!-- title -->
           <div class="font-geist" style="--stagger: 1; --delay: 10ms" data-animate>
             <h1 :class="isDark ? 'from-white/90 to-white/30' : 'from-black/80 to-black/50'"
-              class="flex justify-center mx-auto font-medium text-center text-pretty bg-gradient-to-b bg-clip-text text-3xl text-transparent lg:max-w-3xl lg:text-4xl ">
+              class="flex justify-center mx-auto font-medium text-center text-pretty bg-gradient-to-b bg-clip-text text-3xl text-transparent lg:max-w-3xl lg:text-4xl mb-4">
               <!-- <HomeTypewriterTitle> -->
               <slot name="hero_title" mdc-unwrap="p" />
               <!-- </HomeTypewriterTitle> -->
