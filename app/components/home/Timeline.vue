@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="max-w-full mx-auto overflow-x-auto overflow-y-hidden select-none px-6"
+        <div ref="scrollContainer" class="max-w-full mx-auto overflow-x-auto overflow-y-hidden select-none px-6"
             :class="[timelineTrackHeightClass]" style="padding-bottom: 18rem;">
             <div class="relative mx-auto" :class="[timelineTrackHeightClass]"
                 :style="{ width: `${timelineInnerWidth}px` }">
@@ -145,6 +145,15 @@ const iconActivePushedTop = computed(() => `calc(${timelineHorizontalLineTop} + 
 
 const detailsDefaultTop = computed(() => `calc(${iconDefaultTop.value} + 2.5rem)`)
 const detailsActivePushedTop = computed(() => `calc(${iconActivePushedTop.value} + 2.5rem)`)
+
+const scrollContainer = ref<HTMLElement | null>(null)
+
+onMounted(() => {
+    // Scroll to end on mobile devices on mount
+    if (window.innerWidth < 768 && scrollContainer.value) {
+        scrollContainer.value.scrollLeft = scrollContainer.value.scrollWidth
+    }
+})
 </script>
 
 
