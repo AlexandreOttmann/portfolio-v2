@@ -132,7 +132,7 @@
             leave-active-class="transition-all duration-300 ease-in"
             leave-from-class="opacity-100 transform translate-y-0 scale-100"
             leave-to-class="opacity-0 transform translate-y-4 scale-95">
-            <div v-if="!showBubble"
+            <div v-if="showBubble"
               class="absolute bottom-full z-99 left-1/2 -translate-x-1/2 mb-4 w-64 bg-white text-black p-4 rounded-2xl rounded-b-sm shadow-xl text-center cursor-pointer"
               @click="toggleChat">
               <div class="text-sm font-medium leading-snug">
