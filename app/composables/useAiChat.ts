@@ -111,7 +111,6 @@ export const useAiChat = () => {
     }
 
     const sendMessage = async (message: string) => {
-        console.log('MESSAGE', message)
         if (!message.trim() || isLoading.value) return
 
         // Open chat if closed
@@ -185,7 +184,6 @@ export const useAiChat = () => {
     }
 
     const toggleChat = () => {
-        console.log('TOGGLE')
         handleInteraction()
         showChat.value = !showChat.value
         if (showChat.value) {

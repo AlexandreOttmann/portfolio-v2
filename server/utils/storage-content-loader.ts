@@ -17,7 +17,7 @@ const CACHE_TTL = 1000 * 60 * 60 // 1 hour
 export async function loadContentFromStorage(locale: string = 'en', event: H3Event): Promise<string> {
     // Locale kept for interface compatibility; currently unused beyond cache key
     const cacheKey = `storage_content_${locale}`
-
+    console.log('CACHE KEY', cacheKey)
     // Check cache
     const cached = contentCache.get(cacheKey)
     if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
@@ -41,13 +41,20 @@ export async function loadContentFromStorage(locale: string = 'en', event: H3Eve
         const fullContext = aiContextContent
         console.log(`[Storage Loader] Loaded AI context: ${fullContext.length} characters`)
 
+        // Add language directive based on locale
+        const languageDirective = locale === 'fr'
+            ? '\n\nIMPORTANT: Tu DOIS répondre en français. Le contexte ci-dessus est en anglais, mais ta réponse finale pour l\'utilisateur doit être en français.'
+            : '\n\nIMPORTANT: You MUST answer in English.'
+
+        const finalContext = fullContext + languageDirective
+
         // Cache the result
         contentCache.set(cacheKey, {
-            content: fullContext,
+            content: finalContext,
             timestamp: Date.now(),
         })
 
-        return fullContext
+        return finalContext
     } catch (error) {
         console.error('[Storage Loader] Critical error loading content:', error)
 

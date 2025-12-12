@@ -1,4 +1,5 @@
 import OpenAI from 'openai'
+import { createClient } from '@supabase/supabase-js'
 import { loadContentFromStorage } from '../utils/storage-content-loader'
 
 const openai = new OpenAI({
@@ -112,12 +113,43 @@ export default defineEventHandler(async (event) => {
 
       // Log token usage for monitoring
       const usage = completion.usage
+      let estimatedCost = 0
+
       if (usage) {
+        estimatedCost = (usage.total_tokens / 1000) * 0.002
         console.log('[AI Chat] Token Usage:')
         console.log(`  - Prompt tokens (context): ${usage.prompt_tokens}`)
         console.log(`  - Completion tokens (response): ${usage.completion_tokens}`)
         console.log(`  - Total tokens: ${usage.total_tokens}`)
-        console.log(`  - Estimated cost: $${((usage.total_tokens / 1000) * 0.002).toFixed(6)}`) // GPT-3.5-turbo pricing
+        console.log(`  - Estimated cost: $${estimatedCost.toFixed(6)}`) // GPT-3.5-turbo pricing
+
+        // Log interaction to Supabase
+        if (process.env.SUPABASE_KEY) {
+          try {
+            const supabaseUrl = 'https://jobpwmdcwtsjsqwzfifb.supabase.co'
+            const supabaseKey = process.env.SUPABASE_KEY
+            const supabase = createClient(supabaseUrl, supabaseKey)
+
+            const { error } = await supabase
+              .from('ai_chat_interactions')
+              .insert({
+                prompt: message,
+                answer: response,
+                prompt_tokens: usage.prompt_tokens,
+                completion_token: usage.completion_tokens,
+                total_tokens: usage.total_tokens,
+                estimated_cost: estimatedCost,
+              })
+
+            if (error) {
+              console.error('[Supabase] Error logging interaction:', error)
+            } else {
+              console.log('[Supabase] Interaction logged successfully')
+            }
+          } catch (supabaseError) {
+            console.error('[Supabase] Failed to initialize/log:', supabaseError)
+          }
+        }
       }
 
       console.log(response)
