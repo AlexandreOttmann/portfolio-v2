@@ -127,6 +127,11 @@ export const collections = {
     source: 'ai-context.md',
     schema: commonContentSchema,
   }),
+  red_wire: defineCollection({
+    type: 'page',
+    source: 'red-wire.md',
+    schema: commonContentSchema,
+  }),
   faq_en: defineCollection({
     type: 'data',
     source: 'en/faq.json',
@@ -197,7 +202,7 @@ export const collections = {
         image: z.string().nonempty(),
         src: z.string().optional(),
       })),
-    })
+    }),
   }),
   canvas_en: defineCollection({
     type: 'page',
@@ -213,7 +218,7 @@ export const collections = {
         image: z.string().nonempty(),
         src: z.string().optional(),
       })),
-    })
+    }),
   }),
   canvas_fr: defineCollection({
     type: 'page',
@@ -229,6 +234,6 @@ export const collections = {
         image: z.string().nonempty(),
         src: z.string().optional(),
       })),
-    })
+    }),
   }),
 }

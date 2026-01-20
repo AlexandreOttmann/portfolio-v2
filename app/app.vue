@@ -10,34 +10,46 @@ console.log(route)
 </script>
 
 <template>
-  <Html :lang="locale"
-    class="font-geist text-[var(--ui-text)] transition-colors duration-300 selection:bg-white/60 selection:text-zinc-800">
+  <Html
+    :lang="locale"
+    class="font-geist text-[var(--ui-text)] transition-colors duration-300 selection:bg-white/60 selection:text-zinc-800"
+  >
+    <Body>
+      <LayoutScrollToTop />
+      <UApp
+        :locale="locales[locale]"
+        :tooltip="{ delayDuration: 0 }"
+        class="relative"
+      >
+        <NuxtLayout>
+          <NuxtPage />
+          <HomeAiChat />
+        </NuxtLayout>
+      </UApp>
+      <Toaster close-button />
 
-  <Body>
-    <LayoutScrollToTop />
-    <UApp :locale="locales[locale]" :tooltip="{ delayDuration: 0 }" class="relative">
-      <NuxtLayout>
-        <NuxtPage />
-        <HomeAiChat />
-      </NuxtLayout>
-    </UApp>
-    <Toaster close-button />
-
-    <MarqueeBg v-if="!route.path.includes('works')"
-      class="opacity-50 [mask-image:linear-gradient(to_bottom,transparent,black)] inset-0 -z-10 pointer-events-none" />
-    <div class="fixed inset-0 -z-10 pointer-events-none">
-      <div v-if="!route.path.includes('works')"
-        class="pointer-events-none fixed inset-0 z-40 size-full overflow-hidden">
+      <MarqueeBg
+        v-if="!route.path.includes('works')"
+        class="opacity-50 [mask-image:linear-gradient(to_bottom,transparent,black)] inset-0 -z-10 pointer-events-none"
+      />
+      <div class="fixed inset-0 -z-10 pointer-events-none">
         <div
-          class="noise pointer-events-none absolute inset-[-200%] z-50 size-[400%] bg-[url('/noise.png')] opacity-[3%]" />
+          v-if="!route.path.includes('works')"
+          class="pointer-events-none fixed inset-0 z-40 size-full overflow-hidden"
+        >
+          <div
+            class="noise pointer-events-none absolute inset-[-200%] z-50 size-[400%] bg-[url('/noise.png')] opacity-[3%]"
+          />
+        </div>
+        <DotPattern
+          class="absolute inset-0 size-full"
+          :class="isDark ? 'fill-white/10 [mask-image:radial-gradient(white,transparent_85%)]' : 'rainbow-spotlight [mask-image:radial-gradient(white,transparent_85%)]'"
+        />
       </div>
-      <DotPattern class="absolute inset-0 size-full"
-        :class="isDark ? 'fill-white/10 [mask-image:radial-gradient(white,transparent_85%)]' : 'rainbow-spotlight [mask-image:radial-gradient(white,transparent_85%)]'" />
-    </div>
-  </Body>
-
+    </Body>
   </Html>
 </template>
+
 <style scoped>
 @keyframes rainbow-rotate {
   0% {

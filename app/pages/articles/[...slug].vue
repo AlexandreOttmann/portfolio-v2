@@ -1,10 +1,18 @@
 <template>
   <div v-if="page">
-    <FolioMeta :page :is-writing="route.path.includes('/articles/')" />
+    <FolioMeta
+      :page
+      :is-writing="route.path.includes('/articles/')"
+    />
     <div class="mx-auto mt-8 sm:mt-20 px-4 sm:max-w-2xl md:max-w-3xl lg:max-w-4xl">
-      <NuxtLinkLocale to="/writing"
-        class="inline-flex items-center gap-2 text-muted hover:text-primary transition-colors duration-200 cursor-pointer group">
-        <UIcon name="lucide:arrow-left" class="size-4 transition-transform duration-200 group-hover:-translate-x-1" />
+      <NuxtLinkLocale
+        to="/writing"
+        class="inline-flex items-center gap-2 text-muted hover:text-primary transition-colors duration-200 cursor-pointer group"
+      >
+        <UIcon
+          name="lucide:arrow-left"
+          class="size-4 transition-transform duration-200 group-hover:-translate-x-1"
+        />
         <span class="text-sm font-extralight">
           {{ $t("navigation.writing") }}
         </span>
@@ -23,31 +31,37 @@
         <p class="hidden sm:block">
           |
         </p>
-        <UTooltip :text="$t('writing.copy_link')" :shortcuts="['⌘', 'K']">
-          <p class="flex cursor-pointer select-none items-center gap-1 transition-colors duration-200 hover:text-primary"
-            @click="copyArticleLink">
+        <UTooltip
+          :text="$t('writing.copy_link')"
+          :shortcuts="['⌘', 'K']"
+        >
+          <p
+            class="flex cursor-pointer select-none items-center gap-1 transition-colors duration-200 hover:text-primary"
+            @click="copyArticleLink"
+          >
             {{ $t("writing.share") }}
           </p>
         </UTooltip>
       </div>
       <div class="flex h-70 justify-center overflow-hidden rounded-lg border border-primary/10 my-4">
-        <NuxtImg :placeholder="img(`${page.image}`)" width="1536" :alt="page.title + ' article image'"
-          class="h-full rounded-lg object-cover transition-all duration-300 hover:scale-105" :src="page.image"
-          :aria-label="page.title + ' article image'" />
+        <NuxtImg
+          :placeholder="img(`${page.image}`)"
+          width="1536"
+          :alt="page.title + ' article image'"
+          class="h-full rounded-lg object-cover transition-all duration-300 hover:scale-105"
+          :src="page.image"
+          :aria-label="page.title + ' article image'"
+        />
       </div>
-      <ContentRenderer v-if="page" :dir="localeProperties?.dir ?? 'ltr'" :value="page" />
+      <ContentRenderer
+        v-if="page"
+        :dir="localeProperties?.dir ?? 'ltr'"
+        :value="page"
+      />
     </article>
   </div>
 </template>
 
-<style scoped>
-.info-section {
-  font-weight: 200;
-  color: #7d8084;
-  text-decoration: none;
-  text-align: left;
-}
-</style>
 <script lang="ts" setup>
 import type { Collections } from '@nuxt/content'
 import { withLeadingSlash, joinURL } from 'ufo'
@@ -87,3 +101,12 @@ defineOgImage({
   url: page.value.image,
 })
 </script>
+
+<style scoped>
+.info-section {
+  font-weight: 200;
+  color: #7d8084;
+  text-decoration: none;
+  text-align: left;
+}
+</style>

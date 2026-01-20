@@ -6,65 +6,97 @@
     <div class="relative mx-auto flex max-w-7xl flex-col justify-center gap-4 px-4 py-8 sm:px-6 lg:px-8 lg:py-16">
       <!-- spotlight -->
       <div
-        class="rainbow-spotlight absolute -top-8 left-1/2 size-72 -translate-x-1/2 rounded-full blur-[120px] lg:-top-8 lg:size-[32rem] lg:blur-[200px]" />
+        class="rainbow-spotlight absolute -top-8 left-1/2 size-72 -translate-x-1/2 rounded-full blur-[120px] lg:-top-8 lg:size-[32rem] lg:blur-[200px]"
+      />
 
       <!-- profile picture -->
       <HomeProfilePicture />
-      <Motion :initial="{
-        scale: 1.1,
-        opacity: 0,
-        filter: 'blur(20px)',
-      }" :animate="{
-        scale: 1,
-        opacity: 1,
-        filter: 'blur(0px)',
-      }" :transition="{
-        duration: 0.6,
-      }">
-
+      <Motion
+        :initial="{
+          scale: 1.1,
+          opacity: 0,
+          filter: 'blur(20px)',
+        }"
+        :animate="{
+          scale: 1,
+          opacity: 1,
+          filter: 'blur(0px)',
+        }"
+        :transition="{
+          duration: 0.6,
+        }"
+      >
         <div class="z-20 flex flex-col items-center justify-center">
           <!-- title -->
-          <div class="font-geist" style="--stagger: 1; --delay: 10ms" data-animate>
-            <h1 :class="isDark ? 'from-white/90 to-white/30' : 'from-black/80 to-black/50'"
-              class="flex justify-center mx-auto font-medium text-center text-pretty bg-gradient-to-b bg-clip-text text-3xl text-transparent lg:max-w-3xl lg:text-4xl mb-4">
+          <div
+            class="font-geist"
+            style="--stagger: 1; --delay: 10ms"
+            data-animate
+          >
+            <h1
+              :class="isDark ? 'from-white/90 to-white/30' : 'from-black/80 to-black/50'"
+              class="flex justify-center mx-auto font-medium text-center text-pretty bg-gradient-to-b bg-clip-text text-3xl text-transparent lg:max-w-3xl lg:text-4xl mb-4"
+            >
               <!-- <HomeTypewriterTitle> -->
-              <slot name="hero_title" mdc-unwrap="p" />
+              <slot
+                name="hero_title"
+                mdc-unwrap="p"
+              />
               <!-- </HomeTypewriterTitle> -->
             </h1>
 
             <!-- subtitle -->
             <h2 class="mx-auto max-w-xl text-center text-lg antialiased text-muted">
-              <slot name="hero_subtitle" mdc-unwrap="p" />
+              <slot
+                name="hero_subtitle"
+                mdc-unwrap="p"
+              />
             </h2>
           </div>
 
-          <SettingsAvailability background class="mt-2" style="--stagger: 2" data-animate />
+          <SettingsAvailability
+            background
+            class="mt-2"
+            style="--stagger: 2"
+            data-animate
+          />
 
           <!-- social -->
-          <HomeSocial style="--stagger: 3" data-animate />
+          <HomeSocial
+            style="--stagger: 3"
+            data-animate
+          />
 
           <!-- cta -->
-          <HomeCTA style="--stagger: 4" data-animate />
+          <HomeCTA
+            style="--stagger: 4"
+            data-animate
+          />
 
-          <div style="--stagger: 5" data-animate class="mt-12 flex w-full max-w-3xl flex-col gap-4 lg:mt-16">
+          <div
+            style="--stagger: 5"
+            data-animate
+            class="mt-12 flex w-full max-w-3xl flex-col gap-4 lg:mt-16"
+          >
             <!-- timeline -->
             <HomeTimelineWrapper />
             <!-- projects -->
             <HomeProjects />
           </div>
 
-
-
           <Divider class="my-9" />
 
-          <HomeCvDownload style="--stagger: 7" data-animate />
+          <HomeCvDownload
+            style="--stagger: 7"
+            data-animate
+          />
         </div>
       </Motion>
     </div>
   </section>
 </template>
-<script setup>
 
+<script setup>
 const color = useColorMode()
 const isDark = computed(() => color.value === 'dark')
 </script>
