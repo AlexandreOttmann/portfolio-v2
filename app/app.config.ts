@@ -8,7 +8,7 @@ export default defineAppConfig({
     job: 'Full Stack Developer',
     email: 'ottmann.alexandre@gmail.com',
     phone: '(+33) 6 31 87 08 76',
-    picture: 'https://github.com/AlexandreOttmann/Dev-Portfolio/blob/main/public/images/alex.jpg?raw=true',
+    picture: '/alex.jpg',
   },
   socials: {
     github: 'https://github.com/AlexandreOttmann',
