@@ -14,7 +14,9 @@ His Linkedin profile is : [Alex](https://www.linkedin.com/in/alexandre-ottmann/)
 
 # Current Job this year
 
-- Quantedsquare company - 2023 to present, Fullstack web developper and consultant in this web agency. Working on projects for startups and companies, Crown and Odysway. Doing tech due diligence for funds of investment.
+- Applied AI / GenAI Developer - Currently building production-grade projects combining RAG, LLM streaming, and distributed architectures (Kafka, Redis, vector search).
+- Odysway - 2023 to present, Fullstack web developer (Refonte, migration & évolution).
+- Quantedsquare company - 2023 to 2026, Fullstack web developper and consultant in this web agency. Working on projects for startups and companies, Crown and Odysway. Doing tech due diligence for funds of investment.
   His employers are :
 - [Julien LERAY](https://www.linkedin.com/in/julienleray/)
 - [Fabien UNGERER](https://www.linkedin.com/in/fabien-ungerer/)
@@ -46,8 +48,10 @@ His Linkedin profile is : [Alex](https://www.linkedin.com/in/alexandre-ottmann/)
 ## Technical Expertise
 
 - **Frontend**: Vue.js, Nuxt.js, React, TypeScript, Tailwind CSS, HTML5, CSS3, D3.js, Vuetify, Nuxt UI
-- **Backend**: Node.js, Express, Prisma, PostgreSQL, SQL, MongoDB, Supabase
-- **Tools**: Git, Docker, Vercel, Netlify, Figma, Adobe Creative Suite, Active Campaign, ButterCMS, SanityCMS
+- **Backend**: Node.js, Express, Fastify, Python, FastAPI, PostgreSQL, SQL, MongoDB, Supabase, Redis
+- **AI & Realtime**: RAG, vector search (pgvector), LLM APIs (OpenAI, Anthropic Claude, Jina AI), WebSockets, Kafka
+- **Tools**: Git, Docker, Kubernetes, Vercel, Netlify, Figma, ButterCMS, SanityCMS, ActiveCampaign, Stripe, Algolia
+- **Testing & Quality**: Playwright, pytest, k6, Cypress, Zod
 - **Frameworks**: Nuxt 4, Vue 3, React 18+
 
 ## Work Philosophy
@@ -60,6 +64,8 @@ Alex is available for new projects and consultations. He's responsive to inquiri
 
 ## Last projects
 
+- EONI - RAG & AI storefront platform. Full RAG pipeline with pgvector HNSW, reranking, and real-time LLM generation using Claude Sonnet/GPT-4o-mini. Architecture based on Nuxt 4, Supabase, and Realtime.
+- Oni Auction - Scalable real-time bidding infrastructure using FastAPI, Kafka (partitioned by auction_id), Redis for live state, and PostgreSQL. Deployed on Kubernetes.
 - Odysway - 2 years, it's a Full-stack web application for a travel agency, made with Quanted Square company, using Nuxt4, Vuetify, Supabase, SanityCMS, NuxtStudio, Stripe... [<https://www.odysway.com/>] Redid the full website design and redevelopped the whole website /payements funnel / Analytics dashboard / CRM / etc...
 - Crown - 1 year, it's a Full-stack web application made with Quanted Square company, eAuctions Trusted Third Party for industries, using Nuxt4, Vuetify, Supabase, NuxtStudio... [<https://www.crown.com/>] Build the website from scratch. Real Time eAuction platform with live bidding and notifications, charts, dashboard.
 - Quanted Square - 2 years : Web Agency doing technical consulting for startups and mostly actionable and modern Tech & Product Due Diligence for Private Equity and Growth investors.

@@ -1,0 +1,15 @@
+{
+  "name": "Oni Auction",
+  "image": "/projects/oni_auction.png",
+  "link": "https://github.com/AlexandreOttmann/Oni-Auction",
+  "release": "2026",
+  "featured": true,
+  "home": true,
+  "content": "Infrastructure d'enchères temps réel distribuée avec FastAPI, Kafka, Redis et PostgreSQL, déployée sur Kubernetes.",
+  "stack": [
+    "FastAPI",
+    "Kafka",
+    "Redis",
+    "PostgreSQL"
+  ]
+}

@@ -21,9 +21,9 @@
         <UiViewToggle v-model="isCanvasView" />
       </div>
     </template>
-    <ProjectCanvasContainer v-if="isCanvasView" :projects="projects.filter((p) => !p.home)" @select="openProject" />
+    <ProjectCanvasContainer v-if="isCanvasView" :projects="projects.filter((p) => !p.home || ['EONI', 'Oni Auction'].includes(p.name))" @select="openProject" />
     <div v-else class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-      <Motion v-for="project, index in projects.filter((p) => !p.home)" :key="project.name" as="div" :initial="{
+      <Motion v-for="project, index in projects.filter((p) => !p.home || ['EONI', 'Oni Auction'].includes(p.name))" :key="project.name" as="div" :initial="{
         scale: 1.1,
         opacity: 0,
         filter: 'blur(20px)',

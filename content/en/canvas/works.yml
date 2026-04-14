@@ -19,18 +19,18 @@ items:
     width: 680
     height: 240
     src: en/projects/3.odysway/data
-  - title: Ecovoit'
-    link:  'https://github.com/AlexandreOttmann/2309-wns-jaune-eco-voit'
-    image: /projects/ecovoit.png
+  - title: EONI
+    link: 'https://github.com/AlexandreOttmann/EONI'
+    image: /projects/eoni.png
     width: 480
     height: 270
-    src: en/projects/4.ecovoit/data
-  - title: Portfolio v1
-    link: https://portfolio-template.nuxt.dev/
-    image: /projects/portfolio-v1.png
+    src: en/projects/11.eoni/data
+  - title: Oni Auction
+    link: 'https://github.com/AlexandreOttmann/Oni-Auction'
+    image: /projects/oni_auction.png
     width: 480
     height: 270
-    src: en/projects/5.portfolio/data
+    src: en/projects/12.oniauction/data
   - title: Previous career
     link: https://www.malt.fr/profile/alexottmann
     image: /projects/malt.png
@@ -48,71 +48,16 @@ items:
     image: /sunset-yuzu.webp
     width: 480
     height: 270
-    # Need to redirect to article 
     src: en/projects/8.alexottmann/data
-  # - title: NuxtLabs is Joining Vercel
-  #   link: https://nuxtlabs.com
-  #   image: /projects/crown.png
-  #   width: 480
-  #   height: 270
-  # - title: Nuxt UI Raycast Clone
-  #   link: https://raycast-nuxt-ui-clone.vercel.app/
-  #   image: /projects/crown.png
-  #   width: 480
-  #   height: 270
-  # - title: Nuxt Ship
-  #   image: /projects/crown.png
-  #   width: 480
-  #   height: 270
-  # - title: Nuxt Raycast Extension
-  #   link: https://github.com/nuxt/raycast-extension
-  #   image: /projects/crown.png
-  #   width: 480
-  #   height: 270
-  # - title: Inkly OG Image
-  #   link: https://inkly.hrcd.fr
-  #   image: /projects/crown.png
-  #   width: 480
-  #   height: 270
-  # - title: Nuxt 100k Followers Post
-  #   image: /projects/crown.png
-  #   width: 480
-  #   height: 270
-  # - title: NuxtHub x Cloudflare Workers
-  #   link: https://hub.nuxt.com/changelog/workers
-  #   image: /projects/crown.png
-  #   width: 480
-  #   height: 270
-  # - title: Shelve Ripple Loader
-  #   link: https://app.shelve.cloud
-  #   image: /projects/crown.png
-  #   width: 480
-  #   height: 270
-  # - title: Nuxt Logo Blueprint
-  #   image: /projects/crown.png
-  #   width: 480
-  #   height: 270
-  # - title: Nuxt.com Feedbacks Admin
-  #   link: https://nuxt.com/feedbacks
-  #   image: /projects/crown.png
-  #   width: 480
-  #   height: 270
-  # - title: Concept for a Nuxt Metro Ad
-  #   image: /projects/crown.png
-  #   width: 680
-  #   height: 240
-  # - title: Nuxt UI Figma Kit
-  #   image: /projects/crown.png
-  #   link: https://go.nuxt.com/figma-ui
-  #   width: 480
-  #   height: 270
-  # - title: Nuxt UI MCP Server
-  #   image: /projects/crown.png
-  #   link: https://ui.nuxt.com/docs/getting-started/ai/mcp
-  #   width: 480
-  #   height: 270
-  # - title: NuxtL.com new mobile navigation
-  #   image: /projects/crown.png
-  #   link: https://nuxt.com
-  #   width: 480
-  #   height: 270
+  - title: Ecovoit'
+    link:  'https://github.com/AlexandreOttmann/2309-wns-jaune-eco-voit'
+    image: /projects/ecovoit.png
+    width: 480
+    height: 270
+    src: en/projects/4.ecovoit/data
+  - title: Portfolio v1
+    link: https://portfolio-template.nuxt.dev/
+    image: /projects/portfolio-v1.png
+    width: 480
+    height: 270
+    src: en/projects/5.portfolio/data

@@ -33,7 +33,7 @@ export default defineNuxtSchema({
           title: 'Name',
           description: 'Your name.',
           icon: 'lucide:user',
-          default: 'Hugo Richard',
+          default: 'Alexandre Ottmann',
         }),
         job: field({
           type: 'string',
