@@ -1,6 +1,5 @@
 import OpenAI from 'openai'
 import { createClient } from '@supabase/supabase-js'
-import { loadContentFromStorage } from '../utils/storage-content-loader'
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -77,32 +76,81 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    // Try to use OpenAI API
+    // Try to use OpenAI API for Embeddings and Generation
     try {
-      // Load dynamic content context from storage based on locale
-      const context = await loadContentFromStorage(locale, event)
-      console.log('Context loaded from storage:', context)
-      // Debug: Log first 500 chars of context to verify it's correct
-      console.log('[AI Chat] Context preview:', context.substring(0, 500))
-      console.log('[AI Chat] Context length:', context.length, 'characters')
+      const supabaseUrl = 'https://jobpwmdcwtsjsqwzfifb.supabase.co'
+      const supabaseKey = process.env.SUPABASE_KEY!
+      const supabase = createClient(supabaseUrl, supabaseKey)
 
-      // Use the most cost-effective model for simple Q&A
+      // 1. Generate embedding for user query
+      const queryEmbeddingRes = await openai.embeddings.create({
+        model: 'text-embedding-3-small',
+        input: message,
+        dimensions: 1536,
+      })
+      const queryEmbedding = queryEmbeddingRes.data[0].embedding
+      let promptTokens = queryEmbeddingRes.usage.prompt_tokens
+
+      // 2. Check Semantic Cache
+      // We use a strict threshold (0.95 similarity) to ensure meaning is nearly identical
+      const { data: cacheHit, error: cacheErr } = await supabase.rpc('check_semantic_cache', {
+        query_emb: queryEmbedding,
+        match_threshold: 0.95,
+      })
+
+      if (!cacheErr && cacheHit && cacheHit.length > 0) {
+        console.log('[AI Chat] Semantic cache HIT! Similarity:', cacheHit[0].similarity)
+        return {
+          response: cacheHit[0].response,
+          source: 'semantic_cache',
+        }
+      }
+
+      console.log('[AI Chat] Semantic cache MISS. Retrieving context...')
+
+      // 3. Retrieve relevant portfolio chunks
+      const { data: chunks, error: matchErr } = await supabase.rpc('match_portfolio_chunks', {
+        query_embedding: queryEmbedding,
+        match_threshold: 0.4,
+        match_count: 5,
+      })
+
+      console.log('[AI Chat] matchErr:', matchErr)
+      console.log('[AI Chat] Chunks retrieved:', chunks?.length ?? 0)
+
+      let contextBlob = ''
+      if (!matchErr && chunks) {
+        contextBlob = (chunks as Array<{ content: string }>).map(c => c.content).join('\n\n---\n\n')
+      }
+
+      // Add language directive based on locale
+      const languageDirective = locale === 'fr'
+        ? '\n\nIMPORTANT: Tu DOIS répondre en français. Ton public est francophone.'
+        : '\n\nIMPORTANT: You MUST answer in English.'
+
+      const systemPrompt = `You are Petit-Oni, the AI assistant on Alex's portfolio website.
+You answer questions about Alex (Fullstack Developer applied AI).
+
+Here is the retrieved knowledge from his portfolio content:
+${contextBlob}
+
+Answering Rules:
+- Be helpful, concise, and natural.
+- Use markdown. Prefer bullet points for lists.
+- If mentioning a project or context that includes an image, ALWAYS embed it using markdown format: ![Alt text](/path/to/image.jpg)
+- Keep replies under 1000 characters if possible.
+- If you don't know the answer from the context, gently say you're not sure but Alex can be contacted via the contact form.
+${languageDirective}`
+
+      // 4. Generate response
       const completion = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo', // Most cost-effective model
+        model: 'gpt-4o-mini',
         messages: [
-          {
-            role: 'system',
-            content: context,
-          },
-          {
-            role: 'user',
-            content: message,
-          },
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: message },
         ],
-        max_tokens: 500, // Increased to prevent cut-off responses
+        max_tokens: 500,
         temperature: 0.7,
-        presence_penalty: 0.1,
-        frequency_penalty: 0.1,
       })
 
       const response = completion.choices[0]?.message?.content
@@ -111,60 +159,50 @@ export default defineEventHandler(async (event) => {
         throw new Error('No response from OpenAI')
       }
 
-      // Log token usage for monitoring
+      // Log token usage
       const usage = completion.usage
       let estimatedCost = 0
 
       if (usage) {
-        estimatedCost = (usage.total_tokens / 1000) * 0.002
-        console.log('[AI Chat] Token Usage:')
-        console.log(`  - Prompt tokens (context): ${usage.prompt_tokens}`)
-        console.log(`  - Completion tokens (response): ${usage.completion_tokens}`)
-        console.log(`  - Total tokens: ${usage.total_tokens}`)
-        console.log(`  - Estimated cost: $${estimatedCost.toFixed(6)}`) // GPT-3.5-turbo pricing
+        promptTokens += usage.prompt_tokens
+        const completionTokens = usage.completion_tokens
+        const totalTokens = promptTokens + completionTokens
 
-        // Log interaction to Supabase
-        if (process.env.SUPABASE_KEY) {
-          try {
-            const supabaseUrl = 'https://jobpwmdcwtsjsqwzfifb.supabase.co'
-            const supabaseKey = process.env.SUPABASE_KEY
-            const supabase = createClient(supabaseUrl, supabaseKey)
+        estimatedCost = (totalTokens / 1000) * 0.002 // Rough estimate mixing embedding & generation
 
-            const { error } = await supabase
-              .from('ai_chat_interactions')
-              .insert({
-                prompt: message,
-                answer: response,
-                prompt_tokens: usage.prompt_tokens,
-                completion_token: usage.completion_tokens,
-                total_tokens: usage.total_tokens,
-                estimated_cost: estimatedCost,
-              })
+        console.log(`[AI Chat] Total tokens: ${totalTokens} | Est. Cost: $${estimatedCost.toFixed(6)}`)
 
-            if (error) {
-              console.error('[Supabase] Error logging interaction:', error)
-            } else {
-              console.log('[Supabase] Interaction logged successfully')
-            }
-          } catch (supabaseError) {
-            console.error('[Supabase] Failed to initialize/log:', supabaseError)
-          }
-        }
+        // Fire & Forget: Update semantic cache and interactions table
+        supabase.from('semantic_query_cache').insert({
+          query_text: message,
+          query_embedding: queryEmbedding,
+          response: response,
+        }).then(({ error }) => { if (error) console.error('[Supabase] Cache insertion error:', error) })
+
+        supabase.from('ai_chat_interactions').insert({
+          prompt: message,
+          answer: response,
+          prompt_tokens: promptTokens,
+          completion_token: completionTokens,
+          total_tokens: totalTokens,
+          estimated_cost: estimatedCost,
+        }).then(({ error }) => { if (error) console.error('[Supabase] Log insertion error:', error) })
       }
 
-      console.log(response)
       return {
         response,
-        usage: completion.usage, // Include usage for monitoring costs
-        source: 'openai',
+        usage: { total_tokens: promptTokens + (usage?.completion_tokens || 0) },
+        source: 'openai_rag',
       }
     }
-    catch (openaiError: any) {
+    catch (openaiError: unknown) {
       console.log(openaiError)
-      console.warn('OpenAI API Error, using fallback:', openaiError.message)
+      const errMsg = openaiError instanceof Error ? openaiError.message : String(openaiError)
+      const errStatus = (openaiError as { status?: number }).status
+      console.warn('OpenAI API Error, using fallback:', errMsg)
 
       // Check if it's a quota/rate limit error
-      if (openaiError.status === 429 || openaiError.message.includes('quota')) {
+      if (errStatus === 429 || errMsg.includes('quota')) {
         const fallbackResponse = getFallbackResponse(message, locale)
         if (fallbackResponse) {
           return {

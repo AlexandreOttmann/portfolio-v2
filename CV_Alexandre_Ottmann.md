@@ -1,6 +1,6 @@
 # ALEXANDRE OTTMANN
-## Développeur Fullstack JS (Vue / Node)
-**Realtime & Scalabilité • IA appliquée (RAG, LLM)**
+## Développeur Fullstack IA appliquée avec temps réel et scalabilité
+**RAG, LLM, Kafka, Redis, Vue & Node**
 
 ---
 

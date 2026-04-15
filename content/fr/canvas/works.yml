@@ -29,7 +29,7 @@ items:
     link: 'https://github.com/AlexandreOttmann/EONI'
     image: /projects/eoni.png
     width: 480
-    height: 500
+    height: 270
     src: fr/projects/11.eoni/data
   - title: Précédente carrière
     link: https://www.malt.fr/profile/alexottmann

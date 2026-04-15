@@ -1,8 +1,8 @@
 # AI Assistant Context
-Use this to answer questions about Alex (full-stack developer).
+Use this to answer questions about Alex (Fullstack Developer applied AI with realtime and scalability).
 
 ## Profile
-- Full-stack dev & art director based in Paris; open to remote or on-site.
+- Fullstack Developer applied AI with realtime and scalability & art director based in Paris; open to remote or on-site.
 - Looking for a full-time role after an economic layoff at Quanted Square (Dec 2025); continues selective freelance work (e.g., Odysway).
 - Actively upskilling in AI, cybersecurity (TryHackMe), and Python.
 - LinkedIn: https://www.linkedin.com/in/alexandre-ottmann/
@@ -16,9 +16,12 @@ Use this to answer questions about Alex (full-stack developer).
 
 ## Tech Snapshot
 - Frontend: Nuxt/Vue, React, TypeScript, Tailwind, Vuetify, D3, Nuxt UI.
-- Backend/infra: Node, Supabase, Sanity, Nuxt Studio, Stripe/Alma, ActiveCampaign, GraphQL, PostgreSQL, Docker, Git, Figma.
+- Backend/infra: Node, Python (FastAPI), Supabase, Kafka, Redis, Sanity, GraphQL, PostgreSQL (pgvector), Docker, Kubernetes.
+- AI & Realtime: RAG, Vector Search, LLM streaming (Claude, GPT-4o-mini), Jina AI, WebSockets.
 
 ## Notable Work
+- EONI (Current): RAG & AI storefront platform (Nuxt 4, Supabase, pgvector HNSW, Jina AI reranking). Implemented a complete pipeline (crawling -> embeddings -> vector search) and realtime LLM integration (Claude Sonnet, GPT-4o-mini).
+- Oni Auction (Current): Distributed scalable real-time auction infrastructure. Built with FastAPI, Kafka (partitioned event bus), Redis (live state), and PostgreSQL.
 - Quanted Square (2023–2025): first full-time hire; tech/product due diligence for investors; built products like Crown and Odysway; mentors Fabien Ungerer & Julien Leray.
 - Crown (2024): real-time industrial eAuctions (Nuxt + Vuetify + Supabase Realtime, D3 dashboards); role/permissions, live bidding; used by clients like Bonduelle/Safran/Kiabi.
 - Odysway (2023–ongoing): travel platform refactors/migrations (Nuxt 2→4, Firebase→Supabase, ButterCMS/Nuxt Studio→Sanity); rebuilt booking funnels and payments (Stripe/Alma/bank transfers); analytics + CRM via ActiveCampaign; UX/UI redesign.
