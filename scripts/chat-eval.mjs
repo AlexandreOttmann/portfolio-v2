@@ -11,7 +11,7 @@
  * - which cards were displayed (`cards`: project/article slugs or "contact", at least one of them),
  * - facts the answer must mention (`mentions`: every group must match one of its variants),
  * - things it must not say (`forbidden`),
- * - for every case: no full answer written before a tool call, and "vous" (never "tu") in French.
+ * - for every case: no full answer written before a lookup tool call, and "vous" (never "tu") in French.
  * Every run calls the model (~40 requests): it costs real tokens.
  *
  *   ONLY=project pnpm eval:chat   # run only the cases whose group matches
@@ -49,7 +49,9 @@ const cases = [
   { group: 'profile', locale: 'fr', question: 'Quel est son parcours scolaire ?', mentions: [['wild code school'], ['o\'clock', 'oclock'], ['abbey road']] },
   { group: 'profile', locale: 'fr', question: 'Quand a-t-il quitté Quanted Square ?', mentions: [['decembre 2025', 'fin 2025']] },
   { group: 'profile', locale: 'en', question: 'Where is he based and can he work remotely?', mentions: [['paris'], ['remote', 'distance']] },
-  { group: 'profile', locale: 'fr', question: 'Combien coûte un projet avec lui ?', mentions: [['2000', '2 000', '2k']] },
+  { group: 'contact', locale: 'fr', question: 'Combien coûte un projet avec lui ?', tools: ['show_contact_options'], cards: ['contact'], mentions: [['2000', '2 000', '2k']] },
+  { group: 'contact', locale: 'en', question: 'What are his rates?', tools: ['show_contact_options'], cards: ['contact'], mentions: [['450']] },
+  { group: 'contact', locale: 'en', question: 'Is he available for a freelance mission?', tools: ['show_contact_options'], cards: ['contact'] },
   { group: 'profile', locale: 'en', question: 'What is his dog called?', mentions: [['yuzu']] },
   { group: 'profile', locale: 'fr', question: 'Sur quoi travaille-t-il en ce moment ?', mentions: [['eoni', 'oni auction', 'realtime ai ops', 'odysway', 'tryhackme', 'python']] },
   { group: 'contact', locale: 'fr', question: 'Je voudrais l\'embaucher, comment le contacter ?', tools: ['show_contact_options'], cards: ['contact'] },
@@ -79,7 +81,8 @@ async function ask({ locale, question }) {
     const event = JSON.parse(line)
     if (event.type === 'text') text += event.delta
     if (event.type === 'tool-start') {
-      if (!tools.length) textBeforeTool = text
+      // The contact card may close an answer; lookup tools must come first.
+      if (!tools.some(name => name !== 'show_contact_options') && event.name !== 'show_contact_options') textBeforeTool = text
       tools.push(event.name)
     }
     if (event.type === 'error') error = event.message
