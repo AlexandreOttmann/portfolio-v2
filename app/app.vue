@@ -6,7 +6,13 @@ const color = useColorMode()
 const isDark = computed(() => color.value === 'dark')
 const { locale } = useI18n()
 const route = useRoute()
-console.log(route)
+
+// WebGL glass on desktop only: phones get the CSS fallback (GPU cost, and no hover to lean to).
+const finePointer = useMediaQuery('(hover: hover) and (pointer: fine)')
+const plasmaEnabled = computed(() =>
+  finePointer.value && !PLASMA_EXCLUDED_ROUTES.some(r => route.path.includes(r)),
+)
+const plasmaGround = usePlasmaGround(isDark)
 </script>
 
 <template>
@@ -21,10 +27,18 @@ console.log(route)
         :tooltip="{ delayDuration: 0 }"
         class="relative"
       >
-        <NuxtLayout>
-          <NuxtPage />
-          <HomeAiChat />
-        </NuxtLayout>
+        <PlasmaProvider
+          v-bind="PLASMA_SOLID"
+          :enabled="plasmaEnabled"
+          :theme="isDark ? 'dark' : 'light'"
+          ground="clear"
+          :background="plasmaGround"
+        >
+          <NuxtLayout>
+            <NuxtPage />
+            <HomeAiChat />
+          </NuxtLayout>
+        </PlasmaProvider>
       </UApp>
       <Toaster close-button />
 
