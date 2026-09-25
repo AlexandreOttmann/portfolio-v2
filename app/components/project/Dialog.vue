@@ -1,8 +1,8 @@
 <template>
-    <UModal v-model:open="isOpen" :ui="{ content: 'max-w-4xl sm:max-w-4xl bg-muted/80 backdrop-blur-xs' }">
+    <UModal v-model:open="isOpen" :ui="{ content: 'max-w-4xl sm:max-w-4xl bg-transparent ring-0 shadow-none overflow-visible' }">
         <template #content>
-            <div v-if="project"
-                class="relative flex flex-col overflow-hidden rounded-lg bg-card-bg/50 shadow-xl max-h-[100vh]">
+            <LiquidGlass v-if="project" :radius="16" :bezel="20" :refraction="36" :blur="16"
+                class="flex flex-col overflow-hidden max-h-[100vh]">
                 <!-- Noise -->
                 <div class="pointer-events-none fixed inset-0 z-40 size-full overflow-hidden">
                     <div
@@ -20,7 +20,7 @@
                         @click="isOpen = false" />
                 </div>
 
-                <div class="flex-1 overflow-y-auto p-6 bg-card-bg/50">
+                <div class="flex-1 overflow-y-auto p-6">
                     <!-- Stack -->
                     <div v-if="project.stack && project.stack.length" class="mb-6 flex flex-wrap gap-2">
                         <UBadge v-for="tech in project.stack" :key="tech" color="neutral" variant="outline">
@@ -48,7 +48,7 @@
                         {{ locale === 'fr' ? 'Visiter le site' : 'Visit Website' }}
                     </UButton>
                 </div>
-            </div>
+            </LiquidGlass>
         </template>
     </UModal>
 </template>

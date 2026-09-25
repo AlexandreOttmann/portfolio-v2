@@ -13,7 +13,7 @@ const switchLocalePath = useSwitchLocalePath()
 </script>
 
 <template>
-  <div class="z-99 flex items-center gap-3 rounded-lg border border-white/10 bg-zinc-900/90 px-3 py-1 backdrop-blur-xl">
+  <LiquidGlass :radius="10" :bezel="8" :refraction="12" class="z-99 flex items-center gap-3 px-3 py-1">
     <ClientOnly>
       <NuxtLink v-for="locale in locales" :key="locale.code" class="cursor-pointer select-none"
         :to="switchLocalePath(locale.code)">
@@ -25,5 +25,5 @@ const switchLocalePath = useSwitchLocalePath()
         <div class="h-2 w-5" />
       </template>
     </ClientOnly>
-  </div>
+  </LiquidGlass>
 </template>
