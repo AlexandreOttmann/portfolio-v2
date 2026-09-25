@@ -17,6 +17,7 @@ export type Locale = 'fr' | 'en'
 
 export interface ProjectSummary {
   slug: string
+  stem: string
   name: string
   release: string
   summary: string
@@ -110,6 +111,7 @@ async function listProjectsWithDir(event: H3Event, locale: Locale) {
 function toProjectSummary(doc: RawDoc, slug: string): ProjectSummary {
   return {
     slug,
+    stem: doc.stem ?? '',
     name: String(doc.name ?? ''),
     release: String(doc.release ?? ''),
     summary: String(doc.content ?? ''),

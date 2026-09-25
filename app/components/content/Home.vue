@@ -63,6 +63,7 @@
 
           <!-- social -->
           <HomeSocial
+            data-pilot="socials"
             style="--stagger: 3"
             data-animate
           />
@@ -79,14 +80,15 @@
             class="mt-12 flex w-full max-w-3xl flex-col gap-4 lg:mt-16"
           >
             <!-- timeline -->
-            <HomeTimelineWrapper />
+            <HomeTimelineWrapper data-pilot="timeline" />
             <!-- projects -->
-            <HomeProjects />
+            <HomeProjects data-pilot="featured-projects" />
           </div>
 
           <Divider class="my-9" />
 
           <HomeCvDownload
+            data-pilot="cv"
             style="--stagger: 7"
             data-animate
           />

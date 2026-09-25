@@ -1,4 +1,5 @@
-import type { ChatRequestBody, ChatStreamEvent, ChatUiPayload } from '~~/shared/types/chat'
+import type { ChatMode } from './useSitePilot'
+import type { ChatRequestBody, ChatStreamEvent, ChatUiPayload, OniState } from '~~/shared/types/chat'
 
 export type ChatPart
   = | { type: 'text', text: string }
@@ -21,11 +22,43 @@ export interface PresetQuestion {
 const messages = ref<Message[]>([])
 const inputMessage = ref('')
 const isLoading = ref(false)
-const showChat = ref(false)
 const showBubble = ref(false)
 const hasInteracted = ref(false)
 
 let abortController: AbortController | null = null
+
+// Avatar: `speaking` while text streams in, plus short one-off reactions.
+const speaking = ref(false)
+const reaction = ref<OniState | null>(null)
+let speakingTimer: ReturnType<typeof setTimeout> | null = null
+let reactionTimer: ReturnType<typeof setTimeout> | null = null
+let reactionAt = 0
+const REACTION_MIN_MS = 600
+
+function markSpeaking() {
+  // A reaction (card, navigation) is seen for a moment, then the voice takes over.
+  if (reaction.value && reaction.value !== 'error' && Date.now() - reactionAt > REACTION_MIN_MS) {
+    reaction.value = null
+  }
+  speaking.value = true
+  if (speakingTimer) clearTimeout(speakingTimer)
+  // Pauses in the stream (tool calls, slow tokens) close the mouth.
+  speakingTimer = setTimeout(() => (speaking.value = false), 350)
+}
+
+function react(state: OniState, ms: number) {
+  reaction.value = state
+  reactionAt = Date.now()
+  if (reactionTimer) clearTimeout(reactionTimer)
+  reactionTimer = setTimeout(() => (reaction.value = null), ms)
+}
+
+const avatarState = computed<OniState>(() => {
+  if (reaction.value) return reaction.value
+  if (isLoading.value) return speaking.value ? 'speaking' : 'thinking'
+  if (inputMessage.value.trim()) return 'listening'
+  return 'idle'
+})
 
 // Store timers for cleanup
 let bubbleTimer: ReturnType<typeof setTimeout> | null = null
@@ -44,12 +77,15 @@ function toHistoryText(message: Message): string {
     if (part.ui?.type === 'projects') return `[Displayed project cards: ${part.ui.projects.map(p => p.name).join(', ')}]`
     if (part.ui?.type === 'article') return `[Displayed article card: ${part.ui.article.title}]`
     if (part.ui?.type === 'contact') return '[Displayed contact card]'
+    if (part.ui?.type === 'site-action') return `[On the site: ${part.ui.action.label}]`
     return ''
   }).filter(Boolean).join('\n').trim()
 }
 
 export const useAiChat = () => {
   const { locale } = useI18n()
+  const pilot = useSitePilot()
+  const { mode } = pilot
 
   const t = (fr: string, en: string) => locale.value === 'fr' ? fr : en
 
@@ -130,6 +166,7 @@ export const useAiChat = () => {
   const applyEvent = (assistant: Message, event: ChatStreamEvent) => {
     switch (event.type) {
       case 'text': {
+        markSpeaking()
         const last = assistant.parts.at(-1)
         if (last?.type === 'text') last.text += event.delta
         else assistant.parts.push({ type: 'text', text: event.delta })
@@ -147,9 +184,17 @@ export const useAiChat = () => {
         else {
           assistant.parts.push({ type: 'tool', id: event.id, name: event.name, state: event.ok ? 'done' : 'error', ui: event.ui })
         }
+        if (event.ui?.type === 'projects' || event.ui?.type === 'article' || event.ui?.type === 'contact') react('showing', 1600)
+        if (!event.ok) react('error', 1500)
+        // The assistant drives the site: navigate, open a project, highlight.
+        if (event.ui?.type === 'site-action') {
+          react('navigating', 1800)
+          pilot.run(event.ui.action).catch(error => console.error('Site action failed:', error))
+        }
         break
       }
       case 'error':
+        react('error', 2500)
         assistant.parts.push({ type: 'text', text: event.message })
         break
     }
@@ -159,9 +204,9 @@ export const useAiChat = () => {
     const content = message.trim()
     if (!content || isLoading.value) return
 
-    // Open chat if closed
-    if (!showChat.value) {
-      showChat.value = true
+    // Open chat if closed (a docked or minimized chat stays where it is)
+    if (mode.value === 'closed') {
+      mode.value = 'open'
       handleInteraction()
       scrollToBottom()
     }
@@ -201,6 +246,7 @@ export const useAiChat = () => {
           ? t('Vous envoyez beaucoup de messages ! Réessayez dans une minute.', 'You\'re sending a lot of messages! Try again in a minute.')
           : t('Désolé, je rencontre un problème technique. Réessayez plus tard.', 'Sorry, I\'m experiencing a technical issue. Please try again later.')
         assistant.parts.push({ type: 'text', text })
+        react('error', 2500)
         return
       }
 
@@ -227,6 +273,7 @@ export const useAiChat = () => {
     catch (error) {
       if ((error as Error).name !== 'AbortError') {
         console.error('Chat error:', error)
+        react('error', 2500)
         assistant.parts.push({
           type: 'text',
           text: t('Désolé, je rencontre un problème technique. Réessayez plus tard.', 'Sorry, I\'m experiencing a technical issue. Please try again later.'),
@@ -251,13 +298,13 @@ export const useAiChat = () => {
     sendMessage(question)
   }
 
-  const toggleChat = () => {
+  const setMode = (next: ChatMode) => {
     handleInteraction()
-    showChat.value = !showChat.value
-    if (showChat.value) {
-      scrollToBottom()
-    }
+    mode.value = next
+    if (next === 'open' || next === 'docked') scrollToBottom()
   }
+
+  const toggleChat = () => setMode(mode.value === 'closed' ? 'open' : 'closed')
 
   const handleKeyPress = (event: KeyboardEvent) => {
     if (event.key === 'Enter' && !event.shiftKey) {
@@ -282,7 +329,10 @@ export const useAiChat = () => {
     messages,
     inputMessage,
     isLoading,
-    showChat,
+    avatarState,
+    mode,
+    status: pilot.status,
+    isDesktop: pilot.isDesktop,
     showBubble,
     hasInteracted,
     presetQuestions,
@@ -295,6 +345,7 @@ export const useAiChat = () => {
     stop,
     askPresetQuestion,
     toggleChat,
+    setMode,
     handleKeyPress,
     cleanup,
   }
