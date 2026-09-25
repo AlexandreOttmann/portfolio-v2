@@ -7,7 +7,7 @@ import { enforceRateLimit } from '../utils/rate-limit'
 import { useServerSupabase } from '../utils/supabase'
 import type { ChatStreamEvent } from '../../shared/types/chat'
 
-const MODEL = process.env.AI_CHAT_MODEL || 'claude-opus-5'
+const MODEL = process.env.AI_CHAT_MODEL || 'claude-sonnet-5'
 // Public endpoint: cap the output of a single answer (thinking included).
 const MAX_TOKENS = 4096
 // Max model round-trips per visitor message (each tool round is one).

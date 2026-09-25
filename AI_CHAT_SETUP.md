@@ -43,7 +43,7 @@ To see exactly what the model receives, run `pnpm dev` and open:
 | Variable | Required | Purpose |
 | --- | --- | --- |
 | `ANTHROPIC_API_KEY` | yes | Claude API key. Without it, the chat answers with the contact card. |
-| `AI_CHAT_MODEL` | no | Defaults to `claude-opus-5`. Any Claude model id works (e.g. `claude-sonnet-5`, `claude-haiku-4-5`) if you want to trade quality for cost. |
+| `AI_CHAT_MODEL` | no | Defaults to `claude-sonnet-5`. Any Claude model id works (e.g. `claude-opus-5` for more quality, `claude-haiku-4-5` for lower cost). |
 | `SUPABASE_URL` | no | Defaults to the existing project. |
 | `SUPABASE_KEY` | no | Enables logging to `ai_chat_interactions` and the `/chat-logs` page. |
 | `BEST_PASSWORD` | no | Password of `/chat-logs`, sent as a `Bearer` header. |
@@ -54,13 +54,13 @@ To see exactly what the model receives, run `pnpm dev` and open:
 - **Input validation** (zod): at most 24 messages, 1000 characters per question, and the last message must come from the user.
 - **Rate limiting** per IP (8 requests/min, 60/hour), kept in memory. This is best effort, because each Vercel instance has its own memory. For a hard global limit, add a Vercel Firewall rate-limit rule on `/api/chat`.
 - **Output limits**: `max_tokens` 4096, `effort: low`, at most 5 tool rounds per question.
-- **Refusal fallback**: on Opus 5, `fallbacks: "default"` re-runs a policy-declined request on a fallback model.
+- **Refusal fallback**: when `AI_CHAT_MODEL` is an Opus 5 / Fable 5 model, `fallbacks: "default"` re-runs a policy-declined request on a fallback model.
 - **Rendering**: assistant markdown goes through `marked` + DOMPurify. Scripts, event handlers and `javascript:` links are stripped, and only same-site images are kept.
 - **Logs**: every answer is written to Supabase with token usage and an estimated cost (cache reads and writes included).
 
 ## Evaluation
 
-`pnpm eval:chat` runs a golden set of about 16 FR/EN questions against `/api/chat`. It checks which tools were called, the facts each answer must mention, and what it must refuse (off-topic requests, prompt extraction). It calls the model, so it costs tokens.
+`pnpm eval:chat` runs a golden set of 35 FR/EN questions against `/api/chat`: one question per project in each language, plus profile, contact and guardrail questions. It checks which tools were called, which cards were shown, the facts each answer must mention, and what it must refuse (off-topic requests, prompt extraction). `ONLY=project pnpm eval:chat` runs a single group. It calls the model, so it costs tokens.
 
 ```bash
 pnpm dev
