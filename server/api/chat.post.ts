@@ -21,20 +21,30 @@ const PRICING: Record<string, [number, number]> = {
   'claude-haiku-4-5': [1, 5],
 }
 
+// Long enough for a pasted job offer, bounded for cost.
+const MAX_QUESTION_CHARS = 6000
+const MAX_TOTAL_CHARS = 30000
+
 const bodySchema = z.object({
   locale: z.enum(['fr', 'en']),
   messages: z.array(z.object({
     role: z.enum(['user', 'assistant']),
-    content: z.string().trim().max(4000),
+    content: z.string().trim().max(8000),
   })).min(1).max(24),
 }).refine(({ messages }) => messages.at(-1)?.role === 'user', 'The last message must come from the user')
-  .refine(({ messages }) => (messages.at(-1)?.content.length ?? 0) <= 1000, 'Message too long')
+  .refine(({ messages }) => (messages.at(-1)?.content.length ?? 0) <= MAX_QUESTION_CHARS, 'Message too long')
+  .refine(({ messages }) => messages.reduce((sum, m) => sum + m.content.length, 0) <= MAX_TOTAL_CHARS, 'Conversation too long')
   .refine(({ messages }) => (messages.at(-1)?.content.length ?? 0) > 0, 'Empty message')
 
 const FALLBACK_TEXT: Record<Locale, string> = {
   fr: 'Désolé, je ne suis pas disponible pour le moment. Vous pouvez contacter Alex directement :',
   en: 'Sorry, I\'m not available right now. You can reach Alex directly:',
 }
+
+// Anthropic-hosted fetch, used to read a job offer from a link. It only fetches
+// URLs present in the conversation and never runs on this server.
+const WEB_FETCH_TOOL = { type: 'web_fetch_20260209' as const, name: 'web_fetch' as const, max_uses: 2, max_content_tokens: 12000 }
+const SERVER_TOOL_RESULTS = new Set(['web_fetch_tool_result'])
 
 // Keys that are not scoped to a workspace must name one on every request.
 const anthropic = new Anthropic({
@@ -103,7 +113,7 @@ export default defineEventHandler(async (event) => {
             model: MODEL,
             max_tokens: 400,
             system: [{ type: 'text', text: buildSystemPrompt(locale, await buildProfileContext(event, locale)), cache_control: { type: 'ephemeral' } }],
-            tools: toolDefinitions,
+            tools: [...toolDefinitions, WEB_FETCH_TOOL],
             tool_choice: { type: 'tool', name: 'suggest_follow_ups' },
             // Forced tool use cannot be combined with thinking.
             thinking: { type: 'disabled' },
@@ -147,13 +157,25 @@ export default defineEventHandler(async (event) => {
             model: MODEL,
             max_tokens: MAX_TOKENS,
             system,
-            tools: toolDefinitions,
+            tools: [...toolDefinitions, WEB_FETCH_TOOL],
             messages: conversation,
             // Chat Q&A over a small knowledge base does not need deep reasoning.
             ...(MODEL.startsWith('claude-haiku') ? {} : { output_config: { effort: 'low' as const } }),
             // On a policy decline, let the API re-run the request on a fallback model.
             ...(isOpus ? { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' as const } : {}),
           }, { signal: abort.signal })
+
+          // Server tools (web_fetch) run inside this request: surface them like our own tools.
+          response.on('streamEvent', (streamEvent) => {
+            if (streamEvent.type !== 'content_block_start') return
+            const block = streamEvent.content_block
+            // Only web_fetch is shown: its internal code_execution steps are an implementation detail.
+            if (block.type === 'server_tool_use' && block.name === 'web_fetch') send({ type: 'tool-start', id: block.id, name: block.name })
+            if (SERVER_TOOL_RESULTS.has(block.type) && 'tool_use_id' in block) {
+              const failed = 'content' in block && typeof block.content === 'object' && block.content !== null && 'error_code' in block.content
+              send({ type: 'tool-end', id: block.tool_use_id, name: 'web_fetch', ok: !failed })
+            }
+          })
 
           response.on('text', (delta) => {
             answer += delta

@@ -23,6 +23,8 @@ app/composables/useAiChat.ts + app/components/home/AiChat.vue + app/components/c
   - `get_article`: reads an article or the `red-wire` page, displayed as a link card.
   - `search_portfolio`: keyword search over every section of the markdown content. This is the single retrieval entry point: replace its implementation (e.g. pgvector hybrid search) without touching the agent.
   - `show_contact_options`: contact form, call booking, LinkedIn and CV download.
+  - `show_job_match`: the visitor shares a job offer, either pasted or as a link. The model lists the offer's key requirements, each marked met, partial or gap, with evidence and project slugs. The server keeps only the project slugs that exist (they become chips that open the project on the site) and **computes the verdict** from coverage, a partial counting half: excellent ≥ 85 %, good ≥ 65 %, partial ≥ 40 %, low otherwise.
+  - `web_fetch` (Anthropic server tool, `web_fetch_20260209`): reads a job offer from a link. It runs on Anthropic's side, only fetches URLs present in the conversation, and is limited to 2 fetches and 12k tokens per page. Pages behind a login (LinkedIn) fail; the assistant then asks for the pasted text.
   - `suggest_follow_ups`: 2 or 3 follow-up questions, shown as buttons under the answer. The model calls it as the last step of every answer. It is a *terminal* tool (`TERMINAL_TOOLS`): when a turn only calls it, the server does not send its result back to the model, so it costs no extra round trip.
 - **Streaming protocol**: one JSON event per line (`text`, `tool-start`, `tool-end` with a UI payload, `error`, `done`). Types live in `shared/types/chat.ts`.
 
@@ -60,6 +62,15 @@ Colors come from `--oni-line`, `--oni-eyes` and `--oni-shine`. The chat variant 
 
 The `/oni-lab` page shows every state side by side. It is available in dev, and in production only when `NUXT_PUBLIC_ONI_LAB=true`; otherwise it returns 404.
 
+## Job offer matcher
+
+The "Évaluer une offre d'emploi" button (under the welcome questions) switches the composer to *offer mode*: the next message is framed as a job offer to assess. Pasting a long text into the one-line bottom bar also opens the chat in offer mode with the text ready to send. The answer is a `ChatJobMatchCard` showing:
+- the verdict and the coverage;
+- each requirement with its evidence and project chips;
+- buttons to book a call or open the contact form.
+
+A pasted offer costs about $0.01 to $0.02, and a link about $0.07 (the page is read in full).
+
 ## Editing what the assistant knows
 
 Edit the content as usual (files or Nuxt Studio). There is no ingestion step: the next deploy picks it up.
@@ -87,7 +98,7 @@ To see exactly what the model receives, run `pnpm dev` and open:
 
 ## Safety and cost controls
 
-- **Input validation** (zod): at most 24 messages, 1000 characters per question, and the last message must come from the user.
+- **Input validation** (zod): at most 24 messages, 6,000 characters per question (a pasted job offer fits), 30,000 characters for the whole conversation, and the last message must come from the user.
 - **Rate limiting** per IP (8 requests/min, 60/hour), kept in memory. This is best effort, because each Vercel instance has its own memory. For a hard global limit, add a Vercel Firewall rate-limit rule on `/api/chat`.
 - **Output limits**: `max_tokens` 4096, `effort: low`, at most 5 tool rounds per question.
 - **Refusal fallback**: when `AI_CHAT_MODEL` is an Opus 5 / Fable 5 model, `fallbacks: "default"` re-runs a policy-declined request on a fallback model.
