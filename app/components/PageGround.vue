@@ -9,7 +9,7 @@
  * every plasma frame, so the marquee is redrawn at 30fps and the static dot layer is
  * cached until a resize or a theme change.
  */
-import { useDebounceFn, useEventListener, useMediaQuery } from '@vueuse/core'
+import { useDebounceFn, useMediaQuery, useResizeObserver } from '@vueuse/core'
 
 const props = defineProps<{
   isDark: boolean
@@ -236,8 +236,10 @@ function draw(time: number) {
 function resize() {
   const c = canvas.value
   if (!c) return
-  w = window.innerWidth
-  h = window.innerHeight
+  // The canvas box, not innerWidth: a classic scrollbar is outside the fixed canvas, and the
+  // plasma renderer measures the same box, so its sampling lines up with what is shown.
+  w = c.clientWidth || document.documentElement.clientWidth
+  h = c.clientHeight || document.documentElement.clientHeight
   // Every plasma frame uploads this canvas; 1.5x keeps that cheap and the dots crisp enough.
   dpr = Math.min(window.devicePixelRatio || 1, 1.5)
   c.width = Math.round(w * dpr)
@@ -268,9 +270,10 @@ onMounted(() => {
   loadImages()
   resize()
   syncLoop()
-  useEventListener(window, 'resize', useDebounceFn(resize, 100))
 })
 onBeforeUnmount(() => cancelAnimationFrame(raf))
+// Also catches a scrollbar appearing when the page gets longer, which is no window resize.
+useResizeObserver(canvas, useDebounceFn(resize, 100))
 
 watch(() => props.marquee, syncLoop)
 watch(reducedMotion, syncLoop)

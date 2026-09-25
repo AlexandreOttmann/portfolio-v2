@@ -12,3 +12,11 @@ Only the framework-agnostic engine is copied, **unchanged**:
 The React layer (`PlasmaProvider.tsx`, `Plasma.tsx`) is re-written in Vue in `../components`.
 To update: copy the five files again from upstream `src/` and re-check the `RendererSettings`
 and `ShapeOptions` interfaces against `../components/PlasmaProvider.vue` and `Plasma.vue`.
+
+## Local patches
+
+`renderer.ts` carries one patch, marked `Local patch` in the source: the viewport size
+comes from `document.documentElement.clientWidth/Height` instead of `innerWidth/Height`
+(which count a classic scrollbar the fixed canvas does not cover), and a `ResizeObserver`
+on the canvas reallocates when a scrollbar appears or goes. Worth sending upstream;
+re-apply it when copying a new version.

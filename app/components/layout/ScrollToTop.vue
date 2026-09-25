@@ -21,7 +21,7 @@ function scrollToTop() {
       as="button"
       aria-label="scroll to top button"
       class="flex size-10 cursor-pointer items-center justify-center p-1 text-muted transition-all duration-200"
-      :radius="999"
+      :radius="10"
       :bezel="10"
       :refraction="14"
       :class="{ 'opacity-100': isScrolling, 'opacity-0': !isScrolling }"

@@ -10,10 +10,10 @@
         :style="{ animationDelay: `${index * 1}s` }">
         <!-- Rainbow border effect on hover -->
         <div
-          class="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-[#ff0080] via-[#ff8c00] to-[#40e0d0] opacity-0 blur transition duration-500 group-hover:opacity-45" />
+          class="absolute -inset-0.5 rounded-xl bg-white/20 opacity-0 blur transition duration-500 group-hover:opacity-40" />
 
         <!-- Motion animates the wrapper: the glass element's transform belongs to plasma-ui -->
-        <Plasma :as="NuxtLink" :to="project.link" target="_blank" :radius="12" :lean="6"
+        <Plasma :as="NuxtLink" :to="project.link" target="_blank" :radius="12" :lean="false"
           :elevation="hovered === index ? 0.6 : undefined"
           class="relative flex h-full flex-col justify-between p-6" @mouseenter="hovered = index" @mouseleave="hovered = null">
           <div class="flex flex-col gap-3">

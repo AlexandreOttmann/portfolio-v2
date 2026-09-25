@@ -2,6 +2,13 @@ import { vert, makeShaders, DEFAULT_MAX_SHAPES, MAX_PULSES } from "./shaders";
 import { hexToRgb } from "./moods";
 import { Box, boxGap } from "./snap";
 
+// ── Local patch (portfolio, see UPSTREAM.md) ─────────────────────────────────
+// The canvas is `position: fixed; width: 100%`, i.e. the viewport WITHOUT a classic
+// scrollbar, while innerWidth includes it: every frame was stretched by the scrollbar's
+// width, so surfaces and their refraction drifted off the page as x grew.
+const viewW = () => document.documentElement.clientWidth || innerWidth;
+const viewH = () => document.documentElement.clientHeight || innerHeight;
+
 export interface RendererSettings {
   colors: [string, string, string];
   blend: number;
@@ -324,6 +331,7 @@ export class PlasmaRenderer {
   private tintCache = new Map<string, [number, number, number]>();
   private RP = new Float32Array(MAX_PULSES * 4);
   settings: RendererSettings;
+  private sizeObserver: ResizeObserver | null = null;
 
   /** Returns null when WebGL2 is unavailable. */
   static create(canvas: HTMLCanvasElement, settings: RendererSettings): PlasmaRenderer | null {
@@ -344,6 +352,9 @@ export class PlasmaRenderer {
     canvas.addEventListener("webglcontextlost", this.onContextLost);
     canvas.addEventListener("webglcontextrestored", this.onContextRestored);
     addEventListener("resize", this.resize);
+    // Local patch: a scrollbar appearing (a longer page) resizes the canvas, not the window.
+    this.sizeObserver = typeof ResizeObserver !== "undefined" ? new ResizeObserver(this.resize) : null;
+    this.sizeObserver?.observe(canvas);
     document.addEventListener("visibilitychange", this.onVisibility);
     // The setting is read per event, so it can be toggled through configure().
     if (this.coarse) addEventListener("scroll", this.onScroll, { passive: true });
@@ -623,6 +634,7 @@ export class PlasmaRenderer {
     this.canvas.removeEventListener("webglcontextlost", this.onContextLost);
     this.canvas.removeEventListener("webglcontextrestored", this.onContextRestored);
     removeEventListener("resize", this.resize);
+    this.sizeObserver?.disconnect();
     document.removeEventListener("visibilitychange", this.onVisibility);
     removeEventListener("scroll", this.onScroll);
     clearTimeout(this.scrollIdle);
@@ -672,7 +684,7 @@ export class PlasmaRenderer {
     // One frame covering three viewports, the current one in the middle, so
     // the fling has a viewport of runway each way. It is drawn for the scroll
     // offset of this moment, and pinned there.
-    const vw = innerWidth, vh = innerHeight, runway = Math.round(vh * PlasmaRenderer.RUNWAY);
+    const vw = viewW(), vh = viewH(), runway = Math.round(vh * PlasmaRenderer.RUNWAY);
     this.region = { ox: 0, oy: runway, w: vw, h: vh + 2 * runway };
     this.allocate();
     this.oneShot = true; this.frame(performance.now()); this.oneShot = false;
@@ -718,7 +730,7 @@ export class PlasmaRenderer {
 
   private applyResize = () => {
     if (this.frozen) { this.resizeWhileFrozen = true; return; }
-    this.region = { ox: 0, oy: 0, w: innerWidth, h: innerHeight };
+    this.region = { ox: 0, oy: 0, w: viewW(), h: viewH() };
     this.allocate();
   };
 
@@ -943,7 +955,7 @@ export class PlasmaRenderer {
     const light = this.isLight() ? 1 : 0;
     const setCommon = (u: Prog["u"], scale: number) => {
       gl.uniform2f(u.uRes, rg.w, rg.h);
-      gl.uniform4f(u.uView, rg.ox, rg.oy, innerWidth, innerHeight);
+      gl.uniform4f(u.uView, rg.ox, rg.oy, viewW(), viewH());
       gl.uniform1f(u.uScale, scale);
       gl.uniform1f(u.uTime, this.time);
       gl.uniform1f(u.uGoo, this.blend);

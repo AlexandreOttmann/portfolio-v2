@@ -8,8 +8,8 @@
       <Plasma
         :as="NuxtLinkLocale"
         to="/writing"
-        :radius="999"
-        :lean="4"
+        :radius="8"
+        :lean="false"
         class="inline-flex items-center gap-2 px-4 py-1.5 text-muted hover:text-primary transition-colors duration-200 cursor-pointer group"
       >
         <UIcon

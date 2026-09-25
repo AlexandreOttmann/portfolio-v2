@@ -247,11 +247,11 @@
           <!-- Input Bar -->
           <div class="relative group ">
             <div
-              class="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 rainbow-border"
+              class="absolute inset-0 rounded-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 rainbow-border"
             />
             <LiquidGlass
-              :radius="999"
-              :bezel="16"
+              :radius="14"
+              :bezel="14"
               :refraction="26"
               class="p-1.5 pl-5 pr-1.5 flex items-center gap-3 transition-transform duration-300 hover:scale-[1.02] cursor-text z-10"
               @click.stop="bottomInput?.focus()"
@@ -270,7 +270,7 @@
               >
 
               <button
-                class="flex items-center justify-center w-10 h-10 rounded-full bg-white text-black hover:bg-gray-200 transition-colors"
+                class="flex items-center justify-center w-10 h-10 rounded-[9px] bg-white text-black hover:bg-gray-200 transition-colors"
                 @click.stop="inputMessage.trim() ? sendMessage(inputMessage) : toggleChat()"
               >
                 <Icon
@@ -446,14 +446,13 @@ watch(messages, () => {
 }
 
 .rainbow-border {
+  /* a travelling white highlight rather than a rainbow: quieter, same motion */
   background: linear-gradient(90deg,
-      #ff0080,
-      #ff8c00,
-      #40e0d0,
-      #4169e1,
-      #9370db,
-      #ff1493,
-      #ff0080);
+      rgb(255 255 255 / 0.05),
+      rgb(255 255 255 / 0.45),
+      rgb(255 255 255 / 0.05),
+      rgb(255 255 255 / 0.45),
+      rgb(255 255 255 / 0.05));
   background-size: 200% 100%;
   animation: rainbow-rotate 3s linear infinite;
   padding: 2px;

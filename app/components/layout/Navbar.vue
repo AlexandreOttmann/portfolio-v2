@@ -16,8 +16,8 @@ const localePath = useLocalePath()
   <div class="mx-auto my-2 flex w-full items-center justify-center">
     <LiquidGlass
       as="header"
-      :radius="999"
-      :bezel="14"
+      :radius="14"
+      :bezel="12"
       :refraction="22"
       class="p-0.5"
     >
@@ -35,7 +35,7 @@ const localePath = useLocalePath()
               : 'text-muted',
           ]"
           :to="localePath(item.to)"
-          class="flex items-center rounded-full border border-transparent px-4 py-1 transition-all duration-300 ease-in-out hover:border-white/5 hover:bg-zinc-900/50 hover:backdrop-blur-3xl sm:px-6 hover:text-white"
+          class="flex items-center rounded-[10px] border border-transparent px-4 py-1 transition-all duration-300 ease-in-out hover:border-white/5 hover:bg-zinc-900/50 hover:backdrop-blur-3xl sm:px-6 hover:text-white"
         >
           <UIcon
             :name="item.icon"

@@ -27,7 +27,7 @@ defineProps({
     :to="path"
     :aria-label="title"
     :radius="16"
-    :lean="6"
+    :lean="false"
     :fuse="false"
     class="flex cursor-pointer flex-col gap-2 p-2 pb-3"
   >
