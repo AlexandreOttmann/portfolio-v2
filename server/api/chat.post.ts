@@ -2,7 +2,7 @@ import Anthropic from '@anthropic-ai/sdk'
 import { z } from 'zod/v4'
 import { buildProfileContext, type Locale } from '../utils/ai/knowledge'
 import { buildSystemPrompt } from '../utils/ai/prompt'
-import { runTool, toolDefinitions } from '../utils/ai/tools'
+import { runTool, TERMINAL_TOOLS, toolDefinitions } from '../utils/ai/tools'
 import { enforceRateLimit } from '../utils/rate-limit'
 import { useServerSupabase } from '../utils/supabase'
 import type { ChatStreamEvent } from '../../shared/types/chat'
@@ -95,6 +95,35 @@ export default defineEventHandler(async (event) => {
       let answer = ''
       const usage = { input: 0, cacheWrite: 0, cacheRead: 0, output: 0 }
 
+      const suggestFollowUps = async (history: Anthropic.Beta.BetaMessageParam[]) => {
+        // Forced tool choice is rejected by these models: they keep the prompt-only behavior.
+        if (/^claude-(opus-5-5|fable-5-1)/.test(MODEL)) return
+        try {
+          const message = await anthropic.beta.messages.create({
+            model: MODEL,
+            max_tokens: 400,
+            system: [{ type: 'text', text: buildSystemPrompt(locale, await buildProfileContext(event, locale)), cache_control: { type: 'ephemeral' } }],
+            tools: toolDefinitions,
+            tool_choice: { type: 'tool', name: 'suggest_follow_ups' },
+            // Forced tool use cannot be combined with thinking.
+            thinking: { type: 'disabled' },
+            messages: [...history, { role: 'user', content: 'Suggest follow-up questions for the visitor.' }],
+          }, { signal: abort.signal })
+          usage.input += message.usage.input_tokens
+          usage.cacheWrite += message.usage.cache_creation_input_tokens ?? 0
+          usage.cacheRead += message.usage.cache_read_input_tokens ?? 0
+          usage.output += message.usage.output_tokens
+          const toolUse = message.content.find((block): block is Anthropic.Beta.BetaToolUseBlock => block.type === 'tool_use')
+          if (!toolUse) return
+          const output = await runTool(toolUse.name, toolUse.input, { event, locale })
+          if (output.ui) send({ type: 'tool-end', id: toolUse.id, name: toolUse.name, ok: !output.isError, ui: output.ui })
+        }
+        catch (error) {
+          // Suggestions are a nice-to-have: never fail the answer for them.
+          if (!abort.signal.aborted) console.warn('[AI Chat] Follow-up suggestions failed:', error instanceof Error ? error.message : error)
+        }
+      }
+
       try {
         if (!process.env.ANTHROPIC_API_KEY) {
           send({ type: 'text', delta: FALLBACK_TEXT[locale] })
@@ -110,6 +139,8 @@ export default defineEventHandler(async (event) => {
         }]
         const conversation = toApiMessages(messages)
         const isOpus = MODEL.startsWith('claude-opus-5') || MODEL.startsWith('claude-fable-5')
+        let suggested = false
+        let finalMessage: Anthropic.Beta.BetaMessage | null = null
 
         for (let step = 0; step < MAX_STEPS; step++) {
           const response = anthropic.beta.messages.stream({
@@ -146,7 +177,10 @@ export default defineEventHandler(async (event) => {
 
           const toolUses = message.content.filter((block): block is Anthropic.Beta.BetaToolUseBlock => block.type === 'tool_use')
           // A tool input cut off at max_tokens is truncated: never run it.
-          if (message.stop_reason !== 'tool_use' || toolUses.length === 0) break
+          if (message.stop_reason !== 'tool_use' || toolUses.length === 0) {
+            finalMessage = message
+            break
+          }
 
           conversation.push({ role: 'assistant', content: message.content })
 
@@ -154,6 +188,7 @@ export default defineEventHandler(async (event) => {
             send({ type: 'tool-start', id: toolUse.id, name: toolUse.name })
             const output = await runTool(toolUse.name, toolUse.input, { event, locale })
             send({ type: 'tool-end', id: toolUse.id, name: toolUse.name, ok: !output.isError, ui: output.ui })
+            if (output.ui?.type === 'suggestions') suggested = true
             return {
               type: 'tool_result' as const,
               tool_use_id: toolUse.id,
@@ -161,11 +196,19 @@ export default defineEventHandler(async (event) => {
               is_error: output.isError,
             }
           }))
+          // Only follow-up suggestions this turn: the answer is complete, no need for another round trip.
+          if (toolUses.every(toolUse => TERMINAL_TOOLS.has(toolUse.name))) break
+
           conversation.push({ role: 'user', content: results })
 
           if (step === MAX_STEPS - 1) {
             send({ type: 'text', delta: locale === 'fr' ? '\n\nJe n\'ai pas pu terminer ma réponse, pouvez-vous reformuler ?' : '\n\nI couldn\'t finish my answer, could you rephrase?' })
           }
+        }
+
+        // The model sometimes forgets the follow-ups: ask for them explicitly (cached prompt, tiny output).
+        if (!suggested && finalMessage?.stop_reason === 'end_turn' && answer.trim()) {
+          await suggestFollowUps([...conversation, { role: 'assistant', content: finalMessage.content }])
         }
       }
       catch (error) {

@@ -9,6 +9,8 @@ export interface Message {
   id: string
   role: 'user' | 'assistant'
   parts: ChatPart[]
+  /** Follow-up questions offered as buttons under the answer. */
+  suggestions?: string[]
   timestamp: Date
 }
 
@@ -173,9 +175,15 @@ export const useAiChat = () => {
         break
       }
       case 'tool-start':
+        // Suggestions are not a visible step of the answer.
+        if (event.name === 'suggest_follow_ups') break
         assistant.parts.push({ type: 'tool', id: event.id, name: event.name, state: 'running' })
         break
       case 'tool-end': {
+        if (event.ui?.type === 'suggestions') {
+          assistant.suggestions = event.ui.questions
+          break
+        }
         const part = assistant.parts.find(p => p.type === 'tool' && p.id === event.id)
         if (part?.type === 'tool') {
           part.state = event.ok ? 'done' : 'error'
