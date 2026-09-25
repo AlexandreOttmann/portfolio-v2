@@ -67,12 +67,17 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       resend: !!process.env.NUXT_PRIVATE_RESEND_API_KEY,
+      // Petit-Oni animation gallery (/oni-lab): always on in dev, opt-in elsewhere.
+      oniLab: false,
     },
   },
 
   routeRules: {
     // Needed to activate preview on Nuxt Studio
     '/': { prerender: false },
+    // Dev tool, 404 unless NUXT_PUBLIC_ONI_LAB is set: never prerender nor index it.
+    '/fr/oni-lab': { prerender: false, robots: false },
+    '/en/oni-lab': { prerender: false, robots: false },
   },
 
   experimental: {
