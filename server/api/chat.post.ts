@@ -36,7 +36,10 @@ const FALLBACK_TEXT: Record<Locale, string> = {
   en: 'Sorry, I\'m not available right now. You can reach Alex directly:',
 }
 
-const anthropic = new Anthropic()
+// Keys that are not scoped to a workspace must name one on every request.
+const anthropic = new Anthropic({
+  defaultHeaders: process.env.ANTHROPIC_WORKSPACE_ID ? { 'anthropic-workspace-id': process.env.ANTHROPIC_WORKSPACE_ID } : undefined,
+})
 
 /** Merge consecutive turns of the same role and drop empty ones. */
 function toApiMessages(messages: Array<{ role: 'user' | 'assistant', content: string }>): Anthropic.Beta.BetaMessageParam[] {

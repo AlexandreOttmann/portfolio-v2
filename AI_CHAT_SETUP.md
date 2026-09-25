@@ -43,6 +43,7 @@ To see exactly what the model receives, run `pnpm dev` and open:
 | Variable | Required | Purpose |
 | --- | --- | --- |
 | `ANTHROPIC_API_KEY` | yes | Claude API key. Without it, the chat answers with the contact card. |
+| `ANTHROPIC_WORKSPACE_ID` | no | Only for API keys that are not scoped to a workspace (the API then rejects requests without it). |
 | `AI_CHAT_MODEL` | no | Defaults to `claude-sonnet-5`. Any Claude model id works (e.g. `claude-opus-5` for more quality, `claude-haiku-4-5` for lower cost). |
 | `SUPABASE_URL` | no | Defaults to the existing project. |
 | `SUPABASE_KEY` | no | Enables logging to `ai_chat_interactions` and the `/chat-logs` page. |

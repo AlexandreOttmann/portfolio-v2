@@ -114,8 +114,9 @@ for (const testCase of cases) {
   for (const problem of problems) console.log(`    - ${problem}`)
   if (problems.length && result?.text) console.log(`    > ${result.text.slice(0, 300).replace(/\n/g, ' ')}`)
 
-  // Stay under the endpoint's per-IP rate limit when targeting production.
-  if (!BASE_URL.includes('localhost')) await new Promise(resolve => setTimeout(resolve, 8000))
+  // Stay under the endpoint's per-IP rate limit (8/min) outside `nuxt dev`.
+  const delay = Number(process.env.EVAL_DELAY_MS ?? (BASE_URL.includes('localhost') ? 0 : 8000))
+  if (delay) await new Promise(resolve => setTimeout(resolve, delay))
 }
 
 console.log(`\n${cases.length - failed}/${cases.length} passed`)
