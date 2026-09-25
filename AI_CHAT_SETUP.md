@@ -23,6 +23,7 @@ app/composables/useAiChat.ts + app/components/home/AiChat.vue + app/components/c
   - `get_article`: reads an article or the `red-wire` page, displayed as a link card.
   - `search_portfolio`: keyword search over every section of the markdown content. This is the single retrieval entry point: replace its implementation (e.g. pgvector hybrid search) without touching the agent.
   - `show_contact_options`: contact form, call booking, LinkedIn and CV download.
+  - `suggest_follow_ups`: 2 or 3 follow-up questions, shown as buttons under the answer. The model calls it as the last step of every answer. It is a *terminal* tool (`TERMINAL_TOOLS`): when a turn only calls it, the server does not send its result back to the model, so it costs no extra round trip.
 - **Streaming protocol**: one JSON event per line (`text`, `tool-start`, `tool-end` with a UI payload, `error`, `done`). Types live in `shared/types/chat.ts`.
 
 ## Driving the site
@@ -95,7 +96,7 @@ To see exactly what the model receives, run `pnpm dev` and open:
 
 ## Evaluation
 
-`pnpm eval:chat` runs a golden set of 43 FR/EN questions against `/api/chat`: one question per project in each language (which must not drive the site), site-driving requests, plus profile, contact and guardrail questions. It checks which tools were called, which cards were shown, the facts each answer must mention, and what it must refuse (off-topic requests, prompt extraction). `ONLY=project,pilot pnpm eval:chat` runs selected groups. It calls the model, so it costs tokens.
+`pnpm eval:chat` runs a golden set of 43 FR/EN questions (every answer must also offer 2-3 follow-up suggestions) against `/api/chat`: one question per project in each language (which must not drive the site), site-driving requests, plus profile, contact and guardrail questions. It checks which tools were called, which cards were shown, the facts each answer must mention, and what it must refuse (off-topic requests, prompt extraction). `ONLY=project,pilot pnpm eval:chat` runs selected groups. It calls the model, so it costs tokens.
 
 ```bash
 pnpm dev

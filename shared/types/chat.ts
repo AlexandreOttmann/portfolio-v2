@@ -52,6 +52,7 @@ export type ChatUiPayload
     | { type: 'article', article: ChatArticleCard }
     | { type: 'contact' }
     | { type: 'site-action', action: ChatSiteAction }
+    | { type: 'suggestions', questions: string[] }
 
 export type ChatStreamEvent
   = | { type: 'text', delta: string }

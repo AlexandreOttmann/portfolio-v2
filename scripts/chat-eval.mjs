@@ -13,7 +13,8 @@
  * - site actions (`actions`: e.g. "navigate:about:stack" or "open-project:crown", at least one of them),
  * - no site action for plain questions (`noActions`),
  * - things it must not say (`forbidden`),
- * - for every case: no full answer written before a lookup tool call, and "vous" (never "tu") in French.
+ * - for every case: no full answer written before a lookup tool call, "vous" (never "tu") in French,
+ *   and 2-3 short follow-up suggestions (also "vous" in French).
  * Every run calls the model (~40 requests): it costs real tokens.
  *
  *   ONLY=project,pilot pnpm eval:chat   # run only these groups
@@ -31,10 +32,10 @@ const projectCases = [
   { cards: ['odysway', 'current'], fr: 'Parle-moi du projet Odysway', en: 'Tell me about the Odysway project', mentions: [['voyage', 'travel'], ['nuxt'], ['stripe', 'supabase', 'sanity']] },
   { cards: ['crown'], fr: 'C\'est quoi Crown ?', en: 'What is Crown?', mentions: [['enchere', 'auction'], ['temps reel', 'real-time', 'realtime'], ['nuxt', 'supabase', 'vuetify']] },
   { cards: ['eoni'], fr: 'Explique-moi le projet EONI', en: 'Explain the EONI project', mentions: [['rag'], ['pgvector', 'hybrid', 'hybride', 'rerank']] },
-  { cards: ['oniauction'], fr: 'Comment fonctionne Oni Auction ?', en: 'How does Oni Auction work?', mentions: [['kafka'], ['redis'], ['fastapi']] },
+  { cards: ['oniauction'], fr: 'Comment fonctionne Oni Auction ?', en: 'How does Oni Auction work?', mentions: [['kafka'], ['redis'], ['fastapi', 'python', 'pydantic']] },
   { cards: ['ecovoit'], fr: 'Parle-moi d\'Ecovoit', en: 'Tell me about Ecovoit', mentions: [['covoiturage', 'carpool', 'car-sharing', 'ride'], ['wild code school'], ['react', 'next', 'graphql']] },
   { cards: ['portfolio'], fr: 'Comment était son premier portfolio (V1) ?', en: 'What was his first portfolio (V1) like?', mentions: [['react'], ['chakra', 'framer', 'tailwind']] },
-  { cards: ['malt'], fr: 'Parle-moi de sa carrière d\'ingénieur du son', en: 'Tell me about his sound engineering career', mentions: [['son', 'sound', 'audio'], ['freelance', 'malt']] },
+  { cards: ['malt', 'koober'], fr: 'Parle-moi de sa carrière d\'ingénieur du son', en: 'Tell me about his sound engineering career', mentions: [['son', 'sound', 'audio'], ['freelance', 'malt']] },
   { cards: ['koober'], fr: 'Qu\'a-t-il fait chez Koober ?', en: 'What did he do at Koober?', mentions: [['audio'], ['react native', 'livre', 'book', 'freelance']] },
   { cards: ['learning'], fr: 'Qu\'est-ce qu\'il apprend en ce moment ?', en: 'What is he currently learning?', mentions: [['tryhackme', 'cyber'], ['python']] },
 ].flatMap(({ fr, en, ...checks }) => [
@@ -84,6 +85,7 @@ async function ask({ locale, question }) {
   const tools = []
   const cards = []
   const actions = []
+  let suggestions = []
   let error
   for (const line of (await response.text()).split('\n')) {
     if (!line.trim()) continue
@@ -91,19 +93,21 @@ async function ask({ locale, question }) {
     if (event.type === 'text') text += event.delta
     if (event.type === 'tool-start') {
       // The contact card may close an answer; lookup tools must come first.
-      if (!tools.some(name => name !== 'show_contact_options') && event.name !== 'show_contact_options') textBeforeTool = text
+      const closing = ['show_contact_options', 'suggest_follow_ups']
+      if (!tools.some(name => !closing.includes(name)) && !closing.includes(event.name)) textBeforeTool = text
       tools.push(event.name)
     }
     if (event.type === 'error') error = event.message
     if (event.type === 'tool-end' && event.ui?.type === 'projects') cards.push(...event.ui.projects.map(p => p.slug))
     if (event.type === 'tool-end' && event.ui?.type === 'article') cards.push(event.ui.article.slug)
     if (event.type === 'tool-end' && event.ui?.type === 'contact') cards.push('contact')
+    if (event.type === 'tool-end' && event.ui?.type === 'suggestions') suggestions = event.ui.questions
     if (event.type === 'tool-end' && event.ui?.type === 'site-action') {
       const action = event.ui.action
       actions.push(action.kind === 'navigate' ? ['navigate', action.page, action.target].filter(Boolean).join(':') : `open-project:${action.stem}`)
     }
   }
-  return { text, textBeforeTool, tools, cards, actions, error }
+  return { text, textBeforeTool, tools, cards, actions, suggestions, error }
 }
 
 let failed = 0
@@ -131,7 +135,13 @@ for (const testCase of cases) {
       if (!group.some(variant => answer.includes(normalize(variant)))) problems.push(`missing one of: ${group.join(' | ')}`)
     }
     if (result.textBeforeTool.length > 150) problems.push(`answered before calling a tool (${result.textBeforeTool.length} chars)`)
-    if (testCase.locale === 'fr' && /(?<!\p{L})(?:tu|toi|ton|ta|tes)(?!\p{L})/iu.test(result.text)) problems.push('uses "tu" instead of "vous"')
+    const tutoiement = /(?<!\p{L})(?:tu|toi|ton|ta|tes)(?!\p{L})/iu
+    if (testCase.locale === 'fr' && tutoiement.test(result.text)) problems.push('uses "tu" instead of "vous"')
+    // 2-3 from the model, possibly one fewer after the server drops "why did he leave…" questions.
+    if (result.suggestions.length < 1 || result.suggestions.length > 3) problems.push(`expected 1-3 follow-up suggestions, got ${result.suggestions.length}`)
+    if (result.suggestions.some(question => /quitt|left|leave/i.test(question))) problems.push('follow-up suggestion about leaving a job')
+    if (result.suggestions.some(question => question.length > 90)) problems.push('follow-up suggestion too long')
+    if (testCase.locale === 'fr' && result.suggestions.some(question => tutoiement.test(question))) problems.push('follow-up suggestion uses "tu"')
     for (const forbidden of testCase.forbidden ?? []) {
       if (answer.includes(normalize(forbidden))) problems.push(`forbidden content: "${forbidden}"`)
     }
@@ -142,8 +152,9 @@ for (const testCase of cases) {
 
   const ms = Date.now() - started
   if (problems.length) failed++
-  report.push({ ...testCase, ms, problems, tools: result?.tools, cards: result?.cards, actions: result?.actions, answer: result?.text })
+  report.push({ ...testCase, ms, problems, tools: result?.tools, cards: result?.cards, actions: result?.actions, suggestions: result?.suggestions, answer: result?.text })
   console.log(`${problems.length ? '✗' : '✓'} [${testCase.locale}] ${testCase.question} (${ms} ms, tools: ${result?.tools.join(', ') || '-'}, cards: ${result?.cards.join(', ') || '-'}, actions: ${result?.actions.join(', ') || '-'})`)
+  if (result?.suggestions.length) console.log(`    ↳ ${result.suggestions.join(' | ')}`)
   for (const problem of problems) console.log(`    - ${problem}`)
   if (problems.length && result?.text) console.log(`    > ${result.text.slice(0, 300).replace(/\n/g, ' ')}`)
 

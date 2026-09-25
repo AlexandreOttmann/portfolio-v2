@@ -36,6 +36,8 @@ const PAGE_LABELS: Record<Locale, Record<PilotPage, string>> = {
   en: { 'home': 'the home page', 'works': 'the projects', 'writing': 'the articles', 'about': 'the About page', 'contact': 'the Contact page', 'red-wire': 'the red wire page' },
 }
 
+const DEPARTURE_RE = /\b(quitt\w*|départ|partir|parti|left|leave|leaving|laid off|layoff|licenci\w*)\b/i
+
 const tools = [
   defineTool({
     name: 'get_project_details',
@@ -134,6 +136,19 @@ const tools = [
     },
   }),
   defineTool({
+    name: 'suggest_follow_ups',
+    description: 'Offer the visitor 2 or 3 follow-up questions, shown as buttons under your answer. Call it once, as the very last step of every answer, after your text.',
+    input: z.object({
+      questions: z.array(z.string().min(3).max(90)).min(2).max(3).describe('Short questions (max ~8 words) the visitor could naturally ask next about Alex, in the visitor\'s language, written from the visitor\'s point of view ("Quels sont ses projets IA ?"), not already answered, and varied (a project, a skill, working with him…). Only suggest questions your knowledge can answer, and never imply something that isn\'t true (e.g. a job he has left). Phrase them about Alex rather than addressing you; in French, never use "tu" (write "Quel était son rôle sur Crown ?", not "Peux-tu détailler Crown ?").'),
+    }),
+    async run({ questions }) {
+      // Why he left a job is only discussed when the visitor raises it: never suggest it.
+      // (A prompt rule was not enough: the model kept offering it after the Quanted Square write-up.)
+      const kept = questions.filter(question => !DEPARTURE_RE.test(question))
+      return { content: 'Suggestions displayed.', ui: kept.length ? { type: 'suggestions', questions: kept } : undefined }
+    },
+  }),
+  defineTool({
     name: 'show_contact_options',
     description: 'Show the visitor a card with the ways to reach Alex (contact form, book a call, LinkedIn, CV download). Use it when the visitor wants to hire, meet or contact Alex, asks for his CV, or when you cannot answer a question.',
     input: z.object({}),
@@ -156,6 +171,9 @@ export const toolDefinitions: Anthropic.Beta.BetaTool[] = tools.map((tool) => {
     eager_input_streaming: true,
   }
 })
+
+/** Tools whose result the model doesn't need: when a turn only calls these, the answer is over. */
+export const TERMINAL_TOOLS = new Set(['suggest_follow_ups'])
 
 export async function runTool(name: string, rawInput: unknown, ctx: { event: H3Event, locale: Locale }): Promise<ToolOutput> {
   const tool = tools.find(t => t.name === name)

@@ -258,6 +258,29 @@
                 </div>
               </TransitionGroup>
 
+              <!-- Follow-up questions under the last answer -->
+              <TransitionGroup
+                v-if="followUps.length"
+                tag="div"
+                name="follow-up"
+                class="flex flex-col items-start gap-2 pl-[3.25rem]"
+                :aria-label="locale === 'fr' ? 'Questions suggérées' : 'Suggested questions'"
+              >
+                <button
+                  v-for="(question, index) in followUps"
+                  :key="question"
+                  class="group flex max-w-full items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-left text-sm text-white/75 transition-colors hover:border-white/30 hover:bg-white/10 hover:text-white"
+                  :style="{ '--delay': `${index * 90}ms` }"
+                  @click="sendMessage(question)"
+                >
+                  <Icon
+                    name="lucide:corner-down-right"
+                    class="size-3.5 shrink-0 text-white/40 group-hover:text-white/80"
+                  />
+                  <span class="truncate">{{ question }}</span>
+                </button>
+              </TransitionGroup>
+
               <!-- Loading indicator -->
               <div
                 v-if="isLoading && !messages.at(-1)?.parts.length"
@@ -475,6 +498,12 @@ watchEffect(() => {
   document.documentElement.toggleAttribute('data-chat-docked', mode.value === 'docked' && isDesktop.value)
 })
 
+// Suggestions of the last answer, once it is complete.
+const followUps = computed(() => {
+  const last = messages.value.at(-1)
+  return !isLoading.value && last?.role === 'assistant' ? last.suggestions ?? [] : []
+})
+
 // The assistant placeholder stays hidden until its first token arrives.
 const visibleMessages = computed(() => messages.value.filter(m => m.parts.length > 0))
 
@@ -529,6 +558,17 @@ watch(messages, () => {
 
 .scrollbar-thin::-webkit-scrollbar {
   width: 4px;
+}
+
+/* Follow-up questions: fade up one after the other */
+.follow-up-enter-active {
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  transition-delay: var(--delay, 0ms);
+}
+
+.follow-up-enter-from {
+  opacity: 0;
+  transform: translateY(6px);
 }
 
 /* Message animations */
