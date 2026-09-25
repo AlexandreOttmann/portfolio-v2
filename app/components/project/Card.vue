@@ -8,14 +8,11 @@ defineProps<{
   }
 }>()
 const img = useImage()
-const color = useColorMode()
-const isDark = computed(() => color.value === 'dark')
 </script>
 
 <template>
-  <div :aria-label="project.name + ' project details'"
-    class="group relative flex cursor-pointer flex-col gap-1 rounded-lg border bg-muted p-1 shadow-2xl shadow-zinc-950/50 backdrop-blur-sm"
-    :class="isDark ? 'border-white/10' : 'border-inverted/10'" @click="$emit('select', project)">
+  <Plasma :aria-label="project.name + ' project details'" :radius="14" :lean="6" :fuse="false"
+    class="group relative flex cursor-pointer flex-col gap-1 p-1.5" @click="$emit('select', project)">
     <div class="flex gap-1 px-1 py-[2px]">
       <div
         class="size-2 rounded-full bg-red-500/90 transition-all duration-300 group-hover:bg-red-500/90 sm:bg-inverted/10" />
@@ -29,9 +26,9 @@ const isDark = computed(() => color.value === 'dark')
         class="h-full rounded-lg object-cover transition-all duration-300 hover:scale-105" :src="project.image"
         :aria-label="project.name + ' project image'" />
     </div>
-    <div class="absolute bottom-0 flex w-full justify-center">
-      <div
-        class="rounded-t-lg border-x border-t border-white/10 border-b-transparent px-4 py-[5px] shadow-md backdrop-blur-md sm:w-2/3 bg-zinc-900/40">
+    <!-- The title floats over the image: plasma cannot refract DOM, LiquidGlass can -->
+    <div class="absolute bottom-3 flex w-full justify-center px-3">
+      <LiquidGlass :radius="12" :bezel="10" :refraction="16" class="w-full px-4 py-[5px] sm:w-2/3">
         <div class="flex items-center justify-between gap-2">
           <div class="flex items-center gap-2">
             <div class="flex items-center gap-2">
@@ -48,9 +45,9 @@ const isDark = computed(() => color.value === 'dark')
             <UIcon name="heroicons:arrow-right" class="size-3 text-white" />
           </div>
         </div>
-      </div>
+      </LiquidGlass>
     </div>
-  </div>
+  </Plasma>
 </template>
 <style scoped>
 .text-shadow {

@@ -29,7 +29,7 @@ const props = withDefaults(defineProps<{
   radius: 24,
   bezel: 18,
   refraction: 36,
-  blur: 6,
+  blur: 10,
 })
 
 const id = `lg-${useId()}`

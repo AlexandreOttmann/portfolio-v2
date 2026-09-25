@@ -5,9 +5,12 @@
       :is-writing="route.path.includes('/articles/')"
     />
     <div class="mx-auto mt-8 sm:mt-20 px-4 sm:max-w-2xl md:max-w-3xl lg:max-w-4xl">
-      <NuxtLinkLocale
+      <Plasma
+        :as="NuxtLinkLocale"
         to="/writing"
-        class="inline-flex items-center gap-2 text-muted hover:text-primary transition-colors duration-200 cursor-pointer group"
+        :radius="999"
+        :lean="4"
+        class="inline-flex items-center gap-2 px-4 py-1.5 text-muted hover:text-primary transition-colors duration-200 cursor-pointer group"
       >
         <UIcon
           name="lucide:arrow-left"
@@ -16,9 +19,16 @@
         <span class="text-sm font-extralight">
           {{ $t("navigation.writing") }}
         </span>
-      </NuxtLinkLocale>
+      </Plasma>
     </div>
-    <article class="writing mx-auto px-4 sm:max-w-2xl md:max-w-3xl lg:max-w-4xl">
+    <!-- One tall pane of frosted glass: frost keeps long text readable over the marquee -->
+    <Plasma
+      as="article"
+      :radius="24"
+      :lean="false"
+      :frost="0.55"
+      class="writing mx-4 my-6 p-6 sm:mx-auto sm:max-w-2xl sm:p-10 md:max-w-3xl lg:max-w-4xl"
+    >
       <h1 class="text-2xl font-bold">
         {{ page?.title }}
       </h1>
@@ -58,7 +68,7 @@
         :dir="localeProperties?.dir ?? 'ltr'"
         :value="page"
       />
-    </article>
+    </Plasma>
   </div>
 </template>
 
@@ -69,6 +79,7 @@ import { withLeadingSlash, joinURL } from 'ufo'
 const route = useRoute()
 const { locale, t, localeProperties } = useI18n()
 const img = useImage()
+const NuxtLinkLocale = resolveComponent('NuxtLinkLocale')
 const slug = computed(() => Array.isArray(route.params.slug) ? route.params.slug as string[] : [route.params.slug as string])
 const path = computed(() => withLeadingSlash(joinURL(locale.value, 'articles', ...slug.value)))
 const collection = computed(() => `articles_${locale.value}` as keyof Collections)

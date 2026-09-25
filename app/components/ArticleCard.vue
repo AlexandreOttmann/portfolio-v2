@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const NuxtLink = resolveComponent('NuxtLink')
+
 defineProps({
   title: {
     type: String,
@@ -20,12 +22,16 @@ defineProps({
 </script>
 
 <template>
-  <NuxtLink
+  <Plasma
+    :as="NuxtLink"
     :to="path"
     :aria-label="title"
-    class="flex cursor-pointer flex-col gap-2"
+    :radius="16"
+    :lean="6"
+    :fuse="false"
+    class="flex cursor-pointer flex-col gap-2 p-2 pb-3"
   >
-    <div class="overflow-hidden rounded-md border border-white/10 shadow-md shadow-zinc-950/50 transition-colors duration-200 hover:border-white/20">
+    <div class="overflow-hidden rounded-xl">
       <NuxtImg
         width="1536"
         :alt="`${title} article image`"
@@ -34,11 +40,11 @@ defineProps({
         :aria-label="`${title} article image`"
       />
     </div>
-    <div class="flex flex-col">
+    <div class="flex flex-col px-2">
       <h3 class="text-lg font-semibold">
         {{ title }}
       </h3>
       <span class="text-xs text-muted">{{ date }}</span>
     </div>
-  </NuxtLink>
+  </Plasma>
 </template>

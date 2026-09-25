@@ -165,7 +165,7 @@ body,
    Unlayered on purpose: layer order is not stable across dev stylesheets, and Tailwind's
    base reset on <button> would otherwise win. */
 .liquid-glass {
-  --lg-tint: rgb(24 24 27 / 0.28);
+  --lg-tint: rgb(24 24 27 / 0.42);
   --lg-rim: conic-gradient(from 210deg, rgb(255 255 255 / 0.6), rgb(255 95 162 / 0.4), rgb(95 212 255 / 0.4), rgb(181 140 255 / 0.4), rgb(255 255 255 / 0.12), rgb(108 242 168 / 0.35), rgb(255 255 255 / 0.6));
   --lg-sheen: rgb(255 255 255 / 0.1);
   isolation: isolate;
@@ -179,7 +179,7 @@ body,
 }
 
 html:not(.dark) .liquid-glass {
-  --lg-tint: rgb(255 255 255 / 0.42);
+  --lg-tint: rgb(255 255 255 / 0.55);
   --lg-rim: conic-gradient(from 210deg, rgb(255 255 255 / 0.95), rgb(255 95 162 / 0.45), rgb(95 212 255 / 0.45), rgb(181 140 255 / 0.45), rgb(0 0 0 / 0.08), rgb(108 242 168 / 0.4), rgb(255 255 255 / 0.95));
   --lg-sheen: rgb(255 255 255 / 0.45);
   box-shadow:

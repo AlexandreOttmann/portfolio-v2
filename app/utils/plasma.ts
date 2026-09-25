@@ -28,8 +28,9 @@ export const PLASMA_SOLID = {
   // A drop chasing the cursor over a whole site is too much; the pull at edges stays.
   pointerDrop: false,
   pointerPull: true,
-  maxSurfaces: 24,
+  // the About stack shows 15 tiles, a zoomed-out /works canvas a couple dozen
+  maxSurfaces: 32,
 } as const
 
-/** Routes that keep the CSS fallback: /works has its own canvas, /lab mounts its own provider. */
-export const PLASMA_EXCLUDED_ROUTES = ['/works', '/lab/']
+/** Routes that keep the CSS fallback: /lab mounts its own provider. */
+export const PLASMA_EXCLUDED_ROUTES = ['/lab/']
