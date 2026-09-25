@@ -12,7 +12,8 @@ const finePointer = useMediaQuery('(hover: hover) and (pointer: fine)')
 const plasmaEnabled = computed(() =>
   finePointer.value && !PLASMA_EXCLUDED_ROUTES.some(r => route.path.includes(r)),
 )
-const plasmaGround = usePlasmaGround(isDark)
+const ground = ref<{ canvas: HTMLCanvasElement | null }>()
+const plasmaGround = computed(() => ground.value?.canvas ?? null)
 </script>
 
 <template>
@@ -42,50 +43,20 @@ const plasmaGround = usePlasmaGround(isDark)
       </UApp>
       <Toaster close-button />
 
-      <MarqueeBg
-        v-if="!route.path.includes('works')"
-        class="opacity-50 [mask-image:linear-gradient(to_bottom,transparent,black)] inset-0 -z-10 pointer-events-none"
+      <!-- Page color, image marquee and dot grid: one canvas, also what the glass refracts -->
+      <PageGround
+        ref="ground"
+        :is-dark="isDark"
+        :marquee="!route.path.includes('works')"
       />
-      <div class="fixed inset-0 -z-10 pointer-events-none">
+      <div
+        v-if="!route.path.includes('works')"
+        class="pointer-events-none fixed inset-0 -z-10 size-full overflow-hidden"
+      >
         <div
-          v-if="!route.path.includes('works')"
-          class="pointer-events-none fixed inset-0 z-40 size-full overflow-hidden"
-        >
-          <div
-            class="noise pointer-events-none absolute inset-[-200%] z-50 size-[400%] bg-[url('/noise.png')] opacity-[3%]"
-          />
-        </div>
-        <DotPattern
-          class="absolute inset-0 size-full"
-          :class="isDark ? 'fill-white/10 [mask-image:radial-gradient(white,transparent_85%)]' : 'rainbow-spotlight [mask-image:radial-gradient(white,transparent_85%)]'"
+          class="noise pointer-events-none absolute inset-[-200%] z-50 size-[400%] bg-[url('/noise.png')] opacity-[3%]"
         />
       </div>
     </Body>
   </Html>
 </template>
-
-<style scoped>
-@keyframes rainbow-rotate {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  100% {
-    background-position: 200% 50%;
-  }
-}
-
-.rainbow-spotlight {
-  background: linear-gradient(90deg,
-      #ff0080,
-      #ff8c00,
-      #40e0d0,
-      #4169e1,
-      #9370db,
-      #ff1493,
-      #ff0080);
-  background-size: 200% 100%;
-  animation: rainbow-rotate 10s linear infinite;
-  opacity: 0.3;
-}
-</style>

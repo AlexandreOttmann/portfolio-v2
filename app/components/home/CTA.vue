@@ -6,7 +6,7 @@ const isDark = computed(() => color.value === 'dark')
 
 <template>
   <div class="flex flex-col items-center justify-center gap-4 sm:gap-2">
-    <div class="flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-2">
+    <div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
       <UTooltip :text="$t('global.email')" :shortcuts="['⌘', 'O']">
         <GlassButton>
           <NuxtLinkLocale
