@@ -61,7 +61,7 @@ To see exactly what the model receives, run `pnpm dev` and open:
 
 ## Evaluation
 
-`pnpm eval:chat` runs a golden set of 35 FR/EN questions against `/api/chat`: one question per project in each language, plus profile, contact and guardrail questions. It checks which tools were called, which cards were shown, the facts each answer must mention, and what it must refuse (off-topic requests, prompt extraction). `ONLY=project pnpm eval:chat` runs a single group. It calls the model, so it costs tokens.
+`pnpm eval:chat` runs a golden set of 43 FR/EN questions against `/api/chat`: one question per project in each language (which must not drive the site), site-driving requests, plus profile, contact and guardrail questions. It checks which tools were called, which cards were shown, the facts each answer must mention, and what it must refuse (off-topic requests, prompt extraction). `ONLY=project,pilot pnpm eval:chat` runs selected groups. It calls the model, so it costs tokens.
 
 ```bash
 pnpm dev

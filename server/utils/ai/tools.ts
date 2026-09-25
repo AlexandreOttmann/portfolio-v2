@@ -2,7 +2,7 @@ import type Anthropic from '@anthropic-ai/sdk'
 import type { H3Event } from 'h3'
 import { z } from 'zod/v4'
 import { getArticle, getProject, listProjects, searchPortfolio, type Locale } from './knowledge'
-import type { ChatUiPayload } from '../../../shared/types/chat'
+import { PILOT_PAGES, type ChatUiPayload, type PilotPage } from '../../../shared/types/chat'
 
 /**
  * Agent tools. Each tool returns two things:
@@ -14,6 +14,7 @@ import type { ChatUiPayload } from '../../../shared/types/chat'
 interface ToolOutput {
   content: string
   ui?: ChatUiPayload
+  isError?: boolean
 }
 
 interface ToolDefinition<S extends z.ZodType> {
@@ -25,6 +26,14 @@ interface ToolDefinition<S extends z.ZodType> {
 
 function defineTool<S extends z.ZodType>(tool: ToolDefinition<S>) {
   return tool
+}
+
+const pilotPages = Object.keys(PILOT_PAGES) as [PilotPage, ...PilotPage[]]
+const pilotTargets = [...new Set(Object.values(PILOT_PAGES).flatMap(page => page.targets))] as [string, ...string[]]
+
+const PAGE_LABELS: Record<Locale, Record<PilotPage, string>> = {
+  fr: { 'home': 'l\'accueil', 'works': 'les projets', 'writing': 'les articles', 'about': 'la page À propos', 'contact': 'la page Contact', 'red-wire': 'le fil rouge' },
+  en: { 'home': 'the home page', 'works': 'the projects', 'writing': 'the articles', 'about': 'the About page', 'contact': 'the Contact page', 'red-wire': 'the red wire page' },
 }
 
 const tools = [
@@ -91,6 +100,40 @@ const tools = [
     },
   }),
   defineTool({
+    name: 'show_on_site',
+    description: `Take the visitor to a page of the website, optionally scrolling to and highlighting a section. The chat shrinks to the side so they can see it. Use it when the visitor asks to see, visit or be shown something on the site, or when a quick visual tour answers better than text. Sections by page: ${Object.entries(PILOT_PAGES).map(([page, { targets }]) => `${page}: ${targets.join(', ') || '(whole page)'}`).join('; ')}.`,
+    input: z.object({
+      page: z.enum(pilotPages),
+      section: z.enum(pilotTargets).optional().describe('A section of that page to scroll to and highlight.'),
+    }),
+    async run({ page, section }, { locale }) {
+      const targets: readonly string[] = PILOT_PAGES[page].targets
+      if (section && !targets.includes(section)) {
+        return { content: `Section "${section}" is not on page "${page}". Available: ${targets.join(', ') || 'none'}.`, isError: true }
+      }
+      const label = (locale === 'fr' ? 'Direction ' : 'Going to ') + PAGE_LABELS[locale][page]
+      return {
+        content: `The visitor now sees ${page}${section ? `, with the "${section}" section highlighted` : ''}. Refer to what is on screen in one or two sentences.`,
+        ui: { type: 'site-action', action: { kind: 'navigate', page, target: section, label } },
+      }
+    },
+  }),
+  defineTool({
+    name: 'open_project_on_site',
+    description: 'Open a project\'s detail panel on the website (image, stack, full write-up) while the chat moves to the side. Use it when the visitor wants to see a project, or after describing a project when showing it adds value.',
+    input: z.object({
+      slug: z.string().describe('Project slug from the "Projects" section of your context.'),
+    }),
+    async run({ slug }, { event, locale }) {
+      const project = (await listProjects(event, locale)).find(p => p.slug === slug.toLowerCase())
+      if (!project) return { content: `No project with slug "${slug}".`, isError: true }
+      return {
+        content: `The ${project.name} panel is now open on the site. Refer to it briefly instead of repeating its content.`,
+        ui: { type: 'site-action', action: { kind: 'open-project', stem: project.stem, label: (locale === 'fr' ? 'Ouverture de ' : 'Opening ') + project.name } },
+      }
+    },
+  }),
+  defineTool({
     name: 'show_contact_options',
     description: 'Show the visitor a card with the ways to reach Alex (contact form, book a call, LinkedIn, CV download). Use it when the visitor wants to hire, meet or contact Alex, asks for his CV, or when you cannot answer a question.',
     input: z.object({}),
@@ -114,7 +157,7 @@ export const toolDefinitions: Anthropic.Beta.BetaTool[] = tools.map((tool) => {
   }
 })
 
-export async function runTool(name: string, rawInput: unknown, ctx: { event: H3Event, locale: Locale }): Promise<ToolOutput & { isError?: boolean }> {
+export async function runTool(name: string, rawInput: unknown, ctx: { event: H3Event, locale: Locale }): Promise<ToolOutput> {
   const tool = tools.find(t => t.name === name)
   if (!tool) return { content: `Unknown tool "${name}".`, isError: true }
 
