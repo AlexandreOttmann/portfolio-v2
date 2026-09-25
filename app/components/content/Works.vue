@@ -1,14 +1,14 @@
 <template>
   <section :class="isCanvasView ? '' : 'mx-auto flex max-w-4xl flex-col p-7 mt-4  sm:mt-20'">
-    <div v-if="isCanvasView"
-      class="fixed left-1/2 -translate-x-1/2 z-50 top-0 sm:top-16 backdrop-blur-xs bg-gradient-to-b from-black/10 via-black/5 to-transparent rounded-3xl px-10 py-4 shadow-lg">
+    <LiquidGlass v-if="isCanvasView" :radius="24" :bezel="20" :refraction="32"
+      class="fixed left-1/2 -translate-x-1/2 z-50 top-0 sm:top-16 px-10 py-4">
       <h1 class="font-newsreader italic text-white-shadow text-center text-4xl">
         <slot name="title" mdc-unwrap="p" />
       </h1>
       <div class="flex justify-center mt-6">
         <UiViewToggle v-model="isCanvasView" />
       </div>
-    </div>
+    </LiquidGlass>
     <template v-else>
       <h1 class="font-newsreader italic text-white-shadow text-center text-4xl">
         <slot name="title" mdc-unwrap="p" />

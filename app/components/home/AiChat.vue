@@ -20,8 +20,12 @@
         />
 
         <!-- Modal Card -->
-        <div
-          class="relative w-full max-w-2xl h-[80vh] bg-card/50 border border-white/10 rounded-3xl shadow-2xl flex flex-col overflow-hidden"
+        <LiquidGlass
+          :radius="24"
+          :bezel="22"
+          :refraction="40"
+          :blur="14"
+          class="w-full max-w-2xl h-[80vh] flex flex-col overflow-hidden"
         >
           <div class="pointer-events-none fixed inset-0 z-40 size-full overflow-hidden">
             <div
@@ -201,7 +205,7 @@
               </UButton>
             </div>
           </div>
-        </div>
+        </LiquidGlass>
       </div>
     </Transition>
 
@@ -245,8 +249,11 @@
             <div
               class="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 rainbow-border"
             />
-            <div
-              class="relative bg-muted/70 backdrop-blur-xl border border-white/10 group-hover:border-transparent rounded-full p-1.5 pl-5 pr-1.5 flex items-center gap-3 shadow-2xl transition-all duration-300 hover:shadow-white/5 hover:scale-[1.02] cursor-text z-10"
+            <LiquidGlass
+              :radius="999"
+              :bezel="16"
+              :refraction="26"
+              class="p-1.5 pl-5 pr-1.5 flex items-center gap-3 transition-transform duration-300 hover:scale-[1.02] cursor-text z-10"
               @click.stop="bottomInput?.focus()"
             >
               <Icon
@@ -258,7 +265,7 @@
                 v-model="inputMessage"
                 type="text"
                 :placeholder="locale === 'fr' ? 'Demandez-moi quelque chose...' : 'Ask me anything...'"
-                class="flex-1 bg-transparent border-none outline-none text-white text-md placeholder-inverted/40 h-10 group-hover:placeholder-white"
+                class="flex-1 bg-transparent border-none outline-none text-highlighted text-md placeholder:text-muted h-10"
                 @keydown.enter="sendMessage(inputMessage)"
               >
 
@@ -277,7 +284,7 @@
                   class="w-4 h-4"
                 />
               </button>
-            </div>
+            </LiquidGlass>
           </div>
         </div>
       </Transition>
