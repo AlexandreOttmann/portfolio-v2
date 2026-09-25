@@ -711,6 +711,13 @@ export class PlasmaRenderer {
     if (!document.hidden && !this.raf) this.raf = requestAnimationFrame(this.frame);
   };
 
+  /**
+   * Local patch: fade the pointer out (drop and pull) or back in, the way leaving the
+   * window does. The portfolio does it while scrolling, so panels sliding under a still
+   * cursor do not bulge into the drop.
+   */
+  setPointerActive(on: boolean) { this.mouse.target = on ? 1 : 0; }
+
   private onPointer = (e: PointerEvent) => { this.mouse.tx = e.clientX; this.mouse.ty = e.clientY; this.mouse.target = 1; };
   private onLeave = () => { this.mouse.target = 0; };
 

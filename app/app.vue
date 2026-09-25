@@ -34,6 +34,7 @@ const plasmaGround = computed(() => ground.value?.canvas ?? null)
           :theme="isDark ? 'dark' : 'light'"
           ground="clear"
           :background="plasmaGround"
+          quiet-pointer-on-scroll
         >
           <NuxtLayout>
             <NuxtPage />

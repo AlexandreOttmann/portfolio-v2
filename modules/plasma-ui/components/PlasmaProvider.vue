@@ -12,6 +12,8 @@ import { PLASMA_DEFAULTS, PLASMA_RUNTIME, type PlasmaRuntime } from '../composab
 const props = withDefaults(defineProps<{
   /** False keeps every surface on the CSS fallback and never creates a WebGL context (mobile, reduced motion). */
   enabled?: boolean
+  /** Fade the pointer drop and pull out while the page scrolls, so panels passing under a still cursor do not bulge. */
+  quietPointerOnScroll?: boolean
   mood?: MoodName | Mood
   theme?: 'auto' | 'light' | 'dark'
   blend?: number
@@ -64,6 +66,7 @@ const props = withDefaults(defineProps<{
   zIndex?: number
 }>(), {
   enabled: true,
+  quietPointerOnScroll: false,
   mood: 'tidal',
   theme: 'auto',
   blend: undefined,
@@ -191,6 +194,14 @@ function destroy() {
   supported.value = false
 }
 
+let scrollIdle: ReturnType<typeof setTimeout> | undefined
+const onScroll = () => {
+  if (!props.quietPointerOnScroll || !renderer.value) return
+  renderer.value.setPointerActive(false)
+  clearTimeout(scrollIdle)
+  scrollIdle = setTimeout(() => renderer.value?.setPointerActive(true), 220)
+}
+
 let motionQuery: MediaQueryList | null = null
 const onMotion = () => {
   reducedMotion.value = !!motionQuery?.matches
@@ -200,11 +211,14 @@ onMounted(() => {
   motionQuery = matchMedia('(prefers-reduced-motion: reduce)')
   onMotion()
   motionQuery.addEventListener('change', onMotion)
+  addEventListener('scroll', onScroll, { passive: true })
   create()
 })
 
 onBeforeUnmount(() => {
   motionQuery?.removeEventListener('change', onMotion)
+  removeEventListener('scroll', onScroll)
+  clearTimeout(scrollIdle)
   destroy()
 })
 

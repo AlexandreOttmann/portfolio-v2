@@ -184,6 +184,8 @@ void main(){
     // so a refraction of it lines up with the page it sits on
     float sc = max(uView.z / uImgRes.x, uView.w / uImgRes.y);
     vec2 uv = (p - uView.xy - .5*uView.zw) / (uImgRes * sc) + .5;
+    // Local patch: the upload flips Y (UNPACK_FLIP_Y), p runs top-down - read it upright.
+    uv.y = 1. - uv.y;
     o = vec4(texture(uImg, clamp(uv, 0., 1.)).rgb, 1.);
     return;
   }
@@ -197,6 +199,7 @@ void main(){
     // cover-fit the image to the canvas
     float sc = max(uView.z / uImgRes.x, uView.w / uImgRes.y);
     vec2 uv = (q - uView.xy - .5*uView.zw) / (uImgRes * sc) + .5;
+    uv.y = 1. - uv.y; // Local patch: see the clear branch above
     o = vec4(texture(uImg, clamp(uv, 0., 1.)).rgb, 1.);
     return;
   }

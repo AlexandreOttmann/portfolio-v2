@@ -16,7 +16,8 @@ export const PLASMA_SOLID = {
   material: 'plasma',
   radius: 16,
   frost: 0.25,
-  refraction: 1,
+  // a touch more lens, so even the quiet dot grid visibly bends at the edges
+  refraction: 1.3,
   dispersion: 0.25,
   rim: 0.45,
   rimColor: '#e8ecf2',
@@ -30,7 +31,8 @@ export const PLASMA_SOLID = {
   elevation: 0.3,
   // Below the 16px grid gaps, so neighbouring cards stay separate panes of glass.
   blend: 12,
-  // A liquid drop follows the cursor, a few ambient drops orbit bottom right.
+  // A liquid drop follows the cursor (faded out while scrolling, see app.vue), a few
+  // ambient drops orbit bottom right.
   pointerDrop: true,
   pointerPull: true,
   ambientDrops: true,
