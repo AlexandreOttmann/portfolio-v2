@@ -60,6 +60,9 @@ export type ChatStreamEvent
     | { type: 'error', message: string }
     | { type: 'done' }
 
+/** What the Petit-Oni avatar is doing, derived from the stream and the input. */
+export type OniState = 'idle' | 'listening' | 'thinking' | 'speaking' | 'showing' | 'navigating' | 'error'
+
 /** What the widget sends: text-only history, the server rebuilds the rest. */
 export interface ChatRequestBody {
   locale: 'fr' | 'en'

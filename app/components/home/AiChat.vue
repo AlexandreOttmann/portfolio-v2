@@ -45,15 +45,11 @@
               class="flex min-w-0 flex-1 items-center gap-3 text-left"
               @click="setMode(isDesktop ? 'docked' : 'open')"
             >
-              <span class="relative flex size-9 shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/40">
-                <img
-                  src="/onicon-dark.png"
-                  alt=""
-                  class="size-6 object-cover"
-                >
-                <span
-                  v-if="isLoading"
-                  class="absolute -right-0.5 -top-0.5 size-2.5 animate-pulse rounded-full bg-emerald-400"
+              <span class="relative flex size-10 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/5">
+                <ChatPetitOniAvatar
+                  :variant="avatarVariant"
+                  :state="avatarState"
+                  class="size-7"
                 />
               </span>
               <span class="min-w-0">
@@ -84,13 +80,13 @@
             <div class="relative p-3 sm:p-4 border-b border-white/10 flex items-center justify-between bg-white/5">
               <div class="flex items-center gap-3">
                 <div
-                  class="w-10 h-10 rounded-full overflow-hidden border border-white/20 bg-black/40 flex items-center justify-center"
+                  class="w-11 h-11 rounded-full border border-white/15 bg-white/5 flex items-center justify-center"
                 >
-                  <img
-                    src="/onicon-dark.png"
-                    alt="Petit-Oni"
-                    class="w-7 h-7 object-cover"
-                  >
+                  <ChatPetitOniAvatar
+                    :variant="avatarVariant"
+                    :state="avatarState"
+                    class="w-8"
+                  />
                 </div>
                 <div class="min-w-0">
                   <h3 class="font-medium text-white">
@@ -146,14 +142,11 @@
                 class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4"
               >
                 <div class="col-span-full text-center mb-4">
-                  <div
-                    class="inline-flex items-center justify-center size-10 rounded-full border border-white/5 bg-zinc-900/10 text-white/75 shadow-2xl shadow-white/50 backdrop-blur-3xl"
-                  >
-                    <Icon
-                      name="lucide:sparkles"
-                      class="size-5 sm:size-6 text-white"
-                    />
-                  </div>
+                  <ChatPetitOniAvatar
+                    :variant="avatarVariant"
+                    :state="avatarState"
+                    class="mx-auto mb-3 w-20"
+                  />
                   <p class="text-white/60 text-sm">
                     {{ locale === 'fr' ? 'Comment puis-je vous aider ?' : 'How can I help you today?' }}
                   </p>
@@ -186,14 +179,13 @@
                   <!-- Assistant Avatar -->
                   <div
                     v-if="message.role === 'assistant'"
-                    class="flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-full overflow-hidden border border-white/20 bg-black/40 mt-1"
+                    class="flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-full border border-white/15 bg-white/5 mt-1"
                   >
-                    <img
-                      src="/onicon-dark.png"
-                      alt="Petit-Oni"
-                      height="24"
-                      width="24"
-                    >
+                    <ChatPetitOniAvatar
+                      :variant="avatarVariant"
+                      :animated="false"
+                      class="w-6"
+                    />
                   </div>
 
                   <!-- Message Content -->
@@ -271,12 +263,12 @@
                 v-if="isLoading && !messages.at(-1)?.parts.length"
                 class="flex items-start gap-4 justify-start"
               >
-                <div class="flex-shrink-0 w-8 h-8 rounded-full overflow-hidden border border-white/20 bg-black/40 mt-1">
-                  <img
-                    src="/onicon-dark.png"
-                    alt="Petit-Oni"
-                    class="w-full h-full object-cover"
-                  >
+                <div class="flex-shrink-0 w-8 h-8 rounded-full border border-white/15 bg-white/5 mt-1 flex items-center justify-center">
+                  <ChatPetitOniAvatar
+                    :variant="avatarVariant"
+                    state="thinking"
+                    class="w-6"
+                  />
                 </div>
                 <div class="bg-white/5 text-white/90 border border-white/10 rounded-2xl rounded-tl-sm px-5 py-4">
                   <div class="flex items-center gap-2">
@@ -388,9 +380,10 @@
               class="relative bg-muted/70 backdrop-blur-xl border border-white/10 group-hover:border-transparent rounded-full p-1.5 pl-5 pr-1.5 flex items-center gap-3 shadow-2xl transition-all duration-300 hover:shadow-white/5 hover:scale-[1.02] cursor-text z-10"
               @click.stop="bottomInput?.focus()"
             >
-              <Icon
-                name="lucide:sparkles"
-                class="w-4 h-4 text-muted/80 group-hover:text-white transition-colors"
+              <ChatPetitOniAvatar
+                :variant="avatarVariant"
+                :state="avatarState"
+                class="w-7 shrink-0"
               />
               <input
                 ref="bottomInput"
@@ -429,6 +422,7 @@ const {
   messages,
   inputMessage,
   isLoading,
+  avatarState,
   mode,
   status,
   isDesktop,
@@ -450,6 +444,7 @@ const { locale } = useI18n()
 const bottomInput = ref<HTMLInputElement | null>(null)
 
 const { run: replay } = useSitePilot()
+const avatarVariant = useAppConfig().petitOni.variant
 
 const windowClass = computed(() => {
   switch (mode.value) {

@@ -41,6 +41,24 @@ The chat widget (`useSitePilot`) runs the actions and switches modes:
 
 A site action docks the chat on desktop and minimizes it on mobile. The chat lives in `app.vue`, so it stays open across navigations. It is teleported to `<body>` so it stays above the project dialog, which becomes non-modal while the chat is docked.
 
+## Petit-Oni avatar
+
+`app/components/chat/PetitOniAvatar.vue` is an inline SVG with the same geometry as `app/assets/icons/petit-oni.svg`. It is split into parts (horns, brow, ears, eyes, mouth, fangs) that CSS animates per state.
+
+| State | Trigger (in `useAiChat`) |
+| --- | --- |
+| `idle` | nothing happening (floats, blinks at random) |
+| `listening` | the visitor is typing (ears perk up, sound waves) |
+| `thinking` | request sent or tool running (eyes look around, horns glow) |
+| `speaking` | text is streaming; the mouth stops during pauses |
+| `showing` | a card was displayed (wide eyes, sparkle) |
+| `navigating` | a site action ran (head tilts toward the page) |
+| `error` | error or refusal (half-closed eyes, small shake) |
+
+Colors come from `--oni-line`, `--oni-eyes` and `--oni-shine`. The chat variant is set in `app.config.ts` (`petitOni.variant`: `color` or `mono`). `prefers-reduced-motion` disables the loops.
+
+The `/oni-lab` page shows every state side by side. It is available in dev, and in production only when `NUXT_PUBLIC_ONI_LAB=true`; otherwise it returns 404.
+
 ## Editing what the assistant knows
 
 Edit the content as usual (files or Nuxt Studio). There is no ingestion step: the next deploy picks it up.

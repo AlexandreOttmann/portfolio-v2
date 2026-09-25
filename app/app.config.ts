@@ -3,6 +3,10 @@ export default defineAppConfig({
     meetingLink: 'https://cal.com/petit-oni/15and30min',
     available: true,
   },
+  // Chat avatar: 'color' (pink lines, blue eyes) or 'mono' (all white, dark eye shine).
+  petitOni: {
+    variant: 'color' as 'color' | 'mono',
+  },
   profile: {
     name: 'Alexandre Ottmann',
     job: 'Full Stack Developer',
