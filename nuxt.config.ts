@@ -1,3 +1,10 @@
+// Nuxt Content picks its SQLite driver at build time and silently falls back to
+// the native `better-sqlite3` binary when `node:sqlite` is missing. That binary
+// fails to load on Vercel, so refuse to deploy rather than ship a broken chat.
+if (process.env.VERCEL && !process.getBuiltinModule?.('node:sqlite')) {
+  throw new Error(`Node ${process.version} has no built-in node:sqlite: set the Vercel project to Node.js 22.13+ (Settings > Build and Deployment > Node.js Version).`)
+}
+
 export default defineNuxtConfig({
 
   modules: [
@@ -51,6 +58,12 @@ export default defineNuxtConfig({
     preview: {
       api: 'https://api.nuxt.studio',
       dev: true,
+    },
+    experimental: {
+      // Server-side queries (the AI chat) use Node's built-in `node:sqlite` (Node >= 22.5).
+      // The default `better-sqlite3` native binary fails to load on Vercel
+      // ("Module did not self-register"), which broke every server-side query.
+      sqliteConnector: 'native',
     },
   },
 
