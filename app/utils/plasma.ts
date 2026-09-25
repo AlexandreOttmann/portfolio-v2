@@ -23,11 +23,12 @@ export const PLASMA_SOLID = {
   wash: 0.5,
   grain: 0,
   elevation: 0.3,
-  blend: 24,
+  // Below the 16px grid gaps, so neighbouring cards stay separate panes of glass.
+  blend: 12,
   // A drop chasing the cursor over a whole site is too much; the pull at edges stays.
   pointerDrop: false,
   pointerPull: true,
-  maxSurfaces: 16,
+  maxSurfaces: 24,
 } as const
 
 /** Routes that keep the CSS fallback: /works has its own canvas, /lab mounts its own provider. */

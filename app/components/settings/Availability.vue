@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const appConfig = useAppConfig().global
+const Plasma = resolveComponent('Plasma')
 
 const currentAvailability = computed(() => {
   return [
@@ -29,8 +30,12 @@ defineProps({
 </script>
 
 <template>
-  <div class="flex items-center rounded-full"
-    :class="{ 'border border-muted/50 bg-secondary/80 px-5 py-2 backdrop-blur-3xl': background }">
+  <component
+    :is="background ? Plasma : 'div'"
+    class="flex items-center rounded-full"
+    :class="{ 'px-5 py-2': background }"
+    v-bind="background ? { radius: 999, lean: 3 } : {}"
+  >
     <span class="relative flex size-3">
       <span class="absolute inline-flex size-full animate-ping rounded-full opacity-75"
         :class="currentAvailability!.color" />
@@ -39,7 +44,7 @@ defineProps({
     <span class="ml-2 text-sm font-medium" :class="currentAvailability!.textColor">
       {{ $t("global." + currentAvailability!.status) }}
     </span>
-  </div>
+  </component>
 </template>
 
 <style scoped>

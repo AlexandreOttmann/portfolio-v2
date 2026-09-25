@@ -4,7 +4,7 @@ const { profile } = useAppConfig()
 
 <template>
   <div class="z-10 flex items-center justify-center">
-    <SpotlightButton rounded>
+    <GlassButton rounded>
       <div
         class="font-mona relative flex items-center justify-center gap-2 bg-gradient-to-b from-white/25 to-white bg-clip-text text-lg font-medium text-transparent transition-all duration-200"
       >
@@ -16,6 +16,6 @@ const { profile } = useAppConfig()
           aria-label="Alexandre Ottmann Profile Picture"
         />
       </div>
-    </SpotlightButton>
+    </GlassButton>
   </div>
 </template>
