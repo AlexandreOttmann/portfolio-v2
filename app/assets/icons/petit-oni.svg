@@ -1,0 +1,12 @@
+<svg role="img" aria-label="Petit-Oni" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 100" fill="none" stroke="var(--oni-line, #F75474)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+  <g id="horn-left"><path d="M38.5 25.5 L19.5 18 Q14.5 16.5 15.5 21.5 Q17.5 30.5 25 37"/></g>
+  <g id="horn-right"><path d="M81.5 25.5 L100.5 18 Q105.5 16.5 104.5 21.5 Q102.5 30.5 95 37"/></g>
+  <g id="brow"><path d="M41.5 18.5 Q60 8 78.5 18.5"/></g>
+  <g id="ear-left"><path d="M22.5 46 Q8 55 22.5 63.5"/></g>
+  <g id="ear-right"><path d="M97.5 46 Q112 55 97.5 63.5"/></g>
+  <g id="eye-left"><rect x="38" y="44" width="10.5" height="19" rx="5.25" fill="var(--oni-eyes, #2626A0)" stroke="none"/></g>
+  <g id="eye-right"><rect x="71.5" y="44" width="10.5" height="19" rx="5.25" fill="var(--oni-eyes, #2626A0)" stroke="none"/></g>
+  <g id="mouth"><path d="M34.5 75.5 Q60 101.5 85.5 75.5"/></g>
+  <g id="fang-left"><path d="M41.5 80.5 L47 70.5 L52 83.5 Z" stroke-width="4"/></g>
+  <g id="fang-right"><path d="M78.5 80.5 L73 70.5 L68 83.5 Z" stroke-width="4"/></g>
+</svg>
