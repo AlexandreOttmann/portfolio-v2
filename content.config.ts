@@ -1,10 +1,13 @@
 import { defineCollection, z } from '@nuxt/content'
 import { asSeoCollection } from '@nuxtjs/seo/content'
 
+// `rawbody` is filled by Nuxt Content with the raw markdown source. The AI
+// chat builds its knowledge base from it (see server/utils/ai/knowledge.ts).
 const commonContentSchema = z.object({
   title: z.string().nonempty(),
   description: z.string().nonempty(),
   date: z.string().nonempty(),
+  rawbody: z.string(),
 })
 
 const commonArticleSchema = z.object({
@@ -14,6 +17,7 @@ const commonArticleSchema = z.object({
   image: z.string().url(),
   readingTime: z.string().nonempty(),
   tags: z.array(z.string().nonempty()),
+  rawbody: z.string(),
 })
 
 const commonProjectSchema = z.object({
@@ -48,6 +52,7 @@ const projectContentSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
   date: z.string().optional(),
+  rawbody: z.string(),
 })
 
 export const collections = {

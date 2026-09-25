@@ -1,49 +1,69 @@
-# AI Chat Setup Guide
+# AI Chat (Petit-Oni)
 
-## Environment Variables
+The portfolio assistant is a Claude agent that answers questions about Alex from the site's own content, streams its answers, and shows project, article and contact cards instead of plain links.
 
-Add the following environment variable to your `.env` file:
+## Architecture
 
-```bash
-OPENAI_API_KEY=your_openai_api_key_here
+```
+content/**  (Nuxt Content collections: the single source of truth)
+   │
+   ├─ server/utils/ai/knowledge.ts  compiles the profile + backs the tools
+   ├─ server/utils/ai/prompt.ts     system prompt (cached)
+   ├─ server/utils/ai/tools.ts      agent tools, validated with zod
+   │
+server/api/chat.post.ts  ── Claude (streaming, tool loop) ──► NDJSON stream
+   │
+app/composables/useAiChat.ts + app/components/home/AiChat.vue + app/components/chat/*
 ```
 
-Get your API key from: https://platform.openai.com/api-keys
+- **Always in context**: persona (`content/ai-context.md`), site pages, timeline, stack, the project index, the article list and the FAQ, compiled per locale (~4k tokens). This sits in the system prompt with **prompt caching**, so follow-up turns only pay cache-read rates.
+- **On demand (tools)**:
+  - `get_project_details`: the full write-up of a project, displayed as a card.
+  - `list_projects`: project cards, optionally filtered by technology.
+  - `get_article`: reads an article or the `red-wire` page, displayed as a link card.
+  - `search_portfolio`: keyword search over every section of the markdown content. This is the single retrieval entry point: replace its implementation (e.g. pgvector hybrid search) without touching the agent.
+  - `show_contact_options`: contact form, call booking, LinkedIn and CV download.
+- **Streaming protocol**: one JSON event per line (`text`, `tool-start`, `tool-end` with a UI payload, `error`, `done`). Types live in `shared/types/chat.ts`.
 
-## Cost Optimization Features
+## Editing what the assistant knows
 
-The AI chat implementation includes several cost optimization features:
+Edit the content as usual (files or Nuxt Studio). There is no ingestion step: the next deploy picks it up.
 
-1. **Model Selection**: Uses `gpt-3.5-turbo` (most cost-effective model)
-2. **Token Limits**: Limited to 300 tokens per response
-3. **Usage Monitoring**: Returns usage statistics for cost tracking
-4. **Context Management**: Uses a single context file to minimize token usage
-5. **Fallback System**: Local responses when API is unavailable or quota exceeded
+- Facts about the projects, articles, timeline, stack or FAQ: edit their own files. The assistant reads them directly.
+- Facts only the assistant needs (situation, education details, personal info, contact preferences): edit `content/ai-context.md`.
+- Tone and rules: `server/utils/ai/prompt.ts`.
 
-## Components Created
+To see exactly what the model receives, run `pnpm dev` and open:
 
-- `app/components/home/AiChat.vue` - Main chat interface component
-- `server/api/chat.ts` - API endpoint for OpenAI integration
-- `content/ai-context.md` - Context file with information about Alex
+- `/api/chat-debug?locale=fr`: the system prompt and the tool definitions.
+- `/api/chat-debug?locale=fr&tool=search_portfolio&input={"query":"kafka"}`: runs one tool.
 
-## Features
+## Environment variables
 
-- **Preset Questions**: 4 commonly asked questions for quick access
-- **Bilingual Support**: Works in both English and French
-- **Real-time Chat**: Interactive chat interface
-- **Cost Monitoring**: Tracks API usage for budget management
-- **Error Handling**: Graceful error handling with user-friendly messages
-- **Fallback System**: Local responses when OpenAI API is unavailable or quota exceeded
-- **Smart Responses**: Keyword-based matching for common questions
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `ANTHROPIC_API_KEY` | yes | Claude API key. Without it, the chat answers with the contact card. |
+| `ANTHROPIC_WORKSPACE_ID` | no | Only for API keys that are not scoped to a workspace (the API then rejects requests without it). |
+| `AI_CHAT_MODEL` | no | Defaults to `claude-sonnet-5`. Any Claude model id works (e.g. `claude-opus-5` for more quality, `claude-haiku-4-5` for lower cost). |
+| `SUPABASE_URL` | no | Defaults to the existing project. |
+| `SUPABASE_KEY` | no | Enables logging to `ai_chat_interactions` and the `/chat-logs` page. |
+| `BEST_PASSWORD` | no | Password of `/chat-logs`, sent as a `Bearer` header. |
+| `AI_CHAT_DEBUG` | no | `1` exposes `/api/chat-debug` outside `nuxt dev`. Never set it in production. |
 
-## Usage
+## Safety and cost controls
 
-The AI chat replaces the previous FAQ section and provides:
-- Instant answers about services, pricing, and experience
-- Personalized responses based on the context file
-- Interactive chat experience for visitors
-- Cost-effective AI integration
+- **Input validation** (zod): at most 24 messages, 1000 characters per question, and the last message must come from the user.
+- **Rate limiting** per IP (8 requests/min, 60/hour), kept in memory. This is best effort, because each Vercel instance has its own memory. For a hard global limit, add a Vercel Firewall rate-limit rule on `/api/chat`.
+- **Output limits**: `max_tokens` 4096, `effort: low`, at most 5 tool rounds per question.
+- **Refusal fallback**: when `AI_CHAT_MODEL` is an Opus 5 / Fable 5 model, `fallbacks: "default"` re-runs a policy-declined request on a fallback model.
+- **Rendering**: assistant markdown goes through `marked` + DOMPurify. Scripts, event handlers and `javascript:` links are stripped, and only same-site images are kept.
+- **Logs**: every answer is written to Supabase with token usage and an estimated cost (cache reads and writes included).
 
-## Customization
+## Evaluation
 
-You can customize the AI responses by editing `content/ai-context.md` with your specific information, services, and personality.
+`pnpm eval:chat` runs a golden set of 35 FR/EN questions against `/api/chat`: one question per project in each language, plus profile, contact and guardrail questions. It checks which tools were called, which cards were shown, the facts each answer must mention, and what it must refuse (off-topic requests, prompt extraction). `ONLY=project pnpm eval:chat` runs a single group. It calls the model, so it costs tokens.
+
+```bash
+pnpm dev
+BASE_URL=http://localhost:3000 pnpm eval:chat
+```
