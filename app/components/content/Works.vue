@@ -21,8 +21,8 @@
         <UiViewToggle v-model="isCanvasView" />
       </div>
     </template>
-    <ProjectCanvasContainer v-if="isCanvasView" :projects="projects.filter((p) => !p.home || ['EONI', 'Oni Auction'].includes(p.name))" @select="openProject" />
-    <div v-else class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <ProjectCanvasContainer v-if="isCanvasView" data-pilot="projects" :projects="projects.filter((p) => !p.home || ['EONI', 'Oni Auction'].includes(p.name))" @select="openProject" />
+    <div v-else data-pilot="projects" class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <Motion v-for="project, index in projects.filter((p) => !p.home || ['EONI', 'Oni Auction'].includes(p.name))" :key="project.name" as="div" :initial="{
         scale: 1.1,
         opacity: 0,
@@ -62,6 +62,18 @@ function openProject(project: any) {
   selectedProject.value = project
   isDialogOpen.value = true
 }
+
+// The assistant can ask to open a project (from any page, it navigates here first).
+const { pendingProjectStem } = useSitePilot()
+watch([pendingProjectStem, projects], ([stem, list]) => {
+  if (!stem || !list) return
+  const project = list.find(p => p.stem === stem)
+  pendingProjectStem.value = null
+  if (!project) return
+  // Re-open cleanly when another project is already shown.
+  isDialogOpen.value = false
+  nextTick(() => openProject(project))
+}, { immediate: true })
 
 const isCanvasView = ref(true)
 </script>

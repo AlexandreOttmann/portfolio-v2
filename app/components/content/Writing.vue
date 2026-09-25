@@ -27,7 +27,7 @@
         </div>
       </div>
     </div>
-    <TransitionGroup v-if="filteredArticles.length" name="list" tag="ul" class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <TransitionGroup v-if="filteredArticles.length" data-pilot="articles" name="list" tag="ul" class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <Motion v-for="article, index in filteredArticles" :key="article.path" as="li" :initial="{
         scale: 1.1,
         opacity: 0,

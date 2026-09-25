@@ -160,3 +160,51 @@ body,
     background-color: var(--overlay-strong);
   }
 }
+/* AI chat docked on the side (desktop): the page makes room for the panel. */
+body {
+  transition: padding-right 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (min-width: 1024px) {
+  html[data-chat-docked] {
+    --chat-dock-offset: 26rem;
+  }
+
+  html[data-chat-docked] body {
+    padding-right: var(--chat-dock-offset);
+  }
+}
+
+/* Section the assistant is pointing at. */
+.pilot-highlight {
+  position: relative;
+  border-radius: 1rem;
+  animation: pilot-highlight 4s ease-out forwards;
+}
+
+@keyframes pilot-highlight {
+  /* Inner spread gives the ring some breathing room around the section. */
+  0% {
+    box-shadow: 0 0 0 0 rgb(255 255 255 / 0), 0 0 0 0 rgb(255 255 255 / 0);
+  }
+
+  10% {
+    box-shadow: 0 0 0 14px rgb(255 255 255 / 0.05), 0 0 0 16px rgb(255 255 255 / 0.55), 0 0 48px 18px rgb(255 255 255 / 0.15);
+  }
+
+  75% {
+    box-shadow: 0 0 0 14px rgb(255 255 255 / 0.03), 0 0 0 15px rgb(255 255 255 / 0.35), 0 0 36px 14px rgb(255 255 255 / 0.08);
+  }
+
+  100% {
+    box-shadow: 0 0 0 14px rgb(255 255 255 / 0), 0 0 0 16px rgb(255 255 255 / 0), 0 0 0 0 rgb(255 255 255 / 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pilot-highlight {
+    animation: none;
+    outline: 3px solid rgb(255 255 255 / 0.5);
+    outline-offset: 4px;
+  }
+}

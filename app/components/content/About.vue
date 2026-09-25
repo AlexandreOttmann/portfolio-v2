@@ -7,7 +7,7 @@
       <slot name="subtitle" mdc-unwrap="p" />
     </h2>
     <Divider class="mb-8 mt-2" />
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <div data-pilot="intro" class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <AboutProfilePicture />
       <div class="relative flex flex-col gap-3 sm:ml-4">
         <h3 class="text-lg">
@@ -21,9 +21,11 @@
       </div>
     </div>
     <Divider class="my-8" />
-    <slot name="experiences" mdc-unwrap="p" />
+    <div data-pilot="experiences">
+      <slot name="experiences" mdc-unwrap="p" />
+    </div>
     <Divider class="my-8" />
-    <div class="flex flex-col gap-3">
+    <div data-pilot="stack" class="flex flex-col gap-3">
       <div class="mb-6 flex flex-col gap-1">
         <h3 class="text-white-shadow font-newsreader italic text-3xl">
           <slot name="stack_title" mdc-unwrap="p" />

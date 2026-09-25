@@ -25,6 +25,22 @@ app/composables/useAiChat.ts + app/components/home/AiChat.vue + app/components/c
   - `show_contact_options`: contact form, call booking, LinkedIn and CV download.
 - **Streaming protocol**: one JSON event per line (`text`, `tool-start`, `tool-end` with a UI payload, `error`, `done`). Types live in `shared/types/chat.ts`.
 
+## Driving the site
+
+The assistant can show things instead of describing them:
+
+- `show_on_site`: navigates to a page and scrolls to and highlights a section.
+- `open_project_on_site`: opens the project dialog on `/works`.
+
+Pages and sections are declared once in `PILOT_PAGES` (`shared/types/chat.ts`), and each section is marked in the templates with `data-pilot="<section>"`. To add a target, add it to `PILOT_PAGES` and put the attribute on the element.
+
+The chat widget (`useSitePilot`) runs the actions and switches modes:
+- `open`: centered, over a blurred page.
+- `docked`: side panel on desktop, bottom sheet on mobile; no blur, and the page is pushed left.
+- `minimized`: a small card.
+
+A site action docks the chat on desktop and minimizes it on mobile. The chat lives in `app.vue`, so it stays open across navigations. It is teleported to `<body>` so it stays above the project dialog, which becomes non-modal while the chat is docked.
+
 ## Editing what the assistant knows
 
 Edit the content as usual (files or Nuxt Studio). There is no ingestion step: the next deploy picks it up.
@@ -61,7 +77,7 @@ To see exactly what the model receives, run `pnpm dev` and open:
 
 ## Evaluation
 
-`pnpm eval:chat` runs a golden set of 35 FR/EN questions against `/api/chat`: one question per project in each language, plus profile, contact and guardrail questions. It checks which tools were called, which cards were shown, the facts each answer must mention, and what it must refuse (off-topic requests, prompt extraction). `ONLY=project pnpm eval:chat` runs a single group. It calls the model, so it costs tokens.
+`pnpm eval:chat` runs a golden set of 43 FR/EN questions against `/api/chat`: one question per project in each language (which must not drive the site), site-driving requests, plus profile, contact and guardrail questions. It checks which tools were called, which cards were shown, the facts each answer must mention, and what it must refuse (off-topic requests, prompt extraction). `ONLY=project,pilot pnpm eval:chat` runs selected groups. It calls the model, so it costs tokens.
 
 ```bash
 pnpm dev

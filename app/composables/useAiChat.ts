@@ -1,3 +1,4 @@
+import type { ChatMode } from './useSitePilot'
 import type { ChatRequestBody, ChatStreamEvent, ChatUiPayload } from '~~/shared/types/chat'
 
 export type ChatPart
@@ -21,7 +22,6 @@ export interface PresetQuestion {
 const messages = ref<Message[]>([])
 const inputMessage = ref('')
 const isLoading = ref(false)
-const showChat = ref(false)
 const showBubble = ref(false)
 const hasInteracted = ref(false)
 
@@ -44,12 +44,15 @@ function toHistoryText(message: Message): string {
     if (part.ui?.type === 'projects') return `[Displayed project cards: ${part.ui.projects.map(p => p.name).join(', ')}]`
     if (part.ui?.type === 'article') return `[Displayed article card: ${part.ui.article.title}]`
     if (part.ui?.type === 'contact') return '[Displayed contact card]'
+    if (part.ui?.type === 'site-action') return `[On the site: ${part.ui.action.label}]`
     return ''
   }).filter(Boolean).join('\n').trim()
 }
 
 export const useAiChat = () => {
   const { locale } = useI18n()
+  const pilot = useSitePilot()
+  const { mode } = pilot
 
   const t = (fr: string, en: string) => locale.value === 'fr' ? fr : en
 
@@ -147,6 +150,10 @@ export const useAiChat = () => {
         else {
           assistant.parts.push({ type: 'tool', id: event.id, name: event.name, state: event.ok ? 'done' : 'error', ui: event.ui })
         }
+        // The assistant drives the site: navigate, open a project, highlight.
+        if (event.ui?.type === 'site-action') {
+          pilot.run(event.ui.action).catch(error => console.error('Site action failed:', error))
+        }
         break
       }
       case 'error':
@@ -159,9 +166,9 @@ export const useAiChat = () => {
     const content = message.trim()
     if (!content || isLoading.value) return
 
-    // Open chat if closed
-    if (!showChat.value) {
-      showChat.value = true
+    // Open chat if closed (a docked or minimized chat stays where it is)
+    if (mode.value === 'closed') {
+      mode.value = 'open'
       handleInteraction()
       scrollToBottom()
     }
@@ -251,13 +258,13 @@ export const useAiChat = () => {
     sendMessage(question)
   }
 
-  const toggleChat = () => {
+  const setMode = (next: ChatMode) => {
     handleInteraction()
-    showChat.value = !showChat.value
-    if (showChat.value) {
-      scrollToBottom()
-    }
+    mode.value = next
+    if (next === 'open' || next === 'docked') scrollToBottom()
   }
+
+  const toggleChat = () => setMode(mode.value === 'closed' ? 'open' : 'closed')
 
   const handleKeyPress = (event: KeyboardEvent) => {
     if (event.key === 'Enter' && !event.shiftKey) {
@@ -282,7 +289,9 @@ export const useAiChat = () => {
     messages,
     inputMessage,
     isLoading,
-    showChat,
+    mode,
+    status: pilot.status,
+    isDesktop: pilot.isDesktop,
     showBubble,
     hasInteracted,
     presetQuestions,
@@ -295,6 +304,7 @@ export const useAiChat = () => {
     stop,
     askPresetQuestion,
     toggleChat,
+    setMode,
     handleKeyPress,
     cleanup,
   }

@@ -65,6 +65,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     <Divider class="mb-8 mt-2" />
     <div class="flex flex-col sm:items-center sm:justify-between">
       <UForm
+        data-pilot="contact-form"
         :state
         :schema
         class="flex w-full max-w-[40rem] flex-col gap-3"
