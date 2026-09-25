@@ -10,3 +10,5 @@ export default createConfigForNuxt({
       'vue/multi-word-component-names': 'off',
     },
   })
+  // Vendored verbatim from @cruxgarden/plasma-ui; kept untouched so upstream updates stay a plain copy.
+  .append({ ignores: ['modules/plasma-ui/core/**'] })
