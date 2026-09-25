@@ -12,9 +12,10 @@
         <div
           class="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-[#ff0080] via-[#ff8c00] to-[#40e0d0] opacity-0 blur transition duration-500 group-hover:opacity-45" />
 
-        <NuxtLink :to="project.link" target="_blank"
-          class="relative flex h-full flex-col justify-between rounded-xl bg-black/5 dark:bg-white/5 p-6 backdrop-blur-xl border border-black/10 dark:border-white/10 transition-all duration-300 hover:bg-black/10 dark:hover:bg-white/10 animate-float"
-          :style="{ animationDelay: `${index * 0.5}s` }">
+        <!-- Motion animates the wrapper: the glass element's transform belongs to plasma-ui -->
+        <Plasma :as="NuxtLink" :to="project.link" target="_blank" :radius="12" :lean="6"
+          :elevation="hovered === index ? 0.6 : undefined"
+          class="relative flex h-full flex-col justify-between p-6" @mouseenter="hovered = index" @mouseleave="hovered = null">
           <div class="flex flex-col gap-3">
             <div class="flex items-center justify-between">
               <h4
@@ -36,7 +37,7 @@
               {{ project.release }}
             </span>
           </div>
-        </NuxtLink>
+        </Plasma>
       </Motion>
     </div>
 
@@ -53,6 +54,8 @@
 import type { Collections } from '@nuxt/content'
 
 const { locale } = useI18n()
+const NuxtLink = resolveComponent('NuxtLink')
+const hovered = ref<number | null>(null)
 
 const { data: projects } = await useAsyncData('projects_home_' + locale.value, async () => {
   const collection = ('projects_' + locale.value) as keyof Collections
@@ -71,21 +74,3 @@ const projectItems = computed(() => {
   }) || []
 })
 </script>
-
-<style scoped>
-@keyframes float {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-15px);
-  }
-}
-
-.animate-float {
-  animation: float 3s ease-in-out infinite;
-}
-</style>
