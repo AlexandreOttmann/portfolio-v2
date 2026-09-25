@@ -34,7 +34,7 @@ defineProps({
     :is="background ? Plasma : 'div'"
     class="flex items-center rounded-full"
     :class="{ 'px-5 py-2': background }"
-    v-bind="background ? { radius: 999, lean: 3 } : {}"
+    v-bind="background ? { radius: 8, lean: false } : {}"
   >
     <span class="relative flex size-3">
       <span class="absolute inline-flex size-full animate-ping rounded-full opacity-75"

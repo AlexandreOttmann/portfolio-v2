@@ -34,7 +34,7 @@
       </div>
       <div class="flex flex-wrap gap-4">
         <UTooltip v-for="item in stack!.items" :key="item.name" :text="item.name" :popper="{ placement: 'top' }">
-          <Plasma :radius="12" :lean="6">
+          <Plasma :radius="12" :lean="false">
             <NuxtLink :to="item.link" target="_blank" :aria-label="item.name + ' link'" class="flex gap-2 p-6">
               <UIcon :name="item.icon" class="size-9" :font-controlled="false" :alt="item.name + ' logo'"
                 :aria-label="item.name + ' logo'" />

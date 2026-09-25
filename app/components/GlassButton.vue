@@ -2,7 +2,8 @@
 /**
  * Liquid-glass pill. Replaces SpotlightButton wherever the button scrolls with the page;
  * fixed chrome (navbar, scroll-to-top) keeps SpotlightButton, since plasma cannot sit
- * fixed above scrolling plasma. A click sends a ripple through the glass.
+ * fixed above scrolling plasma. A click sends a ripple through the glass. `rounded` is for
+ * round frames (the profile picture), buttons keep squarer 8px corners.
  */
 withDefaults(defineProps<{
   as?: string | Component
@@ -19,8 +20,8 @@ const onClick = (e: MouseEvent) => pulse(e.clientX, e.clientY, 0.6)
 <template>
   <Plasma
     :as="as"
-    :radius="rounded ? 999 : 12"
-    :lean="4"
+    :radius="rounded ? 999 : 8"
+    :lean="false"
     class="group relative inline-flex items-center"
     :class="rounded ? 'p-1.5' : 'px-8 py-1'"
     @click="onClick"

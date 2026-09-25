@@ -10,7 +10,7 @@
  *   computed for this element's size and radius (a bevel that bends the backdrop inward
  *   near the edge), after a blur - so what scrolls underneath is refracted.
  * - Elsewhere (Safari, Firefox cannot use SVG filters in backdrop-filter): a frosted blur.
- * - Everywhere: the iridescent rim, sheen and shadow of the plasma surfaces.
+ * - Everywhere: the neutral rim, sheen and shadow of the plasma surfaces.
  */
 import { useResizeObserver, useDebounceFn } from '@vueuse/core'
 

@@ -9,7 +9,7 @@
  * every plasma frame, so the marquee is redrawn at 30fps and the static dot layer is
  * cached until a resize or a theme change.
  */
-import { useDebounceFn, useEventListener, useMediaQuery } from '@vueuse/core'
+import { useDebounceFn, useMediaQuery, useResizeObserver } from '@vueuse/core'
 
 const props = defineProps<{
   isDark: boolean
@@ -42,9 +42,13 @@ const COLUMNS: Column[] = [
   { left: 1080, top: -300, h: 2160, images: [9, 10, 11, 12], reverse: true, md: true },
   { left: 1680, top: -300, h: 2160, images: [1, 2, 3, 4], reverse: false, md: true },
 ]
-// The wrapper: fixed, top-100 (400px), full viewport height, bg-red-500/20, opacity-50,
-// masked by linear-gradient(to bottom, transparent, black) over that box only.
-const WRAP_TOP = 400
+// The wrapper was fixed at top-100 (400px), so the columns only showed in the lower half of
+// the screen and glass higher up had nothing to refract. It now covers the whole viewport:
+// faint behind the hero (MASK_TOP), fully in from MASK_FULL of the height down.
+// bg-red-500/20 tint, opacity-50.
+const WRAP_TOP = 0
+const MASK_TOP = 0.14
+const MASK_FULL = 0.6
 const WRAP_TINT = 'rgb(251 44 54 / 0.2)'
 const WRAP_OPACITY = 0.5
 
@@ -204,11 +208,11 @@ function drawMarquee(l: CanvasRenderingContext2D, time: number) {
     l.restore()
   }
 
-  // The wrapper's to-bottom mask over its own box (y 400 -> 400 + 100vh); mask-clip is
-  // border-box, so nothing of the tilted columns shows above it.
+  // To-bottom mask over the wrapper box: faint at the top, full from MASK_FULL down.
   l.globalCompositeOperation = 'destination-in'
-  const m = l.createLinearGradient(0, WRAP_TOP, 0, WRAP_TOP + h)
-  m.addColorStop(0, 'rgb(0 0 0 / 0)')
+  const m = l.createLinearGradient(0, WRAP_TOP, 0, h)
+  m.addColorStop(0, `rgb(0 0 0 / ${MASK_TOP})`)
+  m.addColorStop(MASK_FULL, 'rgb(0 0 0 / 1)')
   m.addColorStop(1, 'rgb(0 0 0 / 1)')
   l.fillStyle = m
   l.fillRect(0, 0, w, h)
@@ -236,8 +240,10 @@ function draw(time: number) {
 function resize() {
   const c = canvas.value
   if (!c) return
-  w = window.innerWidth
-  h = window.innerHeight
+  // The canvas box, not innerWidth: a classic scrollbar is outside the fixed canvas, and the
+  // plasma renderer measures the same box, so its sampling lines up with what is shown.
+  w = c.clientWidth || document.documentElement.clientWidth
+  h = c.clientHeight || document.documentElement.clientHeight
   // Every plasma frame uploads this canvas; 1.5x keeps that cheap and the dots crisp enough.
   dpr = Math.min(window.devicePixelRatio || 1, 1.5)
   c.width = Math.round(w * dpr)
@@ -268,9 +274,10 @@ onMounted(() => {
   loadImages()
   resize()
   syncLoop()
-  useEventListener(window, 'resize', useDebounceFn(resize, 100))
 })
 onBeforeUnmount(() => cancelAnimationFrame(raf))
+// Also catches a scrollbar appearing when the page gets longer, which is no window resize.
+useResizeObserver(canvas, useDebounceFn(resize, 100))
 
 watch(() => props.marquee, syncLoop)
 watch(reducedMotion, syncLoop)
