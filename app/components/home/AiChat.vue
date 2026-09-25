@@ -45,11 +45,11 @@
               class="flex min-w-0 flex-1 items-center gap-3 text-left"
               @click="setMode(isDesktop ? 'docked' : 'open')"
             >
-              <span class="relative flex size-10 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/5">
+              <span class="relative flex size-11 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/5">
                 <ChatPetitOniAvatar
                   :variant="avatarVariant"
                   :state="avatarState"
-                  class="size-7"
+                  class="w-10"
                 />
               </span>
               <span class="min-w-0">
@@ -80,12 +80,12 @@
             <div class="relative p-3 sm:p-4 border-b border-white/10 flex items-center justify-between bg-white/5">
               <div class="flex items-center gap-3">
                 <div
-                  class="w-11 h-11 rounded-full border border-white/15 bg-white/5 flex items-center justify-center"
+                  class="w-12 h-12 rounded-full border border-white/15 bg-white/5 flex items-center justify-center"
                 >
                   <ChatPetitOniAvatar
                     :variant="avatarVariant"
                     :state="avatarState"
-                    class="w-8"
+                    class="w-11"
                   />
                 </div>
                 <div class="min-w-0">
@@ -145,7 +145,7 @@
                   <ChatPetitOniAvatar
                     :variant="avatarVariant"
                     :state="avatarState"
-                    class="mx-auto mb-3 w-20"
+                    class="mx-auto mb-3 w-24"
                   />
                   <p class="text-white/60 text-sm">
                     {{ locale === 'fr' ? 'Comment puis-je vous aider ?' : 'How can I help you today?' }}
@@ -179,12 +179,12 @@
                   <!-- Assistant Avatar -->
                   <div
                     v-if="message.role === 'assistant'"
-                    class="flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-full border border-white/15 bg-white/5 mt-1"
+                    class="flex items-center justify-center flex-shrink-0 w-9 h-9 rounded-full border border-white/15 bg-white/5 mt-1"
                   >
                     <ChatPetitOniAvatar
                       :variant="avatarVariant"
                       :animated="false"
-                      class="w-6"
+                      class="w-8"
                     />
                   </div>
 
@@ -263,11 +263,11 @@
                 v-if="isLoading && !messages.at(-1)?.parts.length"
                 class="flex items-start gap-4 justify-start"
               >
-                <div class="flex-shrink-0 w-8 h-8 rounded-full border border-white/15 bg-white/5 mt-1 flex items-center justify-center">
+                <div class="flex-shrink-0 w-9 h-9 rounded-full border border-white/15 bg-white/5 mt-1 flex items-center justify-center">
                   <ChatPetitOniAvatar
                     :variant="avatarVariant"
                     state="thinking"
-                    class="w-6"
+                    class="w-8"
                   />
                 </div>
                 <div class="bg-white/5 text-white/90 border border-white/10 rounded-2xl rounded-tl-sm px-5 py-4">
@@ -383,7 +383,7 @@
               <ChatPetitOniAvatar
                 :variant="avatarVariant"
                 :state="avatarState"
-                class="w-7 shrink-0"
+                class="w-9 shrink-0"
               />
               <input
                 ref="bottomInput"

@@ -22,17 +22,24 @@ const props = withDefaults(defineProps<{
 const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
 const live = computed(() => props.animated && !reducedMotion.value)
 
-// Blink at random intervals, like a living creature (not while thinking: eyes look around).
+// Blink often and at random, sometimes twice in a row, like a living creature
+// (not while thinking, when the eyes look around, nor when half-closed on error).
 const blinking = ref(false)
 let blinkTimer: ReturnType<typeof setTimeout> | undefined
+const blink = (then?: () => void) => {
+  blinking.value = true
+  setTimeout(() => {
+    blinking.value = false
+    then?.()
+  }, 130)
+}
 const scheduleBlink = () => {
   blinkTimer = setTimeout(() => {
     if (live.value && props.state !== 'thinking' && props.state !== 'error') {
-      blinking.value = true
-      setTimeout(() => (blinking.value = false), 140)
+      blink(Math.random() < 0.3 ? () => setTimeout(() => blink(), 160) : undefined)
     }
     scheduleBlink()
-  }, 2500 + Math.random() * 3500)
+  }, 1200 + Math.random() * 2300)
 }
 onMounted(scheduleBlink)
 onBeforeUnmount(() => clearTimeout(blinkTimer))
@@ -115,9 +122,9 @@ onBeforeUnmount(() => clearTimeout(blinkTimer))
             />
             <circle
               class="oni__shine"
-              cx="41.5"
-              cy="48.5"
-              r="1.8"
+              cx="42"
+              cy="49.5"
+              r="2.6"
               fill="var(--oni-shine, #fff)"
               stroke="none"
             />
@@ -134,9 +141,9 @@ onBeforeUnmount(() => clearTimeout(blinkTimer))
             />
             <circle
               class="oni__shine"
-              cx="75"
-              cy="48.5"
-              r="1.8"
+              cx="75.5"
+              cy="49.5"
+              r="2.6"
               fill="var(--oni-shine, #fff)"
               stroke="none"
             />
@@ -155,7 +162,13 @@ onBeforeUnmount(() => clearTimeout(blinkTimer))
           />
         </g>
 
-        <!-- Sparkle: "showing" a card -->
+        <!-- Sparkles: "showing" a card -->
+        <path
+          class="oni__sparkle oni__sparkle--small"
+          d="M6 2 L7.1 5 L10 6 L7.1 7 L6 10 L4.9 7 L2 6 L4.9 5 Z"
+          fill="var(--oni-line, #F75474)"
+          stroke="none"
+        />
         <path
           class="oni__sparkle"
           d="M112 4 L113.6 8.4 L118 10 L113.6 11.6 L112 16 L110.4 11.6 L106 10 L110.4 8.4 Z"
@@ -216,6 +229,15 @@ onBeforeUnmount(() => clearTimeout(blinkTimer))
 .oni--blink .oni__eye {
   transform: scaleY(0.1);
   transition-duration: 0.07s;
+}
+
+/* ---------- Idle: small head movements, eyes wander ---------- */
+.oni--idle.oni--live .oni__head {
+  animation: oni-sway 5.5s ease-in-out infinite;
+}
+
+.oni--idle.oni--live .oni__eyes {
+  animation: oni-wander 7s ease-in-out infinite;
 }
 
 /* ---------- Listening: ears perk up, sound waves, eyes look down at the input ---------- */
@@ -294,6 +316,10 @@ onBeforeUnmount(() => clearTimeout(blinkTimer))
   animation: oni-sparkle 1.2s ease-out infinite;
 }
 
+.oni--showing.oni--live .oni__sparkle--small {
+  animation-delay: 0.45s;
+}
+
 .oni--showing.oni--live .oni__head {
   animation: oni-hop 0.5s ease-out;
 }
@@ -326,6 +352,21 @@ onBeforeUnmount(() => clearTimeout(blinkTimer))
 
 .oni--error.oni--live .oni__head {
   animation: oni-shake 0.45s ease-in-out;
+}
+
+@keyframes oni-sway {
+  0%, 100% { transform: rotate(0) translateX(0); }
+  20% { transform: rotate(-4deg) translateX(-1px); }
+  45% { transform: rotate(0.5deg) translateX(0); }
+  70% { transform: rotate(4deg) translateX(1px); }
+  85% { transform: rotate(1deg) translateX(0); }
+}
+
+@keyframes oni-wander {
+  0%, 18%, 100% { transform: translate(0, 0); }
+  24%, 40% { transform: translate(-2.5px, 0.5px); }
+  48%, 62% { transform: translate(0, 0); }
+  68%, 82% { transform: translate(2.5px, -1px); }
 }
 
 @keyframes oni-float {

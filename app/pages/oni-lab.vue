@@ -19,7 +19,7 @@ const states: { state: OniState, label: string, trigger: string }[] = [
 ]
 
 const current = ref<OniState>('idle')
-const variant = ref<'color' | 'mono'>('color')
+const variant = ref<'color' | 'mono'>(useAppConfig().petitOni.variant)
 </script>
 
 <template>

@@ -47,15 +47,15 @@ A site action docks the chat on desktop and minimizes it on mobile. The chat liv
 
 | State | Trigger (in `useAiChat`) |
 | --- | --- |
-| `idle` | nothing happening (floats, blinks at random) |
+| `idle` | nothing happening (floats, sways its head, eyes wander, blinks often, sometimes twice) |
 | `listening` | the visitor is typing (ears perk up, sound waves) |
 | `thinking` | request sent or tool running (eyes look around, horns glow) |
 | `speaking` | text is streaming; the mouth stops during pauses |
-| `showing` | a card was displayed (wide eyes, sparkle) |
+| `showing` | a card was displayed (wide eyes, two sparkles) |
 | `navigating` | a site action ran (head tilts toward the page) |
 | `error` | error or refusal (half-closed eyes, small shake) |
 
-Colors come from `--oni-line`, `--oni-eyes` and `--oni-shine`. The chat variant is set in `app.config.ts` (`petitOni.variant`: `color` or `mono`). `prefers-reduced-motion` disables the loops.
+Colors come from `--oni-line`, `--oni-eyes` and `--oni-shine`. The chat variant is set in `app.config.ts` (`petitOni.variant`: `mono` by default, or `color`). `prefers-reduced-motion` disables the loops.
 
 The `/oni-lab` page shows every state side by side. It is available in dev, and in production only when `NUXT_PUBLIC_ONI_LAB=true`; otherwise it returns 404.
 
