@@ -197,11 +197,12 @@ export default defineEventHandler(async (event) => {
 })
 
 async function logInteraction(prompt: string, answer: string, usage: { input: number, cacheWrite: number, cacheRead: number, output: number }) {
-  const supabase = useServerSupabase()
-  if (!supabase || !answer) return
   const promptTokens = usage.input + usage.cacheWrite + usage.cacheRead
   const estimatedCost = estimateCost(usage)
   console.log(`[AI Chat] ${MODEL} | in ${usage.input} + cache write ${usage.cacheWrite} + cache read ${usage.cacheRead} | out ${usage.output} | ~$${estimatedCost.toFixed(5)}`)
+
+  const supabase = useServerSupabase()
+  if (!supabase || !answer) return
   const { error } = await supabase.from('ai_chat_interactions').insert({
     prompt,
     answer,

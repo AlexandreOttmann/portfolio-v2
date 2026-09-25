@@ -10,11 +10,15 @@
  * - which tools the agent called (`tools`: at least one of them),
  * - which cards were displayed (`cards`: project/article slugs or "contact", at least one of them),
  * - facts the answer must mention (`mentions`: every group must match one of its variants),
- * - things it must not say (`forbidden`).
+ * - things it must not say (`forbidden`),
+ * - for every case: no full answer written before a tool call, and "vous" (never "tu") in French.
  * Every run calls the model (~40 requests): it costs real tokens.
  *
  *   ONLY=project pnpm eval:chat   # run only the cases whose group matches
+ *   REPORT=eval.json pnpm eval:chat   # also save every answer for manual review
  */
+
+import { writeFileSync } from 'node:fs'
 
 const BASE_URL = process.env.BASE_URL ?? 'http://localhost:3000'
 
@@ -66,6 +70,7 @@ async function ask({ locale, question }) {
   if (!response.ok) throw new Error(`HTTP ${response.status}`)
 
   let text = ''
+  let textBeforeTool = ''
   const tools = []
   const cards = []
   let error
@@ -73,16 +78,20 @@ async function ask({ locale, question }) {
     if (!line.trim()) continue
     const event = JSON.parse(line)
     if (event.type === 'text') text += event.delta
-    if (event.type === 'tool-start') tools.push(event.name)
+    if (event.type === 'tool-start') {
+      if (!tools.length) textBeforeTool = text
+      tools.push(event.name)
+    }
     if (event.type === 'error') error = event.message
     if (event.type === 'tool-end' && event.ui?.type === 'projects') cards.push(...event.ui.projects.map(p => p.slug))
     if (event.type === 'tool-end' && event.ui?.type === 'article') cards.push(event.ui.article.slug)
     if (event.type === 'tool-end' && event.ui?.type === 'contact') cards.push('contact')
   }
-  return { text, tools, cards, error }
+  return { text, textBeforeTool, tools, cards, error }
 }
 
 let failed = 0
+const report = []
 for (const testCase of cases) {
   const started = Date.now()
   const problems = []
@@ -100,6 +109,8 @@ for (const testCase of cases) {
     for (const group of testCase.mentions ?? []) {
       if (!group.some(variant => answer.includes(normalize(variant)))) problems.push(`missing one of: ${group.join(' | ')}`)
     }
+    if (result.textBeforeTool.length > 150) problems.push(`answered before calling a tool (${result.textBeforeTool.length} chars)`)
+    if (testCase.locale === 'fr' && /(?<!\p{L})(?:tu|toi|ton|ta|tes)(?!\p{L})/iu.test(result.text)) problems.push('uses "tu" instead of "vous"')
     for (const forbidden of testCase.forbidden ?? []) {
       if (answer.includes(normalize(forbidden))) problems.push(`forbidden content: "${forbidden}"`)
     }
@@ -110,6 +121,7 @@ for (const testCase of cases) {
 
   const ms = Date.now() - started
   if (problems.length) failed++
+  report.push({ ...testCase, ms, problems, tools: result?.tools, cards: result?.cards, answer: result?.text })
   console.log(`${problems.length ? '✗' : '✓'} [${testCase.locale}] ${testCase.question} (${ms} ms, tools: ${result?.tools.join(', ') || '-'}, cards: ${result?.cards.join(', ') || '-'})`)
   for (const problem of problems) console.log(`    - ${problem}`)
   if (problems.length && result?.text) console.log(`    > ${result.text.slice(0, 300).replace(/\n/g, ' ')}`)
@@ -119,5 +131,6 @@ for (const testCase of cases) {
   if (delay) await new Promise(resolve => setTimeout(resolve, delay))
 }
 
+if (process.env.REPORT) writeFileSync(process.env.REPORT, JSON.stringify(report, null, 2))
 console.log(`\n${cases.length - failed}/${cases.length} passed`)
 process.exit(failed ? 1 : 0)
