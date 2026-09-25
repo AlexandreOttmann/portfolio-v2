@@ -37,10 +37,9 @@
           class="group relative size-full select-none overflow-hidden hover:scale-105 active:scale-95 transition-all duration-300"
           :class="[
             isMobile ? 'cursor-default' : 'cursor-pointer',
-            index % 2 === 0 ? 'rotate-1' : '-rotate-1',
           ]" data-canvas-item @click="onItemClick" @mouseenter="hoveredItemIndex = index"
           @mouseleave="hoveredItemIndex = null">
-          <div class="absolute inset-0 rounded-2xl bg-gradient-to-br p-1 border-2 border-default/50">
+          <Plasma class="absolute inset-0 p-1.5" :radius="16" :lean="0" :fuse="false">
             <div class="relative size-full overflow-hidden rounded-xl">
               <video v-if="item && isVideo(item.image)" :src="item.image" class="size-full object-cover" autoplay loop
                 muted playsinline :draggable="false" />
@@ -87,7 +86,7 @@
                 </Motion>
               </Motion>
             </div>
-          </div>
+          </Plasma>
         </Motion>
       </template>
     </Canvas>
@@ -101,7 +100,7 @@
     </div>
 
     <div class="pointer-events-none absolute bottom-2 left-2 sm:bottom-4 sm:left-4 z-40 flex flex-col gap-2">
-      <div class="rounded-lg bg-default/80 px-3 py-2 text-highlighted backdrop-blur-sm">
+      <LiquidGlass :radius="10" :bezel="8" :refraction="10" class="px-3 py-2 text-highlighted">
         <p class="text-xs opacity-75">
           <span class="sm:hidden">{{ data?.items.length }} items</span><span class="hidden sm:inline">Click
             items to
@@ -110,12 +109,12 @@
             • {{ Math.round((canvasRef.zoom || 1) * 100) }}%
           </span>
         </p>
-      </div>
-      <div class="hidden sm:block rounded-lg bg-default/80 px-3 py-2 text-highlighted backdrop-blur-sm">
+      </LiquidGlass>
+      <LiquidGlass :radius="10" :bezel="8" :refraction="10" class="hidden sm:block px-3 py-2 text-highlighted">
         <p class="text-xs opacity-75">
           Hold Ctrl/⌘/Alt + scroll to zoom (40%-220%)
         </p>
-      </div>
+      </LiquidGlass>
     </div>
 
     <CanvasLoader :progress="loaderProgress" :is-visible="showLoader" :title="canvasTitle" />

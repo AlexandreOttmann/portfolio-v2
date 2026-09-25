@@ -64,92 +64,98 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     </h2>
     <Divider class="mb-8 mt-2" />
     <div class="flex flex-col sm:items-center sm:justify-between">
-      <UForm
-        :state
-        :schema
-        class="flex w-full max-w-[40rem] flex-col gap-3"
-        @submit="onSubmit"
+      <Plasma
+        :radius="24"
+        :lean="false"
+        class="w-full max-w-[40rem] p-6 sm:p-8"
       >
-        <UFormField
-          label="Fullname"
-          name="fullname"
-          required
+        <UForm
+          :state
+          :schema
+          class="flex w-full flex-col gap-3"
+          @submit="onSubmit"
         >
-          <UInput
-            v-model="state.fullname"
-            type="text"
-            autocomplete="name"
-            class="w-full"
-            placeholder="John Doe"
-          />
-        </UFormField>
-
-        <UFormField
-          label="Email"
-          name="email"
-          required
-        >
-          <UInput
-            v-model="state.email"
-            autocomplete="email"
-            class="w-full"
-            placeholder="john.doe@gmail.com"
-          />
-        </UFormField>
-
-        <UFormField
-          label="Phone"
-          name="phone"
-        >
-          <UInput
-            v-model="state.phone"
-            autocomplete="tel"
-            class="w-full"
-            placeholder="123-456-7890"
-          />
-        </UFormField>
-
-        <UFormField
-          label="Subject"
-          name="subject"
-          required
-        >
-          <UInput
-            v-model="state.subject"
-            class="w-full"
-            :placeholder="$t('contact.subject')"
-          />
-        </UFormField>
-
-        <UFormField
-          label="Message"
-          name="message"
-          required
-        >
-          <UTextarea
-            v-model="state.message"
-            autoresize
-            class="w-full"
-            :rows="4"
-            placeholder="Lets work together!"
-          />
-        </UFormField>
-        <div class="flex justify-center">
-          <UTooltip
-            :disabled="isResendEnabled"
-            :text="$t('contact.disabled')"
+          <UFormField
+            label="Fullname"
+            name="fullname"
+            required
           >
-            <UButton
-              :loading
-              :disabled="!isResendEnabled"
-              type="submit"
-              block
+            <UInput
+              v-model="state.fullname"
+              type="text"
+              autocomplete="name"
+              class="w-full"
+              placeholder="John Doe"
+            />
+          </UFormField>
+
+          <UFormField
+            label="Email"
+            name="email"
+            required
+          >
+            <UInput
+              v-model="state.email"
+              autocomplete="email"
+              class="w-full"
+              placeholder="john.doe@gmail.com"
+            />
+          </UFormField>
+
+          <UFormField
+            label="Phone"
+            name="phone"
+          >
+            <UInput
+              v-model="state.phone"
+              autocomplete="tel"
+              class="w-full"
+              placeholder="123-456-7890"
+            />
+          </UFormField>
+
+          <UFormField
+            label="Subject"
+            name="subject"
+            required
+          >
+            <UInput
+              v-model="state.subject"
+              class="w-full"
+              :placeholder="$t('contact.subject')"
+            />
+          </UFormField>
+
+          <UFormField
+            label="Message"
+            name="message"
+            required
+          >
+            <UTextarea
+              v-model="state.message"
+              autoresize
+              class="w-full"
+              :rows="4"
+              placeholder="Lets work together!"
+            />
+          </UFormField>
+          <div class="flex justify-center">
+            <UTooltip
+              :disabled="isResendEnabled"
+              :text="$t('contact.disabled')"
             >
-              {{ $t("contact.submit") }}
-            </UButton>
-          </UTooltip>
-        </div>
-      </UForm>
+              <UButton
+                :loading
+                :disabled="!isResendEnabled"
+                type="submit"
+                block
+              >
+                {{ $t("contact.submit") }}
+              </UButton>
+            </UTooltip>
+          </div>
+        </UForm>
+      </Plasma>
       <Divider class="my-10" />
       <div class="flex w-full flex-col items-center justify-between gap-4 sm:flex-row">
         <div class="flex flex-col gap-3">

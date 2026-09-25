@@ -71,7 +71,7 @@ const viewport = computed(() => {
 </script>
 
 <template>
-  <div class="relative overflow-hidden rounded-lg border border-default bg-default/40 p-2 backdrop-blur-sm shadow-lg">
+  <LiquidGlass :radius="10" :bezel="8" :refraction="10" class="overflow-hidden p-2">
     <!-- Minimap container -->
     <div 
       class="relative"
@@ -112,5 +112,5 @@ const viewport = computed(() => {
         />
       </div>
     </div>
-  </div>
+  </LiquidGlass>
 </template> 

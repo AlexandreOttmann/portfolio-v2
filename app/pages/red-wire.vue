@@ -83,7 +83,7 @@
           :transition="{ duration: 0.6, delay: 0.2 }"
         >
           <div class="max-w-3xl mx-auto">
-            <UCard class="relative overflow-hidden border-2 border-primary/20 hover:border-primary/40 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10">
+            <GlassCard class="relative overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10">
               <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary/20 to-transparent rounded-bl-full animate-pulse" />
               <div
                 class="absolute -top-10 -right-10 size-20 bg-primary/30 rounded-full blur-2xl animate-ping"
@@ -107,7 +107,7 @@
                   {{ t('redwire.current_project_desc') }}
                 </p>
               </div>
-            </UCard>
+            </GlassCard>
           </div>
         </Motion>
       </div>
@@ -138,7 +138,7 @@
             :animate="{ opacity: 1, y: 0 }"
             :transition="{ duration: 0.6, delay: index * 0.1 }"
           >
-            <UCard class="h-full group relative overflow-hidden hover:border-primary/40 transition-all duration-500 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1">
+            <GlassCard class="h-full group relative overflow-hidden transition-all duration-500 hover:shadow-lg hover:shadow-primary/5">
               <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div class="space-y-3 relative">
                 <div class="flex items-center justify-center size-12 rounded-lg bg-primary/10 text-primary group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
@@ -154,7 +154,7 @@
                   {{ principle.description }}
                 </p>
               </div>
-            </UCard>
+            </GlassCard>
           </Motion>
         </div>
       </div>
@@ -188,7 +188,7 @@
             :animate="{ opacity: 1, y: 0 }"
             :transition="{ duration: 0.6, delay: index * 0.08 }"
           >
-            <UCard class="h-full group relative overflow-hidden hover:border-primary/40 transition-all duration-500 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1">
+            <GlassCard class="h-full group relative overflow-hidden transition-all duration-500 hover:shadow-xl hover:shadow-primary/10">
               <!-- Gradient background on hover -->
               <div
                 class="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 bg-gradient-to-br"
@@ -216,7 +216,7 @@
                   {{ tech.description }}
                 </p>
               </div>
-            </UCard>
+            </GlassCard>
           </Motion>
         </div>
       </div>
@@ -288,8 +288,8 @@
                 >
                   <!-- Content Card -->
                   <div class="w-5/12">
-                    <UCard
-                      class="relative group hover:border-primary/40 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20 hover:-translate-y-2"
+                    <GlassCard
+                      class="relative group transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20 hover:-translate-y-2"
                       :class="[
                         index % 2 === 0 ? 'mr-auto' : 'ml-auto',
                         milestone.status === 'in-progress' ? 'border-primary/30 shadow-lg shadow-primary/10' : '',
@@ -351,7 +351,7 @@
                           </span>
                         </div>
                       </div>
-                    </UCard>
+                    </GlassCard>
                   </div>
 
                   <!-- Center Node -->
@@ -443,8 +443,8 @@
                   </div>
 
                   <!-- Content -->
-                  <UCard
-                    class="group hover:border-primary/40 transition-all duration-500 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1"
+                  <GlassCard
+                    class="group transition-all duration-500 hover:shadow-xl hover:shadow-primary/10"
                     :class="milestone.status === 'in-progress' ? 'border-primary/30 shadow-lg shadow-primary/5' : ''"
                   >
                     <div
@@ -501,7 +501,7 @@
                         </span>
                       </div>
                     </div>
-                  </UCard>
+                  </GlassCard>
                 </div>
               </Motion>
             </div>
@@ -528,7 +528,7 @@
         </Motion>
 
         <div class="max-w-3xl mx-auto">
-          <UCard class="relative overflow-hidden hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500">
+          <GlassCard class="relative overflow-hidden hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500">
             <div class="absolute top-0 right-0 size-32 bg-primary/10 rounded-full blur-3xl animate-pulse" />
             <ul class="space-y-4 relative">
               <Motion
@@ -547,7 +547,7 @@
                 </li>
               </Motion>
             </ul>
-          </UCard>
+          </GlassCard>
         </div>
       </div>
     </section>
@@ -567,7 +567,7 @@
           :transition="{ duration: 0.6 }"
         >
           <div class="max-w-4xl mx-auto">
-            <UCard class="relative overflow-hidden border-2 border-primary/20 bg-gradient-to-br from-primary/5 via-transparent to-transparent hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 group">
+            <GlassCard class="relative overflow-hidden bg-gradient-to-br from-primary/5 via-transparent to-transparent hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 group">
               <div class="absolute -top-10 -right-10 size-40 bg-primary/30 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000" />
               <div class="space-y-4 relative">
                 <div class="flex items-center gap-3">
@@ -586,7 +586,7 @@
                   {{ t('redwire.why_desc') }}
                 </p>
               </div>
-            </UCard>
+            </GlassCard>
           </div>
         </Motion>
       </div>
@@ -663,8 +663,8 @@
 
             <!-- GitHub Stats Cards -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-8">
-              <UCard
-                class="group hover:border-primary/40 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10"
+              <GlassCard
+                class="group transition-all duration-300 hover:shadow-lg hover:shadow-primary/10"
               >
                 <div class="text-center space-y-2">
                   <UIcon
@@ -678,9 +678,9 @@
                     Milestones
                   </div>
                 </div>
-              </UCard>
-              <UCard
-                class="group hover:border-primary/40 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10"
+              </GlassCard>
+              <GlassCard
+                class="group transition-all duration-300 hover:shadow-lg hover:shadow-primary/10"
               >
                 <div class="text-center space-y-2">
                   <UIcon
@@ -694,9 +694,9 @@
                     Technologies
                   </div>
                 </div>
-              </UCard>
-              <UCard
-                class="group hover:border-primary/40 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10"
+              </GlassCard>
+              <GlassCard
+                class="group transition-all duration-300 hover:shadow-lg hover:shadow-primary/10"
               >
                 <div class="text-center space-y-2">
                   <UIcon
@@ -710,7 +710,7 @@
                     Grade Quality
                   </div>
                 </div>
-              </UCard>
+              </GlassCard>
             </div>
           </div>
         </Motion>
