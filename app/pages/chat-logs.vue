@@ -1,11 +1,5 @@
 <script setup lang="ts">
-import { marked } from 'marked'
-
-// Configure marked for safe rendering
-marked.setOptions({
-  breaks: true,
-  gfm: true,
-})
+useSeoMeta({ robots: 'noindex, nofollow' })
 
 const password = ref('')
 const isAuthenticated = ref(false)
@@ -19,10 +13,9 @@ const handleLogin = async () => {
 
   try {
     const data = await $fetch('/api/chat-logs', {
-      query: { password: password.value },
+      headers: { Authorization: `Bearer ${password.value}` },
     })
     interactions.value = data
-    console.log(data)
     isAuthenticated.value = true
   }
   catch (e: any) {
@@ -43,11 +36,6 @@ const formatDate = (dateString: string) => {
 const formatCost = (cost: number) => {
   if (cost === null || cost === undefined) return 'N/A'
   return `$${Number(cost).toFixed(6)}`
-}
-
-const renderMarkdown = (text: string): string => {
-  if (!text) return ''
-  return marked.parse(text) as string
 }
 </script>
 
@@ -171,7 +159,7 @@ const renderMarkdown = (text: string): string => {
                   </div>
                   <div
                     class="text-sm text-gray-800 dark:text-gray-200 markdown-content"
-                    v-html="renderMarkdown(interaction.answer)"
+                    v-html="renderSafeMarkdown(interaction.answer)"
                   />
                 </div>
               </div>

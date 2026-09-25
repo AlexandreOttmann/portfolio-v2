@@ -100,7 +100,7 @@
               class="space-y-6"
             >
               <div
-                v-for="message in messages"
+                v-for="message in visibleMessages"
                 :key="message.id"
                 class="flex items-start gap-4 message-item"
                 :class="message.role === 'user' ? 'justify-end' : 'justify-start'"
@@ -120,21 +120,50 @@
 
                 <!-- Message Content -->
                 <div
-                  class="max-w-[85%] sm:max-w-[75%] rounded-2xl px-5 py-3.5 message-bubble shadow-sm"
+                  class="rounded-2xl px-5 py-3.5 message-bubble shadow-sm"
                   :class="message.role === 'user'
-                    ? 'bg-white text-black rounded-tr-sm'
-                    : 'bg-white/20 text-white/90  border border-white/10 rounded-tl-sm'"
+                    ? 'max-w-[85%] sm:max-w-[75%] bg-white text-black rounded-tr-sm'
+                    : 'max-w-[90%] sm:max-w-[85%] bg-white/20 text-white/90 border border-white/10 rounded-tl-sm'"
                 >
-                  <div
-                    v-if="message.role === 'assistant'"
-                    class="text-sm leading-relaxed markdown-content max-w-none"
-                    v-html="renderMarkdown(message.content)"
-                  />
+                  <template v-if="message.role === 'assistant'">
+                    <div class="flex flex-col gap-3">
+                      <template
+                        v-for="(part, index) in message.parts"
+                        :key="index"
+                      >
+                        <!-- Rendered with marked + DOMPurify: LLM output is untrusted -->
+                        <div
+                          v-if="part.type === 'text'"
+                          class="text-sm leading-relaxed markdown-content max-w-none"
+                          v-html="renderMarkdown(part.text)"
+                        />
+                        <div
+                          v-else-if="part.state === 'running'"
+                          class="flex items-center gap-2 text-xs text-white/60"
+                        >
+                          <Icon
+                            name="lucide:loader-circle"
+                            class="size-3.5 animate-spin"
+                          />
+                          {{ toolLabel(part.name) }}
+                        </div>
+                        <ChatProjectCards
+                          v-else-if="part.ui?.type === 'projects'"
+                          :projects="part.ui.projects"
+                        />
+                        <ChatArticleCard
+                          v-else-if="part.ui?.type === 'article'"
+                          :article="part.ui.article"
+                        />
+                        <ChatContactCard v-else-if="part.ui?.type === 'contact'" />
+                      </template>
+                    </div>
+                  </template>
                   <p
                     v-else
                     class="text-sm leading-relaxed whitespace-pre-wrap font-medium"
                   >
-                    {{ message.content }}
+                    {{ message.parts[0]?.type === 'text' ? message.parts[0].text : '' }}
                   </p>
                   <p class="text-[10px] mt-1.5 text-right opacity-50">
                     {{ message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
@@ -145,7 +174,7 @@
 
             <!-- Loading indicator -->
             <div
-              v-if="isLoading"
+              v-if="isLoading && !messages.at(-1)?.parts.length"
               class="flex items-start gap-4 justify-start"
             >
               <div class="flex-shrink-0 w-8 h-8 rounded-full overflow-hidden border border-white/20 bg-black/40 mt-1">
@@ -188,10 +217,25 @@
                 @keypress="handleKeyPress"
               />
               <UButton
-                :disabled="!inputMessage.trim() || isLoading"
+                v-if="isLoading"
                 color="neutral"
                 variant="solid"
                 class="rounded-full w-8 h-8 flex items-center justify-center p-0"
+                :aria-label="locale === 'fr' ? 'Arrêter' : 'Stop'"
+                @click="stop"
+              >
+                <Icon
+                  name="lucide:square"
+                  class="w-3.5 h-3.5 text-ui-bg"
+                />
+              </UButton>
+              <UButton
+                v-else
+                :disabled="!inputMessage.trim()"
+                color="neutral"
+                variant="solid"
+                class="rounded-full w-8 h-8 flex items-center justify-center p-0"
+                :aria-label="locale === 'fr' ? 'Envoyer' : 'Send'"
                 @click="sendMessage(inputMessage)"
               >
                 <Icon
@@ -297,6 +341,7 @@ const {
   renderMarkdown,
   initBubble,
   sendMessage,
+  stop,
   askPresetQuestion,
   toggleChat,
   handleKeyPress,
@@ -305,6 +350,21 @@ const {
 
 const { locale } = useI18n()
 const bottomInput = ref<HTMLInputElement | null>(null)
+
+// The assistant placeholder stays hidden until its first token arrives.
+const visibleMessages = computed(() => messages.value.filter(m => m.parts.length > 0))
+
+const toolLabels: Record<string, [string, string]> = {
+  get_project_details: ['Ouverture du projet…', 'Opening the project…'],
+  list_projects: ['Recherche des projets…', 'Looking up projects…'],
+  get_article: ['Lecture de l\'article…', 'Reading the article…'],
+  search_portfolio: ['Recherche dans le portfolio…', 'Searching the portfolio…'],
+  show_contact_options: ['Préparation des contacts…', 'Getting contact options…'],
+}
+const toolLabel = (name: string) => {
+  const [fr, en] = toolLabels[name] ?? ['Recherche…', 'Searching…']
+  return locale.value === 'fr' ? fr : en
+}
 
 // Initialize bubble on mount
 onMounted(() => {
