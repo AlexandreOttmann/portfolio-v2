@@ -90,7 +90,7 @@ To see exactly what the model receives, run `pnpm dev` and open:
 | --- | --- | --- |
 | `ANTHROPIC_API_KEY` | yes | Claude API key. Without it, the chat answers with the contact card. |
 | `ANTHROPIC_WORKSPACE_ID` | no | Only for API keys that are not scoped to a workspace (the API then rejects requests without it). |
-| `AI_CHAT_MODEL` | no | Defaults to `claude-haiku-4-5` (cheapest; 45/45 on the eval). `claude-sonnet-5` is about 2.4x the cost, with slightly more complete answers and a stricter job matcher. |
+| `AI_CHAT_MODEL` | no | Defaults to `claude-haiku-4-5` (cheapest; 42/45 on the eval, the 3 misses being omissions rather than errors). `claude-sonnet-5` is about 2.4x the cost, with slightly more complete answers and a stricter job matcher. |
 | `SUPABASE_URL` | no | Defaults to the existing project. |
 | `SUPABASE_KEY` | no | Enables logging to `ai_chat_interactions` and the `/chat-logs` page. |
 | `BEST_PASSWORD` | no | Password of `/chat-logs`, sent as a `Bearer` header. |
