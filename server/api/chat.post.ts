@@ -10,7 +10,12 @@ import { enforceRateLimit } from '../utils/rate-limit'
 import { useServerSupabase } from '../utils/supabase'
 import type { ChatStreamEvent } from '../../shared/types/chat'
 
-const MODEL = process.env.AI_CHAT_MODEL || 'claude-haiku-4-5'
+// Everyday questions go to the cheap model; job offers (the analysis a recruiter
+// judges Alex on, and a rare request) go to the stronger one.
+const CHAT_MODEL = process.env.AI_CHAT_MODEL || 'claude-haiku-4-5'
+const MATCHER_MODEL = process.env.AI_CHAT_MATCHER_MODEL || 'claude-sonnet-5'
+// A pasted offer is long; a regular question rarely is.
+const JOB_OFFER_MIN_CHARS = 400
 // Public endpoint: cap the output of a single answer (thinking included).
 const MAX_TOKENS = 4096
 // Max model round-trips per visitor message (each tool round is one).
@@ -30,6 +35,8 @@ const MAX_TOTAL_CHARS = 30000
 
 const bodySchema = z.object({
   locale: z.enum(['fr', 'en']),
+  /** Set by the widget in "Évaluer une offre d'emploi" mode. */
+  intent: z.enum(['job-offer']).optional(),
   messages: z.array(z.object({
     role: z.enum(['user', 'assistant']),
     content: z.string().trim().max(8000),
@@ -48,7 +55,7 @@ const FALLBACK_TEXT: Record<Locale, string> = {
 // URLs present in the conversation and never runs on this server. Its definition
 // adds ~4k tokens to every request, so it is only offered when the question has a link.
 // Dynamic filtering (20260209) needs Sonnet/Opus 4.6+; Haiku gets the basic version.
-const WEB_FETCH_TOOL = MODEL.startsWith('claude-haiku')
+const webFetchTool = (model: string) => model.startsWith('claude-haiku')
   ? { type: 'web_fetch_20250910' as const, name: 'web_fetch' as const, max_uses: 2, max_content_tokens: 12000 }
   : { type: 'web_fetch_20260209' as const, name: 'web_fetch' as const, max_uses: 2, max_content_tokens: 12000 }
 const LINK_RE = /https?:\/\/\S+/i
@@ -72,8 +79,8 @@ function toApiMessages(messages: Array<{ role: 'user' | 'assistant', content: st
   return result
 }
 
-function estimateCost(usage: { input: number, cacheWrite: number, cacheRead: number, output: number }) {
-  const [input, output] = PRICING[MODEL] ?? [5, 25]
+function estimateCost(model: string, usage: { input: number, cacheWrite: number, cacheRead: number, output: number }) {
+  const [input, output] = PRICING[model] ?? [5, 25]
   return (usage.input * input + usage.cacheWrite * input * 1.25 + usage.cacheRead * input * 0.1 + usage.output * output) / 1_000_000
 }
 
@@ -101,9 +108,12 @@ export default defineEventHandler(async (event) => {
   if (!parsed.success) {
     throw createError({ statusCode: 400, statusMessage: 'Invalid chat request' })
   }
-  const { locale, messages } = parsed.data
+  const { locale, messages, intent } = parsed.data
   const question = messages.at(-1)!.content
-  const tools = LINK_RE.test(question) ? [...toolDefinitions, WEB_FETCH_TOOL] : toolDefinitions
+  const hasLink = LINK_RE.test(question)
+  const isJobOffer = intent === 'job-offer' || hasLink || question.length >= JOB_OFFER_MIN_CHARS
+  const model = isJobOffer ? MATCHER_MODEL : CHAT_MODEL
+  const tools = hasLink ? [...toolDefinitions, webFetchTool(model)] : toolDefinitions
   // First message that is one of the welcome questions: same answer for everyone.
   const cacheable = messages.length === 1 && isPresetQuestion(locale, question)
 
@@ -134,10 +144,10 @@ export default defineEventHandler(async (event) => {
 
       const suggestFollowUps = async (history: Anthropic.Beta.BetaMessageParam[]) => {
         // Forced tool choice is rejected by these models: they keep the prompt-only behavior.
-        if (/^claude-(opus-5-5|fable-5-1)/.test(MODEL)) return
+        if (/^claude-(opus-5-5|fable-5-1)/.test(model)) return
         try {
           const message = await anthropic.beta.messages.create({
-            model: MODEL,
+            model: model,
             max_tokens: 400,
             system: [{ type: 'text', text: buildSystemPrompt(locale, await buildProfileContext(event, locale)), cache_control: { type: 'ephemeral' } }],
             tools,
@@ -177,7 +187,7 @@ export default defineEventHandler(async (event) => {
         }]
 
         const cacheKey = cacheable
-          ? answerCacheKey(MODEL, locale, question, createHash('sha256').update(systemText).update(JSON.stringify(tools)).digest('hex'))
+          ? answerCacheKey(model, locale, question, createHash('sha256').update(systemText).update(JSON.stringify(tools)).digest('hex'))
           : null
         const cached = cacheKey ? getCachedAnswer(cacheKey) : null
         if (cached) {
@@ -188,19 +198,19 @@ export default defineEventHandler(async (event) => {
         }
 
         const conversation = toApiMessages(messages)
-        const isOpus = MODEL.startsWith('claude-opus-5') || MODEL.startsWith('claude-fable-5')
+        const isOpus = model.startsWith('claude-opus-5') || model.startsWith('claude-fable-5')
         let suggested = false
         let finalMessage: Anthropic.Beta.BetaMessage | null = null
 
         for (let step = 0; step < MAX_STEPS; step++) {
           const response = anthropic.beta.messages.stream({
-            model: MODEL,
+            model: model,
             max_tokens: MAX_TOKENS,
             system,
             tools,
             messages: conversation,
             // Chat Q&A over a small knowledge base does not need deep reasoning.
-            ...(MODEL.startsWith('claude-haiku') ? {} : { output_config: { effort: 'low' as const } }),
+            ...(model.startsWith('claude-haiku') ? {} : { output_config: { effort: 'low' as const } }),
             // On a policy decline, let the API re-run the request on a fallback model.
             ...(isOpus ? { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' as const } : {}),
           }, { signal: abort.signal })
@@ -287,7 +297,7 @@ export default defineEventHandler(async (event) => {
       finally {
         send({ type: 'done' })
         // Log before closing: serverless functions may be frozen once the response ends.
-        if (!failed || answer) await logInteraction(question, answer, usage, cachedReplay)
+        if (!failed || answer) await logInteraction(model, question, answer, usage, cachedReplay)
         try {
           controller.close()
         }
@@ -304,12 +314,12 @@ export default defineEventHandler(async (event) => {
   return sendStream(event, stream)
 })
 
-async function logInteraction(prompt: string, answer: string, usage: { input: number, cacheWrite: number, cacheRead: number, output: number }, cachedReplay = false) {
+async function logInteraction(model: string, prompt: string, answer: string, usage: { input: number, cacheWrite: number, cacheRead: number, output: number }, cachedReplay = false) {
   const promptTokens = usage.input + usage.cacheWrite + usage.cacheRead
-  const estimatedCost = estimateCost(usage)
+  const estimatedCost = estimateCost(model, usage)
   console.log(cachedReplay
-    ? `[AI Chat] ${MODEL} | cached answer (welcome question) | $0`
-    : `[AI Chat] ${MODEL} | in ${usage.input} + cache write ${usage.cacheWrite} + cache read ${usage.cacheRead} | out ${usage.output} | ~$${estimatedCost.toFixed(5)}`)
+    ? `[AI Chat] ${model} | cached answer (welcome question) | $0`
+    : `[AI Chat] ${model} | in ${usage.input} + cache write ${usage.cacheWrite} + cache read ${usage.cacheRead} | out ${usage.output} | ~$${estimatedCost.toFixed(5)}`)
 
   const supabase = useServerSupabase()
   if (!supabase || !answer) return

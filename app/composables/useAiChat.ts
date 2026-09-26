@@ -202,6 +202,7 @@ export const useAiChat = () => {
     if (!content || isLoading.value) return
     if (content.length > MAX_QUESTION_CHARS) return
 
+    const isJobOffer = offerMode.value
     if (offerMode.value) {
       content = `${t('Voici une offre d\'emploi : le profil d\'Alex correspond-il ?', 'Here is a job offer: is Alex a good fit?')}\n\n${content}`
       offerMode.value = false
@@ -234,6 +235,7 @@ export const useAiChat = () => {
     const body: ChatRequestBody = {
       locale: locale.value === 'en' ? 'en' : 'fr',
       messages: [...history, { role: 'user', content }],
+      ...(isJobOffer ? { intent: 'job-offer' as const } : {}),
     }
 
     try {
