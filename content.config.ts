@@ -25,6 +25,8 @@ const commonProjectSchema = z.object({
   featured: z.boolean().optional(),
   home: z.boolean().optional(),
   content: z.string().optional(),
+  /** One short, complete sentence for the home cards; falls back to `content`. */
+  summary: z.string().optional(),
   stack: z.array(z.string().nonempty()).optional(),
 })
 

@@ -6,5 +6,10 @@
     "featured": true,
     "home": true,
     "content": "Indexing and setting up Algolia for Odysway, GA4 / Meta tag plan",
-    "stack": []
+    "summary": "Algolia search and a GA4 / Meta tagging plan for a travel agency.",
+    "stack": [
+        "Algolia",
+        "GA4",
+        "Meta"
+    ]
 }

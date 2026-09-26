@@ -6,7 +6,7 @@
     <div class="relative mx-auto flex max-w-7xl flex-col justify-center gap-4 px-4 py-8 sm:px-6 lg:px-8 lg:py-16">
       <!-- spotlight -->
       <div
-        class="rainbow-spotlight absolute -top-8 left-1/2 size-72 -translate-x-1/2 rounded-full blur-[120px] lg:-top-8 lg:size-[32rem] lg:blur-[200px]"
+        class="spectrum-bg opacity-30 absolute -top-8 left-1/2 size-72 -translate-x-1/2 rounded-full blur-[120px] lg:-top-8 lg:size-[32rem] lg:blur-[200px]"
       />
 
       <!-- profile picture -->
@@ -29,10 +29,15 @@
         <div class="z-20 flex flex-col items-center justify-center">
           <!-- title -->
           <div
-            class="font-geist"
+            class="relative font-geist"
             style="--stagger: 1; --delay: 10ms"
             data-animate
           >
+            <!-- keeps the hero legible now that the marquee runs up the whole screen -->
+            <div
+              aria-hidden="true"
+              class="pointer-events-none absolute -inset-x-24 -inset-y-12 -z-10 bg-[radial-gradient(closest-side,var(--ui-bg)_35%,transparent)] opacity-90"
+            />
             <h1
               :class="isDark ? 'from-white/90 to-white/30' : 'from-black/80 to-black/50'"
               class="flex justify-center mx-auto font-medium text-center text-pretty bg-gradient-to-b bg-clip-text text-3xl text-transparent lg:max-w-3xl lg:text-4xl mb-4"
@@ -100,30 +105,3 @@
 const color = useColorMode()
 const isDark = computed(() => color.value === 'dark')
 </script>
-
-<style scoped>
-/* Rainbow spotlight animation for light mode */
-@keyframes rainbow-rotate {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  100% {
-    background-position: 200% 50%;
-  }
-}
-
-.rainbow-spotlight {
-  background: linear-gradient(90deg,
-      #ff0080,
-      #ff8c00,
-      #40e0d0,
-      #4169e1,
-      #9370db,
-      #ff1493,
-      #ff0080);
-  background-size: 200% 100%;
-  animation: rainbow-rotate 3s linear infinite;
-  opacity: 0.3;
-}
-</style>

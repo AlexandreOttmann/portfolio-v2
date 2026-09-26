@@ -5,27 +5,26 @@
       :is-writing="route.path.includes('/articles/')"
     />
     <div class="mx-auto mt-8 sm:mt-20 px-4 sm:max-w-2xl md:max-w-3xl lg:max-w-4xl">
-      <Plasma
+      <GlassSurface
         :as="NuxtLinkLocale"
         to="/writing"
-        :radius="8"
-        :lean="false"
-        class="inline-flex items-center gap-2 px-4 py-1.5 text-muted hover:text-primary transition-colors duration-200 cursor-pointer group"
+        variant="control"
+        interactive
+        class="inline-flex items-center gap-2 px-4 py-1.5 text-muted hover:text-highlighted transition-colors duration-200 group"
       >
         <UIcon
           name="lucide:arrow-left"
           class="size-4 transition-transform duration-200 group-hover:-translate-x-1"
         />
-        <span class="text-sm font-extralight">
+        <span class="text-sm">
           {{ $t("navigation.writing") }}
         </span>
-      </Plasma>
+      </GlassSurface>
     </div>
     <!-- One tall pane of frosted glass: frost keeps long text readable over the marquee -->
-    <Plasma
+    <GlassSurface
       as="article"
-      :radius="24"
-      :lean="false"
+      variant="pane"
       :frost="0.55"
       class="writing mx-4 my-6 p-6 sm:mx-auto sm:max-w-2xl sm:p-10 md:max-w-3xl lg:max-w-4xl"
     >
@@ -68,7 +67,7 @@
         :dir="localeProperties?.dir ?? 'ltr'"
         :value="page"
       />
-    </Plasma>
+    </GlassSurface>
   </div>
 </template>
 
