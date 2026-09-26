@@ -90,7 +90,8 @@ To see exactly what the model receives, run `pnpm dev` and open:
 | --- | --- | --- |
 | `ANTHROPIC_API_KEY` | yes | Claude API key. Without it, the chat answers with the contact card. |
 | `ANTHROPIC_WORKSPACE_ID` | no | Only for API keys that are not scoped to a workspace (the API then rejects requests without it). |
-| `AI_CHAT_MODEL` | no | Defaults to `claude-sonnet-5`. Any Claude model id works (e.g. `claude-opus-5` for more quality, `claude-haiku-4-5` for lower cost). |
+| `AI_CHAT_MODEL` | no | Model for everyday questions. Defaults to `claude-haiku-4-5` (cheapest; 42/45 on the eval, the 3 misses being omissions rather than errors). |
+| `AI_CHAT_MATCHER_MODEL` | no | Model for job offers. Defaults to `claude-sonnet-5`, which is stricter and more nuanced than Haiku for this analysis. A request counts as a job offer when it is sent in offer mode, contains a link, or is ≥ 400 characters. |
 | `SUPABASE_URL` | no | Defaults to the existing project. |
 | `SUPABASE_KEY` | no | Enables logging to `ai_chat_interactions` and the `/chat-logs` page. |
 | `BEST_PASSWORD` | no | Password of `/chat-logs`, sent as a `Bearer` header. |
@@ -99,10 +100,15 @@ To see exactly what the model receives, run `pnpm dev` and open:
 ## Safety and cost controls
 
 - **Input validation** (zod): at most 24 messages, 6,000 characters per question (a pasted job offer fits), 30,000 characters for the whole conversation, and the last message must come from the user.
+- **Bots**: [Vercel BotID](https://vercel.com/docs/botid) protects `/api/chat`. The `botid/nuxt` module and `app/plugins/botid.client.ts` attach an invisible challenge, and `checkBotId()` blocks bots with a 403. The check only runs on Vercel and fails open.
 - **Rate limiting** per IP (8 requests/min, 60/hour), kept in memory. This is best effort, because each Vercel instance has its own memory. For a hard global limit, add a Vercel Firewall rate-limit rule on `/api/chat`.
 - **Output limits**: `max_tokens` 4096, `effort: low`, at most 5 tool rounds per question.
 - **Refusal fallback**: when `AI_CHAT_MODEL` is an Opus 5 / Fable 5 model, `fallbacks: "default"` re-runs a policy-declined request on a fallback model.
 - **Rendering**: assistant markdown goes through `marked` + DOMPurify. Scripts, event handlers and `javascript:` links are stripped, and only same-site images are kept.
+- **Cost**: about $0.004 per question with Haiku and a warm prompt cache.
+  - `web_fetch` is only offered when the question contains a link; its definition adds ~4k tokens to every request.
+  - Answers to the 4 welcome questions are generated once, then replayed for free (`server/utils/ai/answer-cache.ts`: in memory, 24 h, invalidated when the model, prompt or tools change).
+  - The first question after 5 minutes without traffic pays the prompt cache write (~$0.01 with Haiku).
 - **Logs**: every answer is written to Supabase with token usage and an estimated cost (cache reads and writes included).
 
 ## Evaluation

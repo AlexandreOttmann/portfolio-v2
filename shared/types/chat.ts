@@ -88,5 +88,7 @@ export type OniState = 'idle' | 'listening' | 'thinking' | 'speaking' | 'showing
 /** What the widget sends: text-only history, the server rebuilds the rest. */
 export interface ChatRequestBody {
   locale: 'fr' | 'en'
+  /** Sent in "Évaluer une offre d'emploi" mode: the server uses the matcher model. */
+  intent?: 'job-offer'
   messages: Array<{ role: 'user' | 'assistant', content: string }>
 }
