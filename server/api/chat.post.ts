@@ -1,5 +1,8 @@
+import { createHash } from 'node:crypto'
 import Anthropic from '@anthropic-ai/sdk'
+import { checkBotId } from 'botid/server'
 import { z } from 'zod/v4'
+import { answerCacheKey, getCachedAnswer, isPresetQuestion, replayAnswer, setCachedAnswer } from '../utils/ai/answer-cache'
 import { buildProfileContext, type Locale } from '../utils/ai/knowledge'
 import { buildSystemPrompt } from '../utils/ai/prompt'
 import { runTool, TERMINAL_TOOLS, toolDefinitions } from '../utils/ai/tools'
@@ -7,7 +10,7 @@ import { enforceRateLimit } from '../utils/rate-limit'
 import { useServerSupabase } from '../utils/supabase'
 import type { ChatStreamEvent } from '../../shared/types/chat'
 
-const MODEL = process.env.AI_CHAT_MODEL || 'claude-sonnet-5'
+const MODEL = process.env.AI_CHAT_MODEL || 'claude-haiku-4-5'
 // Public endpoint: cap the output of a single answer (thinking included).
 const MAX_TOKENS = 4096
 // Max model round-trips per visitor message (each tool round is one).
@@ -42,8 +45,13 @@ const FALLBACK_TEXT: Record<Locale, string> = {
 }
 
 // Anthropic-hosted fetch, used to read a job offer from a link. It only fetches
-// URLs present in the conversation and never runs on this server.
-const WEB_FETCH_TOOL = { type: 'web_fetch_20260209' as const, name: 'web_fetch' as const, max_uses: 2, max_content_tokens: 12000 }
+// URLs present in the conversation and never runs on this server. Its definition
+// adds ~4k tokens to every request, so it is only offered when the question has a link.
+// Dynamic filtering (20260209) needs Sonnet/Opus 4.6+; Haiku gets the basic version.
+const WEB_FETCH_TOOL = MODEL.startsWith('claude-haiku')
+  ? { type: 'web_fetch_20250910' as const, name: 'web_fetch' as const, max_uses: 2, max_content_tokens: 12000 }
+  : { type: 'web_fetch_20260209' as const, name: 'web_fetch' as const, max_uses: 2, max_content_tokens: 12000 }
+const LINK_RE = /https?:\/\/\S+/i
 const SERVER_TOOL_RESULTS = new Set(['web_fetch_tool_result'])
 
 // Keys that are not scoped to a workspace must name one on every request.
@@ -77,12 +85,27 @@ export default defineEventHandler(async (event) => {
     ])
   }
 
+  // Vercel BotID (invisible challenge, see app/plugins/botid.client.ts): bots don't burn API credits.
+  // Only on Vercel, and fail open: the chat must not go down if the check itself fails.
+  if (process.env.VERCEL) {
+    const verification = await checkBotId({ advancedOptions: { headers: event.node.req.headers } }).catch((error) => {
+      console.warn('[AI Chat] BotID check failed, letting the request through:', error instanceof Error ? error.message : error)
+      return null
+    })
+    if (verification?.isBot) {
+      throw createError({ statusCode: 403, statusMessage: 'Access denied' })
+    }
+  }
+
   const parsed = bodySchema.safeParse(await readBody(event).catch(() => null))
   if (!parsed.success) {
     throw createError({ statusCode: 400, statusMessage: 'Invalid chat request' })
   }
   const { locale, messages } = parsed.data
   const question = messages.at(-1)!.content
+  const tools = LINK_RE.test(question) ? [...toolDefinitions, WEB_FETCH_TOOL] : toolDefinitions
+  // First message that is one of the welcome questions: same answer for everyone.
+  const cacheable = messages.length === 1 && isPresetQuestion(locale, question)
 
   setResponseHeaders(event, {
     'Content-Type': 'application/x-ndjson; charset=utf-8',
@@ -98,11 +121,15 @@ export default defineEventHandler(async (event) => {
   const encoder = new TextEncoder()
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
+      const recorded: ChatStreamEvent[] = []
       const send = (payload: ChatStreamEvent) => {
+        if (cacheable) recorded.push(payload)
         if (!abort.signal.aborted) controller.enqueue(encoder.encode(`${JSON.stringify(payload)}\n`))
       }
 
       let answer = ''
+      let failed = false
+      let cachedReplay = false
       const usage = { input: 0, cacheWrite: 0, cacheRead: 0, output: 0 }
 
       const suggestFollowUps = async (history: Anthropic.Beta.BetaMessageParam[]) => {
@@ -113,7 +140,7 @@ export default defineEventHandler(async (event) => {
             model: MODEL,
             max_tokens: 400,
             system: [{ type: 'text', text: buildSystemPrompt(locale, await buildProfileContext(event, locale)), cache_control: { type: 'ephemeral' } }],
-            tools: [...toolDefinitions, WEB_FETCH_TOOL],
+            tools,
             tool_choice: { type: 'tool', name: 'suggest_follow_ups' },
             // Forced tool use cannot be combined with thinking.
             thinking: { type: 'disabled' },
@@ -142,11 +169,24 @@ export default defineEventHandler(async (event) => {
         }
 
         const profile = await buildProfileContext(event, locale)
+        const systemText = buildSystemPrompt(locale, profile)
         const system: Anthropic.Beta.BetaTextBlockParam[] = [{
           type: 'text',
-          text: buildSystemPrompt(locale, profile),
+          text: systemText,
           cache_control: { type: 'ephemeral' },
         }]
+
+        const cacheKey = cacheable
+          ? answerCacheKey(MODEL, locale, question, createHash('sha256').update(systemText).update(JSON.stringify(tools)).digest('hex'))
+          : null
+        const cached = cacheKey ? getCachedAnswer(cacheKey) : null
+        if (cached) {
+          cachedReplay = true
+          answer = cached.filter(e => e.type === 'text').map(e => e.delta).join('')
+          await replayAnswer(cached, send, abort.signal)
+          return
+        }
+
         const conversation = toApiMessages(messages)
         const isOpus = MODEL.startsWith('claude-opus-5') || MODEL.startsWith('claude-fable-5')
         let suggested = false
@@ -157,7 +197,7 @@ export default defineEventHandler(async (event) => {
             model: MODEL,
             max_tokens: MAX_TOKENS,
             system,
-            tools: [...toolDefinitions, WEB_FETCH_TOOL],
+            tools,
             messages: conversation,
             // Chat Q&A over a small knowledge base does not need deep reasoning.
             ...(MODEL.startsWith('claude-haiku') ? {} : { output_config: { effort: 'low' as const } }),
@@ -232,8 +272,11 @@ export default defineEventHandler(async (event) => {
         if (!suggested && finalMessage?.stop_reason === 'end_turn' && answer.trim()) {
           await suggestFollowUps([...conversation, { role: 'assistant', content: finalMessage.content }])
         }
+
+        if (cacheKey && answer.trim() && !abort.signal.aborted) setCachedAnswer(cacheKey, recorded)
       }
       catch (error) {
+        failed = true
         if (abort.signal.aborted) return
         if (error instanceof Anthropic.RateLimitError) console.warn('[AI Chat] Anthropic rate limit reached')
         else if (error instanceof Anthropic.APIError) console.error(`[AI Chat] Anthropic API error ${error.status}:`, error.message)
@@ -244,7 +287,7 @@ export default defineEventHandler(async (event) => {
       finally {
         send({ type: 'done' })
         // Log before closing: serverless functions may be frozen once the response ends.
-        await logInteraction(question, answer, usage)
+        if (!failed || answer) await logInteraction(question, answer, usage, cachedReplay)
         try {
           controller.close()
         }
@@ -261,10 +304,12 @@ export default defineEventHandler(async (event) => {
   return sendStream(event, stream)
 })
 
-async function logInteraction(prompt: string, answer: string, usage: { input: number, cacheWrite: number, cacheRead: number, output: number }) {
+async function logInteraction(prompt: string, answer: string, usage: { input: number, cacheWrite: number, cacheRead: number, output: number }, cachedReplay = false) {
   const promptTokens = usage.input + usage.cacheWrite + usage.cacheRead
   const estimatedCost = estimateCost(usage)
-  console.log(`[AI Chat] ${MODEL} | in ${usage.input} + cache write ${usage.cacheWrite} + cache read ${usage.cacheRead} | out ${usage.output} | ~$${estimatedCost.toFixed(5)}`)
+  console.log(cachedReplay
+    ? `[AI Chat] ${MODEL} | cached answer (welcome question) | $0`
+    : `[AI Chat] ${MODEL} | in ${usage.input} + cache write ${usage.cacheWrite} + cache read ${usage.cacheRead} | out ${usage.output} | ~$${estimatedCost.toFixed(5)}`)
 
   const supabase = useServerSupabase()
   if (!supabase || !answer) return

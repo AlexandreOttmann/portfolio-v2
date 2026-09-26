@@ -10,6 +10,8 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/scripts',
     'vue-sonner/nuxt',
+    // Vercel BotID proxy rewrites (see app/plugins/botid.client.ts).
+    'botid/nuxt',
   ],
 
   imports: {

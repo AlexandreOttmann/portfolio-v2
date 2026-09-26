@@ -1,5 +1,6 @@
 import type { ChatMode } from './useSitePilot'
 import type { ChatRequestBody, ChatStreamEvent, ChatUiPayload, OniState } from '~~/shared/types/chat'
+import { PRESET_QUESTIONS } from '~~/shared/presets'
 
 export type ChatPart
   = | { type: 'text', text: string }
@@ -96,29 +97,12 @@ export const useAiChat = () => {
 
   const t = (fr: string, en: string) => locale.value === 'fr' ? fr : en
 
-  // Preset questions
-  const presetQuestions = computed<PresetQuestion[]>(() => [
-    {
-      id: 'tech-stack',
-      question: t('Quelle est sa stack technique principale ?', 'What is his main tech stack?'),
-      icon: 'lucide:code',
-    },
-    {
-      id: 'projects',
-      question: t('Montre-moi ses projets IA et temps réel', 'Show me his AI and realtime projects'),
-      icon: 'lucide:folder-kanban',
-    },
-    {
-      id: 'current-work',
-      question: t('Sur quoi travaille-t-il en ce moment ?', 'What is he working on right now?'),
-      icon: 'lucide:briefcase',
-    },
-    {
-      id: 'hire',
-      question: t('Comment travailler avec Alex ?', 'How can I work with Alex?'),
-      icon: 'lucide:handshake',
-    },
-  ])
+  // Preset questions (shared with the server, which caches their answers)
+  const presetQuestions = computed<PresetQuestion[]>(() => PRESET_QUESTIONS.map(preset => ({
+    id: preset.id,
+    question: t(preset.fr, preset.en),
+    icon: preset.icon,
+  })))
 
   const welcomeBubbleMessage = computed(() => t(
     'Bonjour! Je suis Petit-Oni, l\'assistant d\'Alex! 👹',

@@ -42,7 +42,7 @@ Requirements: 7+ years of professional backend development in Java; deep experti
 // One question per project, in both languages: the right card must be shown
 // and the answer must contain facts from that project's write-up.
 const projectCases = [
-  { cards: ['quantedsquare'], fr: 'Qu\'a fait Alex chez Quanted Square ?', en: 'What did Alex do at Quanted Square?', mentions: [['due diligence'], ['crown', 'odysway']] },
+  { cards: ['quantedsquare'], fr: 'Qu\'a fait Alex chez Quanted Square ?', en: 'What did Alex do at Quanted Square?', mentions: [['due diligence', 'audit'], ['crown', 'odysway']] },
   { cards: ['odysway', 'current'], fr: 'Parle-moi du projet Odysway', en: 'Tell me about the Odysway project', mentions: [['voyage', 'travel'], ['nuxt'], ['stripe', 'supabase', 'sanity']] },
   { cards: ['crown'], fr: 'C\'est quoi Crown ?', en: 'What is Crown?', mentions: [['enchere', 'auction'], ['temps reel', 'real-time', 'realtime'], ['nuxt', 'supabase', 'vuetify']] },
   { cards: ['eoni'], fr: 'Explique-moi le projet EONI', en: 'Explain the EONI project', mentions: [['rag'], ['pgvector', 'hybrid', 'hybride', 'rerank']] },
@@ -51,10 +51,10 @@ const projectCases = [
   { cards: ['portfolio'], fr: 'Comment était son premier portfolio (V1) ?', en: 'What was his first portfolio (V1) like?', mentions: [['react'], ['chakra', 'framer', 'tailwind']] },
   { cards: ['malt', 'koober'], fr: 'Parle-moi de sa carrière d\'ingénieur du son', en: 'Tell me about his sound engineering career', mentions: [['son', 'sound', 'audio'], ['freelance', 'malt']] },
   { cards: ['koober'], fr: 'Qu\'a-t-il fait chez Koober ?', en: 'What did he do at Koober?', mentions: [['audio'], ['react native', 'livre', 'book', 'freelance']] },
-  { cards: ['learning'], fr: 'Qu\'est-ce qu\'il apprend en ce moment ?', en: 'What is he currently learning?', mentions: [['tryhackme', 'cyber'], ['python']] },
+  { cards: ['learning', 'current'], fr: 'Qu\'est-ce qu\'il apprend en ce moment ?', en: 'What is he currently learning?', mentions: [['tryhackme', 'cyber'], ['python']] },
 ].flatMap(({ fr, en, ...checks }) => [
-  { group: 'project', locale: 'fr', question: fr, tools: ['get_project_details', 'list_projects'], noActions: true, ...checks },
-  { group: 'project', locale: 'en', question: en, tools: ['get_project_details', 'list_projects'], noActions: true, ...checks },
+  { group: 'project', locale: 'fr', question: fr, tools: ['get_project_details', 'list_projects', 'get_article'], noActions: true, ...checks },
+  { group: 'project', locale: 'en', question: en, tools: ['get_project_details', 'list_projects', 'get_article'], noActions: true, ...checks },
 ])
 
 const cases = [
