@@ -94,12 +94,25 @@ export default defineEventHandler(async (event) => {
 
   // Vercel BotID (invisible challenge, see app/plugins/botid.client.ts): bots don't burn API credits.
   // Only on Vercel, and fail open: the chat must not go down if the check itself fails.
+  // Observation mode by default: the verdict is logged but only blocks with BOTID_ENFORCE=true
+  // (real visitors were getting 403s in production, see the log below to diagnose).
   if (process.env.VERCEL) {
-    const verification = await checkBotId({ advancedOptions: { headers: event.node.req.headers } }).catch((error) => {
+    // In production, checkBotId() reads Vercel's request context, not options.headers.
+    const verification = await checkBotId().catch((error) => {
       console.warn('[AI Chat] BotID check failed, letting the request through:', error instanceof Error ? error.message : error)
       return null
     })
-    if (verification?.isBot) {
+    if (verification) {
+      console.log('[AI Chat] BotID', JSON.stringify({
+        isBot: verification.isBot,
+        isHuman: verification.isHuman,
+        bypassed: verification.bypassed,
+        reason: 'classificationReason' in verification ? verification.classificationReason : undefined,
+        humanHeader: Boolean(getHeader(event, 'x-is-human')),
+        enforced: process.env.BOTID_ENFORCE === 'true',
+      }))
+    }
+    if (verification?.isBot && process.env.BOTID_ENFORCE === 'true') {
       throw createError({ statusCode: 403, statusMessage: 'Access denied' })
     }
   }

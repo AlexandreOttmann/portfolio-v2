@@ -95,12 +95,13 @@ To see exactly what the model receives, run `pnpm dev` and open:
 | `SUPABASE_URL` | no | Defaults to the existing project. |
 | `SUPABASE_KEY` | no | Enables logging to `ai_chat_interactions` and the `/chat-logs` page. |
 | `BEST_PASSWORD` | no | Password of `/chat-logs`, sent as a `Bearer` header. |
+| `BOTID_ENFORCE` | no | `true` to return 403 to requests BotID classifies as bots. Off by default (observation only). |
 | `AI_CHAT_DEBUG` | no | `1` exposes `/api/chat-debug` outside `nuxt dev`. Never set it in production. |
 
 ## Safety and cost controls
 
 - **Input validation** (zod): at most 24 messages, 6,000 characters per question (a pasted job offer fits), 30,000 characters for the whole conversation, and the last message must come from the user.
-- **Bots**: [Vercel BotID](https://vercel.com/docs/botid) protects `/api/chat`. The `botid/nuxt` module and `app/plugins/botid.client.ts` attach an invisible challenge, and `checkBotId()` blocks bots with a 403. The check only runs on Vercel and fails open.
+- **Bots**: [Vercel BotID](https://vercel.com/docs/botid) protects `/api/chat`. The `botid/nuxt` module and `app/plugins/botid.client.ts` attach an invisible challenge, and `checkBotId()` blocks bots with a 403. The check only runs on Vercel and fails open. **Observation mode by default**: the verdict is logged (`[AI Chat] BotID {…}`) but only blocks when `BOTID_ENFORCE=true`. Enforcing blocked real visitors in production; turn it on once the logs show humans classified as humans (`isBot: false`, `humanHeader: true`).
 - **Rate limiting** per IP (8 requests/min, 60/hour), kept in memory. This is best effort, because each Vercel instance has its own memory. For a hard global limit, add a Vercel Firewall rate-limit rule on `/api/chat`.
 - **Output limits**: `max_tokens` 4096, `effort: low`, at most 5 tool rounds per question.
 - **Refusal fallback**: when `AI_CHAT_MODEL` is an Opus 5 / Fable 5 model, `fallbacks: "default"` re-runs a policy-declined request on a fallback model.
