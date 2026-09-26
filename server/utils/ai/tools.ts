@@ -2,7 +2,7 @@ import type Anthropic from '@anthropic-ai/sdk'
 import type { H3Event } from 'h3'
 import { z } from 'zod/v4'
 import { getArticle, getProject, listProjects, searchPortfolio, type Locale } from './knowledge'
-import { PILOT_PAGES, type ChatUiPayload, type PilotPage } from '../../../shared/types/chat'
+import { PILOT_PAGES, type ChatJobMatch, type ChatUiPayload, type JobMatchVerdict, type PilotPage } from '../../../shared/types/chat'
 
 /**
  * Agent tools. Each tool returns two things:
@@ -37,6 +37,15 @@ const PAGE_LABELS: Record<Locale, Record<PilotPage, string>> = {
 }
 
 const DEPARTURE_RE = /\b(quitt\w*|départ|partir|parti|left|leave|leaving|laid off|layoff|licenci\w*)\b/i
+
+/** Verdict from coverage (a partial counts half), so it stays consistent with the listed requirements. */
+function jobMatchVerdict(met: number, partial: number, total: number): JobMatchVerdict {
+  const coverage = total ? (met + partial / 2) / total : 0
+  if (coverage >= 0.85) return 'excellent'
+  if (coverage >= 0.65) return 'good'
+  if (coverage >= 0.4) return 'partial'
+  return 'low'
+}
 
 const tools = [
   defineTool({
@@ -132,6 +141,42 @@ const tools = [
       return {
         content: `The ${project.name} panel is now open on the site. Refer to it briefly instead of repeating its content.`,
         ui: { type: 'site-action', action: { kind: 'open-project', stem: project.stem, label: (locale === 'fr' ? 'Ouverture de ' : 'Opening ') + project.name } },
+      }
+    },
+  }),
+  defineTool({
+    name: 'show_job_match',
+    description: 'Show how Alex\'s profile matches a job offer the visitor shared (pasted text, or a page read with web_fetch). List the offer\'s key requirements (skills, experience, languages, location/remote…) and, for each, whether Alex meets it, with concrete evidence from your knowledge and the related projects. Be rigorous and honest: "met" needs concrete evidence (a project, an experience, a listed skill); "partial" for related or lighter experience; "gap" when nothing in your knowledge supports it. Never invent experience. The verdict is computed from these statuses.',
+    input: z.object({
+      role: z.string().min(2).max(160).describe('Job title, as written in the offer.'),
+      company: z.string().max(120).optional().describe('Hiring company, if stated.'),
+      summary: z.string().min(10).max(600).describe('Two sentences for the recruiter: the overall fit, and the main strength or gap. Visitor\'s language.'),
+      requirements: z.array(z.object({
+        requirement: z.string().min(2).max(160).describe('One requirement of the offer, short.'),
+        status: z.enum(['met', 'partial', 'gap']),
+        evidence: z.string().min(2).max(320).describe('Why: concrete evidence from Alex\'s background, or what is missing.'),
+        projects: z.array(z.string()).max(3).optional().describe('Slugs of projects that prove it (from the "Projects" section).'),
+      })).min(2).max(14).describe('Key requirements, most important first. Visitor\'s language.'),
+    }),
+    async run({ role, company, summary, requirements }, { event, locale }) {
+      const projects = await listProjects(event, locale)
+      const bySlug = new Map(projects.map(p => [p.slug, p]))
+      const items = requirements.map(item => ({
+        requirement: item.requirement,
+        status: item.status,
+        evidence: item.evidence,
+        // Only keep projects that exist: the chips open them on the site.
+        projects: (item.projects ?? []).flatMap((slug) => {
+          const project = bySlug.get(slug.toLowerCase())
+          return project ? [{ slug: project.slug, name: project.name, stem: project.stem }] : []
+        }),
+      }))
+      const met = items.filter(i => i.status === 'met').length
+      const partial = items.filter(i => i.status === 'partial').length
+      const match: ChatJobMatch = { role, company, verdict: jobMatchVerdict(met, partial, items.length), met, partial, total: items.length, summary, requirements: items }
+      return {
+        content: `The match card is displayed (verdict: ${match.verdict}, ${met}/${items.length} requirements met, ${partial} partial). Don't repeat it: add at most one sentence, then call suggest_follow_ups.`,
+        ui: { type: 'job-match', match },
       }
     },
   }),

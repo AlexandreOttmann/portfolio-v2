@@ -163,6 +163,19 @@
                   />
                   <span class="text-sm text-white/80 group-hover:text-white font-medium">{{ preset.question }}</span>
                 </button>
+                <button
+                  class="col-span-full text-left p-4 rounded-xl border border-white/15 bg-white/10 hover:bg-white/15 hover:border-white/30 transition-all duration-200 group flex items-center gap-3"
+                  @click="startOfferMode()"
+                >
+                  <Icon
+                    name="lucide:file-search"
+                    class="size-5 shrink-0 text-white/70 group-hover:text-white"
+                  />
+                  <span class="flex flex-col">
+                    <span class="text-sm font-medium text-white">{{ locale === 'fr' ? 'Évaluer une offre d\'emploi' : 'Check a job offer' }}</span>
+                    <span class="text-xs text-white/60">{{ locale === 'fr' ? 'Collez une offre ou son lien : je vérifie l\'adéquation avec le profil d\'Alex.' : 'Paste an offer or its link: I\'ll check how Alex\'s profile fits.' }}</span>
+                  </span>
+                </button>
               </div>
 
               <TransitionGroup
@@ -226,6 +239,10 @@
                             :article="part.ui.article"
                           />
                           <ChatContactCard v-else-if="part.ui?.type === 'contact'" />
+                          <ChatJobMatchCard
+                            v-else-if="part.ui?.type === 'job-match'"
+                            :match="part.ui.match"
+                          />
                           <button
                             v-else-if="part.ui?.type === 'site-action'"
                             class="flex w-fit items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs text-white/70 transition-colors hover:border-white/30 hover:text-white"
@@ -314,16 +331,38 @@
             <!-- Input Area -->
             <div class="p-4 border-t border-white/10 bg-white/5">
               <div
-                class="flex gap-3 items-center bg-black/20 rounded-full border border-white/10 px-2 py-2 focus-within:border-white/30 transition-colors"
+                v-if="offerMode"
+                class="mb-2 flex items-center justify-between gap-2 px-2 text-xs text-white/60"
               >
-                <UInput
+                <span class="flex items-center gap-1.5">
+                  <Icon
+                    name="lucide:file-search"
+                    class="size-3.5"
+                  />
+                  {{ locale === 'fr' ? 'Mode offre d\'emploi : collez le texte ou le lien' : 'Job offer mode: paste the text or the link' }}
+                </span>
+                <button
+                  class="text-white/50 underline-offset-2 hover:text-white hover:underline"
+                  @click="offerMode = false"
+                >
+                  {{ locale === 'fr' ? 'Annuler' : 'Cancel' }}
+                </button>
+              </div>
+              <div
+                id="chat-composer"
+                class="flex gap-3 items-end bg-black/20 rounded-3xl border border-white/10 px-2 py-2 focus-within:border-white/30 transition-colors"
+              >
+                <UTextarea
                   v-model="inputMessage"
-                  :placeholder="locale === 'fr' ? 'Posez votre question...' : 'Ask your question...'"
+                  :placeholder="composerPlaceholder"
                   class="flex-1 text-md"
                   variant="none"
+                  :rows="1"
+                  autoresize
+                  :maxrows="8"
                   :disabled="isLoading"
-                  :ui="{ base: 'bg-transparent focus:ring-0 p-0 pl-2 placeholder:text-ui-bg' }"
-                  @keypress="handleKeyPress"
+                  :ui="{ base: 'bg-transparent focus:ring-0 px-2 py-1.5 resize-none placeholder:text-ui-bg' }"
+                  @keydown="handleKeyPress"
                 />
                 <UButton
                   v-if="isLoading"
@@ -340,7 +379,7 @@
                 </UButton>
                 <UButton
                   v-else
-                  :disabled="!inputMessage.trim()"
+                  :disabled="!inputMessage.trim() || tooLong"
                   color="neutral"
                   variant="solid"
                   class="rounded-full w-8 h-8 flex items-center justify-center p-0"
@@ -353,6 +392,13 @@
                   />
                 </UButton>
               </div>
+              <p
+                v-if="inputMessage.length > 800"
+                class="mt-1 px-3 text-right text-[11px]"
+                :class="tooLong ? 'text-rose-400' : 'text-white/40'"
+              >
+                {{ inputMessage.length }} / {{ MAX_QUESTION_CHARS }}
+              </p>
             </div>
           </template>
         </Motion>
@@ -415,6 +461,7 @@
                 :placeholder="locale === 'fr' ? 'Demandez-moi quelque chose...' : 'Ask me anything...'"
                 class="flex-1 bg-transparent border-none outline-none text-white text-md placeholder-inverted/40 h-10 group-hover:placeholder-white"
                 @keydown.enter="sendMessage(inputMessage)"
+                @paste="onBottomPaste"
               >
 
               <button
@@ -441,6 +488,8 @@
 </template>
 
 <script setup lang="ts">
+import { MAX_QUESTION_CHARS } from '~/composables/useAiChat'
+
 const {
   messages,
   inputMessage,
@@ -459,6 +508,8 @@ const {
   askPresetQuestion,
   toggleChat,
   setMode,
+  offerMode,
+  startOfferMode,
   handleKeyPress,
   cleanup,
 } = useAiChat()
@@ -467,6 +518,19 @@ const { locale } = useI18n()
 const bottomInput = ref<HTMLInputElement | null>(null)
 
 const { run: replay } = useSitePilot()
+
+const tooLong = computed(() => inputMessage.value.length > MAX_QUESTION_CHARS)
+const composerPlaceholder = computed(() => offerMode.value
+  ? (locale.value === 'fr' ? 'Collez l\'offre d\'emploi ou son lien…' : 'Paste the job offer or its link…')
+  : (locale.value === 'fr' ? 'Posez votre question...' : 'Ask your question...'))
+
+// A long paste in the one-line bottom bar is most likely a job offer: open the chat with it.
+const onBottomPaste = (event: ClipboardEvent) => {
+  const text = event.clipboardData?.getData('text') ?? ''
+  if (text.length < 300 && !text.includes('\n')) return
+  event.preventDefault()
+  startOfferMode(text)
+}
 const avatarVariant = useAppConfig().petitOni.variant
 
 const windowClass = computed(() => {
@@ -515,6 +579,8 @@ const toolLabels: Record<string, [string, string]> = {
   show_contact_options: ['Préparation des contacts…', 'Getting contact options…'],
   show_on_site: ['Navigation sur le site…', 'Navigating the site…'],
   open_project_on_site: ['Ouverture du projet sur le site…', 'Opening the project on the site…'],
+  web_fetch: ['Lecture de l\'offre…', 'Reading the offer…'],
+  show_job_match: ['Analyse de l\'adéquation…', 'Checking the fit…'],
 }
 const toolLabel = (name: string) => {
   const [fr, en] = toolLabels[name] ?? ['Recherche…', 'Searching…']

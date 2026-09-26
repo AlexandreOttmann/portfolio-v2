@@ -46,6 +46,26 @@ export type ChatSiteAction
   = | { kind: 'navigate', page: PilotPage, target?: string, label: string }
     | { kind: 'open-project', stem: string, label: string }
 
+export type JobMatchVerdict = 'excellent' | 'good' | 'partial' | 'low'
+
+/** Alex's profile checked against a job offer, requirement by requirement. */
+export interface ChatJobMatch {
+  role: string
+  company?: string
+  /** Computed from the requirement statuses, not chosen by the model. */
+  verdict: JobMatchVerdict
+  met: number
+  partial: number
+  total: number
+  summary: string
+  requirements: Array<{
+    requirement: string
+    status: 'met' | 'partial' | 'gap'
+    evidence: string
+    projects: Array<{ slug: string, name: string, stem: string }>
+  }>
+}
+
 /** Payloads rendered as components instead of text. */
 export type ChatUiPayload
   = | { type: 'projects', projects: ChatProjectCard[] }
@@ -53,6 +73,7 @@ export type ChatUiPayload
     | { type: 'contact' }
     | { type: 'site-action', action: ChatSiteAction }
     | { type: 'suggestions', questions: string[] }
+    | { type: 'job-match', match: ChatJobMatch }
 
 export type ChatStreamEvent
   = | { type: 'text', delta: string }

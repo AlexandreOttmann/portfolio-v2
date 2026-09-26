@@ -23,6 +23,8 @@ export interface PresetQuestion {
 // Shared state
 const messages = ref<Message[]>([])
 const inputMessage = ref('')
+// "Evaluate a job offer" mode: the next message is framed as an offer to match.
+const offerMode = ref(false)
 const isLoading = ref(false)
 const showBubble = ref(false)
 const hasInteracted = ref(false)
@@ -69,6 +71,8 @@ let scrollTimer: ReturnType<typeof setTimeout> | null = null
 // Maximum messages kept in memory and sent as history
 const MAX_MESSAGES = 50
 const MAX_HISTORY = 20
+// Matches the server limit (a pasted job offer fits).
+export const MAX_QUESTION_CHARS = 5800
 
 const newId = () => (typeof crypto !== 'undefined' && 'randomUUID' in crypto) ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`
 
@@ -80,6 +84,7 @@ function toHistoryText(message: Message): string {
     if (part.ui?.type === 'article') return `[Displayed article card: ${part.ui.article.title}]`
     if (part.ui?.type === 'contact') return '[Displayed contact card]'
     if (part.ui?.type === 'site-action') return `[On the site: ${part.ui.action.label}]`
+    if (part.ui?.type === 'job-match') return `[Displayed job match card: ${part.ui.match.role} — ${part.ui.match.verdict}, ${part.ui.match.met}/${part.ui.match.total} requirements met]`
     return ''
   }).filter(Boolean).join('\n').trim()
 }
@@ -192,7 +197,7 @@ export const useAiChat = () => {
         else {
           assistant.parts.push({ type: 'tool', id: event.id, name: event.name, state: event.ok ? 'done' : 'error', ui: event.ui })
         }
-        if (event.ui?.type === 'projects' || event.ui?.type === 'article' || event.ui?.type === 'contact') react('showing', 1600)
+        if (event.ui?.type === 'projects' || event.ui?.type === 'article' || event.ui?.type === 'contact' || event.ui?.type === 'job-match') react('showing', 1600)
         if (!event.ok) react('error', 1500)
         // The assistant drives the site: navigate, open a project, highlight.
         if (event.ui?.type === 'site-action') {
@@ -209,8 +214,14 @@ export const useAiChat = () => {
   }
 
   const sendMessage = async (message: string) => {
-    const content = message.trim()
+    let content = message.trim()
     if (!content || isLoading.value) return
+    if (content.length > MAX_QUESTION_CHARS) return
+
+    if (offerMode.value) {
+      content = `${t('Voici une offre d\'emploi : le profil d\'Alex correspond-il ?', 'Here is a job offer: is Alex a good fit?')}\n\n${content}`
+      offerMode.value = false
+    }
 
     // Open chat if closed (a docked or minimized chat stays where it is)
     if (mode.value === 'closed') {
@@ -306,6 +317,14 @@ export const useAiChat = () => {
     sendMessage(question)
   }
 
+  /** Ask the visitor to paste a job offer (text or link) in the composer. */
+  const startOfferMode = (prefill = '') => {
+    offerMode.value = true
+    if (prefill) inputMessage.value = prefill
+    if (mode.value === 'closed') setMode('open')
+    nextTick(() => document.querySelector<HTMLTextAreaElement>('#chat-composer textarea')?.focus())
+  }
+
   const setMode = (next: ChatMode) => {
     handleInteraction()
     mode.value = next
@@ -315,7 +334,8 @@ export const useAiChat = () => {
   const toggleChat = () => setMode(mode.value === 'closed' ? 'open' : 'closed')
 
   const handleKeyPress = (event: KeyboardEvent) => {
-    if (event.key === 'Enter' && !event.shiftKey) {
+    // Enter sends, Shift+Enter adds a line (and never while composing an accented character).
+    if (event.key === 'Enter' && !event.shiftKey && !event.isComposing) {
       event.preventDefault()
       sendMessage(inputMessage.value)
     }
@@ -352,6 +372,8 @@ export const useAiChat = () => {
     sendMessage,
     stop,
     askPresetQuestion,
+    offerMode,
+    startOfferMode,
     toggleChat,
     setMode,
     handleKeyPress,
