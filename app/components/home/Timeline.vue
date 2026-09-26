@@ -8,7 +8,7 @@
                     <div v-if="props.events.length > 1" class="absolute left-0 h-px bg-neutral-700"
                         :style="{ top: timelineHorizontalLineTop, width: `calc(${timelineInnerWidth}px - ${props.itemWidth}px)` }" />
                     <div v-if="props.events.length > 0 && displayAsActiveIndex >= 0"
-                        class="absolute left-0 h-px bg-primary transition-all duration-400 ease-out"
+                        class="absolute left-0 h-px spectrum-bg transition-all duration-400 ease-out"
                         :style="{ top: timelineHorizontalLineTop, width: `${displayAsActiveIndex * props.itemWidth}px` }" />
                 </template>
 
@@ -18,17 +18,17 @@
                     tabindex="0" @mouseenter="handlePointerEnterItem(index)" @mouseleave="handlePointerLeaveItem()"
                     @focusin="handlePointerEnterItem(index)" @focusout="handlePointerLeaveItem()">
                     <span v-if="shouldDisplayYear(event.year, index)"
-                        class="absolute top-0 left-0 font-serif italic -translate-x-1/2 text-xs font-medium text-muted whitespace-nowrap">
+                        class="absolute top-0 left-0 font-mono -translate-x-1/2 text-[11px] text-muted whitespace-nowrap">
                         {{ event.year }}
                     </span>
 
                     <div class="absolute left-0 transition-all duration-300 ease-out transform origin-top"
                         :style="{ top: timelineHorizontalLineTop }" :class="[
                             displayAsActiveIndex === index
-                                ? `${props.mainTickHeightActive} ${props.tickThicknessActive} rainbow-gradient`
+                                ? `${props.mainTickHeightActive} ${props.tickThicknessActive} spectrum-bg`
                                 : `${props.mainTickHeightBase} group-hover:${props.mainTickHeightHover}`,
                             index <= displayAsActiveIndex
-                                ? `${props.tickThicknessActive} rainbow-gradient`
+                                ? `${props.tickThicknessActive} spectrum-bg`
                                 : `${props.tickThicknessBase} bg-accented`
                         ]" />
 
@@ -36,7 +36,7 @@
                         <div v-for="tickNumber in numberOfIntermediateTicks" :key="`subtick-${index}-${tickNumber}`"
                             class="absolute transition-colors duration-300 ease-out" :class="[
                                 props.intermediateTickHeight,
-                                index < displayAsActiveIndex ? `${props.tickThicknessActive} rainbow-gradient` : `${props.tickThicknessBase} bg-accented`
+                                index < displayAsActiveIndex ? `${props.tickThicknessActive} spectrum-bg` : `${props.tickThicknessBase} bg-accented`
                             ]"
                             :style="{ top: timelineHorizontalLineTop, left: `${(tickNumber * props.itemWidth / (numberOfIntermediateTicks + 1))}px` }" />
                     </div>
@@ -160,29 +160,5 @@ onMounted(() => {
 <style scoped>
 .group:focus {
     outline: none;
-}
-
-/* Rainbow gradient animation */
-@keyframes rainbow-slide {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    100% {
-        background-position: 200% 50%;
-    }
-}
-
-.rainbow-gradient {
-    background: linear-gradient(90deg,
-            #ff0080,
-            #ff8c00,
-            #40e0d0,
-            #4169e1,
-            #9370db,
-            #ff1493,
-            #ff0080);
-    background-size: 200% 100%;
-    animation: rainbow-slide 3s linear infinite;
 }
 </style>

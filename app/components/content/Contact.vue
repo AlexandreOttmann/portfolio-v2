@@ -56,7 +56,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         mdc-unwrap="p"
       />
     </h1>
-    <h2 class="text-center text-lg font-extralight italic text-muted">
+    <h2 class="text-center text-base font-light text-muted">
       <slot
         name="subtitle"
         mdc-unwrap="p"
@@ -64,9 +64,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     </h2>
     <Divider class="mb-8 mt-2" />
     <div class="flex flex-col sm:items-center sm:justify-between">
-      <Plasma
-        :radius="24"
-        :lean="false"
+      <GlassSurface
+        variant="pane"
         class="w-full max-w-[40rem] p-6 sm:p-8"
       >
         <UForm
@@ -155,7 +154,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             </UTooltip>
           </div>
         </UForm>
-      </Plasma>
+      </GlassSurface>
       <Divider class="my-10" />
       <div class="flex w-full flex-col items-center justify-between gap-4 sm:flex-row">
         <div class="flex flex-col gap-3">

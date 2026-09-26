@@ -39,7 +39,7 @@
             isMobile ? 'cursor-default' : 'cursor-pointer',
           ]" data-canvas-item @click="onItemClick" @mouseenter="hoveredItemIndex = index"
           @mouseleave="hoveredItemIndex = null">
-          <Plasma class="absolute inset-0 p-1.5" :radius="16" :lean="0" :fuse="false">
+          <GlassSurface class="absolute inset-0 p-1.5" interactive>
             <div class="relative size-full overflow-hidden rounded-xl">
               <video v-if="item && isVideo(item.image)" :src="item.image" class="size-full object-cover" autoplay loop
                 muted playsinline :draggable="false" />
@@ -86,7 +86,7 @@
                 </Motion>
               </Motion>
             </div>
-          </Plasma>
+          </GlassSurface>
         </Motion>
       </template>
     </Canvas>

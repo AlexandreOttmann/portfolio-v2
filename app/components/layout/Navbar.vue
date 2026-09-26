@@ -35,11 +35,16 @@ const localePath = useLocalePath()
               : 'text-muted',
           ]"
           :to="localePath(item.to)"
-          class="flex items-center rounded-[10px] border border-transparent px-4 py-1 transition-all duration-300 ease-in-out hover:border-white/5 hover:bg-zinc-900/50 hover:backdrop-blur-3xl sm:px-6 hover:text-white"
+          class="relative flex items-center rounded-[10px] border border-transparent px-4 py-1 transition-all duration-300 ease-in-out hover:border-white/5 hover:bg-zinc-900/50 hover:backdrop-blur-3xl sm:px-6 hover:text-white"
         >
           <UIcon
             :name="item.icon"
             class="size-7 font-light sm:size-6"
+          />
+          <span
+            v-if="localePath(item.to) === route.path"
+            aria-hidden="true"
+            class="spectrum-bg absolute bottom-0.5 left-1/2 h-0.5 w-5 -translate-x-1/2 rounded-full"
           />
         </NuxtLink>
       </nav>

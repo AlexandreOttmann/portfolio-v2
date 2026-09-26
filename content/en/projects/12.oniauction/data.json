@@ -6,6 +6,7 @@
   "featured": true,
   "home": true,
   "content": "Scalable real-time bidding infrastructure using FastAPI, Kafka, Redis, and PostgreSQL deployed on Kubernetes.",
+  "summary": "Distributed real-time auctions, deployed on Kubernetes.",
   "stack": [
     "FastAPI",
     "Kafka",

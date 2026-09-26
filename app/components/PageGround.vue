@@ -22,6 +22,8 @@ defineExpose({ canvas })
 
 const img = useImage()
 const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
+// Phones get one still frame: a 30fps full-screen redraw is battery for little gain there.
+const touch = useMediaQuery('(pointer: coarse)')
 
 // ── Geometry of the old MarqueeBg ────────────────────────────────────────────
 // Each column was a fixed 460px wide UMarquee (vertical, 4 copies, 4rem gap, 40s loop),
@@ -125,8 +127,7 @@ function buildDots() {
   strip.height = 1
   const s = strip.getContext('2d')!
   const lg = s.createLinearGradient(0, 0, strip.width, 0)
-  const stops = ['#ff0080', '#ff8c00', '#40e0d0', '#4169e1', '#9370db', '#ff1493', '#ff0080']
-  stops.forEach((c, i) => lg.addColorStop(i / (stops.length - 1), c))
+  SPECTRUM.forEach((c, i) => lg.addColorStop(i / (SPECTRUM.length - 1), c))
   s.fillStyle = lg
   s.fillRect(0, 0, strip.width, 1)
   rainbow = s.createPattern(strip, 'repeat')
@@ -266,7 +267,7 @@ function syncLoop() {
   cancelAnimationFrame(raf)
   raf = 0
   const moving = props.marquee || !props.isDark
-  if (moving && !reducedMotion.value) raf = requestAnimationFrame(loop)
+  if (moving && !reducedMotion.value && !touch.value) raf = requestAnimationFrame(loop)
   else draw(performance.now())
 }
 
@@ -280,7 +281,7 @@ onBeforeUnmount(() => cancelAnimationFrame(raf))
 useResizeObserver(canvas, useDebounceFn(resize, 100))
 
 watch(() => props.marquee, syncLoop)
-watch(reducedMotion, syncLoop)
+watch([reducedMotion, touch], syncLoop)
 // The CSS variables flip with the `dark` class, which lands after the color-mode value.
 watch(() => props.isDark, () => nextTick(() => {
   resize()

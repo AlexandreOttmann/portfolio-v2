@@ -222,3 +222,66 @@ html:not(.dark) .liquid-glass {
 .liquid-glass:not(.fixed, .absolute, .sticky) {
   position: relative;
 }
+
+/* ── Spectrum: the portfolio's one accent (see SPECTRUM in utils/plasma.ts) ────
+   Reserved for what is live - active, hovered, current. One gradient, one speed. */
+:root {
+  --spectrum: linear-gradient(90deg, #ff0080, #ff8c00, #40e0d0, #4169e1, #9370db, #ff1493, #ff0080);
+  --spectrum-speed: 6s;
+}
+
+@keyframes spectrum-slide {
+  from { background-position: 0% 50%; }
+  to { background-position: 200% 50%; }
+}
+
+.spectrum-bg,
+.spectrum-text,
+.spectrum-ring {
+  background-image: var(--spectrum);
+  background-size: 200% 100%;
+  animation: spectrum-slide var(--spectrum-speed) linear infinite;
+}
+
+.spectrum-text {
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* a ring of spectrum around a positioned parent: <span class="spectrum-ring absolute inset-0 rounded-[inherit]" /> */
+.spectrum-ring {
+  padding: var(--ring, 1.5px);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spectrum-bg,
+  .spectrum-text,
+  .spectrum-ring {
+    animation: none;
+  }
+}
+
+/* ── Mono tags: dates, releases, stack ─────────────────────────────────────── */
+.tag-mono {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.72rem;
+  line-height: 1;
+  padding: 0.3rem 0.5rem;
+  border-radius: 6px;
+  color: var(--ui-text-muted);
+  background: rgb(255 255 255 / 0.05);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+}
+
+html:not(.dark) .tag-mono {
+  background: rgb(0 0 0 / 0.04);
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.08);
+}

@@ -247,7 +247,7 @@
           <!-- Input Bar -->
           <div class="relative group ">
             <div
-              class="absolute inset-0 rounded-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 rainbow-border"
+              class="spectrum-ring absolute -inset-px rounded-[15px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
             />
             <LiquidGlass
               :radius="14"
@@ -432,31 +432,5 @@ watch(messages, () => {
   border-radius: 12px;
   margin: 0.75em 0;
   display: block;
-}
-
-/* Rainbow border animation */
-@keyframes rainbow-rotate {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  100% {
-    background-position: 200% 50%;
-  }
-}
-
-.rainbow-border {
-  /* a travelling white highlight rather than a rainbow: quieter, same motion */
-  background: linear-gradient(90deg,
-      rgb(255 255 255 / 0.05),
-      rgb(255 255 255 / 0.45),
-      rgb(255 255 255 / 0.05),
-      rgb(255 255 255 / 0.45),
-      rgb(255 255 255 / 0.05));
-  background-size: 200% 100%;
-  animation: rainbow-rotate 3s linear infinite;
-  padding: 2px;
-
-  mask-composite: exclude;
 }
 </style>

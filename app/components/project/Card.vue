@@ -11,7 +11,7 @@ const img = useImage()
 </script>
 
 <template>
-  <Plasma :aria-label="project.name + ' project details'" :radius="14" :lean="false" :fuse="false"
+  <GlassSurface :aria-label="project.name + ' project details'" interactive
     class="group relative flex cursor-pointer flex-col gap-1 p-1.5" @click="$emit('select', project)">
     <div class="flex gap-1 px-1 py-[2px]">
       <div
@@ -47,7 +47,7 @@ const img = useImage()
         </div>
       </LiquidGlass>
     </div>
-  </Plasma>
+  </GlassSurface>
 </template>
 <style scoped>
 .text-shadow {

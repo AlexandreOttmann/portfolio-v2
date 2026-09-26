@@ -8,36 +8,32 @@
       <Motion v-for="(project, index) in projectItems" :key="project.link" :initial="{ opacity: 0, y: 20 }"
         :animate="{ opacity: 1, y: 0 }" :transition="{ duration: 0.5, delay: index * 0.1 }" class="group relative"
         :style="{ animationDelay: `${index * 1}s` }">
-        <!-- Rainbow border effect on hover -->
+        <!-- spectrum halo on hover, echoing the rim -->
         <div
-          class="absolute -inset-0.5 rounded-xl bg-white/20 opacity-0 blur transition duration-500 group-hover:opacity-40" />
+          class="spectrum-bg absolute -inset-1 rounded-2xl opacity-0 blur-lg transition duration-500 group-hover:opacity-25" />
 
         <!-- Motion animates the wrapper: the glass element's transform belongs to plasma-ui -->
-        <Plasma :as="NuxtLink" :to="project.link" target="_blank" :radius="12" :lean="false"
-          :elevation="hovered === index ? 0.6 : undefined"
-          class="relative flex h-full flex-col justify-between p-6" @mouseenter="hovered = index" @mouseleave="hovered = null">
+        <GlassSurface :as="NuxtLink" :to="project.link" target="_blank" interactive
+          class="relative flex h-full flex-col justify-between gap-4 p-6">
           <div class="flex flex-col gap-3">
             <div class="flex items-center justify-between">
-              <h4
-                class="font-newsreader text-lg font-medium text-black dark:text-white transition-colors duration-300 group-hover:text-white">
+              <h4 class="font-newsreader text-lg font-medium text-highlighted">
                 {{ project.label }}
               </h4>
               <UIcon name="i-heroicons-arrow-up-right-20-solid"
-                class="h-5 w-5 text-black/50 dark:text-white/50 transition-transform duration-300 group-hover:rotate-45 group-hover:text-white" />
+                class="size-5 text-muted transition-transform duration-300 group-hover:rotate-45" />
             </div>
 
-            <p class="text-sm text-muted line-clamp-3 transition-colors duration-300 group-hover:text-white/90">
-              {{ project.content }}
+            <p class="text-sm text-muted">
+              {{ project.summary }}
             </p>
           </div>
 
-          <div class="mt-4 flex items-center gap-2">
-            <span
-              class="text-xs font-mono text-black/40 dark:text-white/40 bg-black/5 dark:bg-white/5 px-2 py-1 rounded transition-colors duration-300 group-hover:text-white/60 group-hover:bg-white/10">
-              {{ project.release }}
-            </span>
+          <div class="flex flex-wrap items-center gap-1.5">
+            <span class="tag-mono">{{ project.release }}</span>
+            <span v-for="tech in project.stack" :key="tech" class="tag-mono">{{ tech }}</span>
           </div>
-        </Plasma>
+        </GlassSurface>
       </Motion>
     </div>
 
@@ -55,7 +51,6 @@ import type { Collections } from '@nuxt/content'
 
 const { locale } = useI18n()
 const NuxtLink = resolveComponent('NuxtLink')
-const hovered = ref<number | null>(null)
 
 const { data: projects } = await useAsyncData('projects_home_' + locale.value, async () => {
   const collection = ('projects_' + locale.value) as keyof Collections
@@ -69,7 +64,9 @@ const projectItems = computed(() => {
       label: project.name,
       link: project.link,
       release: project.release,
-      content: project.content,
+      // one short, complete sentence; the longer description is for the works page
+      summary: project.summary ?? project.content,
+      stack: project.stack?.slice(0, 3) ?? [],
     }
   }) || []
 })

@@ -1,20 +1,18 @@
 <script setup lang="ts">
 /**
- * A UCard rendered as a plasma surface: same slots (header, default, footer), the card's
- * own background and ring dropped so the glass shows. Attributes such as `radius` or
- * `frost` fall through to <Plasma>.
+ * A UCard rendered as a GlassSurface: same slots (header, default, footer), the card's
+ * own background and ring dropped so the glass shows, the rim lit by the spectrum on
+ * hover. Attributes such as `variant` or `frost` fall through.
  */
 defineOptions({ inheritAttrs: false })
 
-const Plasma = resolveComponent('Plasma')
+const GlassSurface = resolveComponent('GlassSurface')
 </script>
 
 <template>
   <UCard
-    :as="Plasma"
-    :radius="16"
-    :lean="0"
-    :fuse="false"
+    :as="GlassSurface"
+    interactive
     v-bind="$attrs"
     :ui="{ root: 'bg-transparent ring-0 rounded-2xl divide-white/10' }"
   >

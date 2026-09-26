@@ -1,15 +1,15 @@
 <script setup lang="ts">
 const appConfig = useAppConfig().global
-const Plasma = resolveComponent('Plasma')
+const GlassSurface = resolveComponent('GlassSurface')
 
 const currentAvailability = computed(() => {
   return [
     {
       status: 'available',
       message: 'Available for hire',
-      color: 'rainbow-gradient',
-      bgColor: 'rainbow-gradient',
-      textColor: 'rainbow-gradient-text',
+      color: 'spectrum-bg',
+      bgColor: 'spectrum-bg',
+      textColor: 'spectrum-text',
     },
     {
       status: 'unavailable',
@@ -31,10 +31,10 @@ defineProps({
 
 <template>
   <component
-    :is="background ? Plasma : 'div'"
-    class="flex items-center rounded-full"
+    :is="background ? GlassSurface : 'div'"
+    class="flex items-center"
     :class="{ 'px-5 py-2': background }"
-    v-bind="background ? { radius: 8, lean: false } : {}"
+    v-bind="background ? { variant: 'control' } : {}"
   >
     <span class="relative flex size-3">
       <span class="absolute inline-flex size-full animate-ping rounded-full opacity-75"
@@ -46,45 +46,3 @@ defineProps({
     </span>
   </component>
 </template>
-
-<style scoped>
-/* Rainbow gradient animation */
-@keyframes rainbow-slide {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  100% {
-    background-position: 200% 50%;
-  }
-}
-
-.rainbow-gradient {
-  background: linear-gradient(90deg,
-      #ff0080,
-      #ff8c00,
-      #40e0d0,
-      #4169e1,
-      #9370db,
-      #ff1493,
-      #ff0080);
-  background-size: 200% 100%;
-  animation: rainbow-slide 3s linear infinite;
-}
-
-.rainbow-gradient-text {
-  background: linear-gradient(90deg,
-      #ff0080,
-      #ff8c00,
-      #40e0d0,
-      #4169e1,
-      #9370db,
-      #ff1493,
-      #ff0080);
-  background-size: 200% 100%;
-  animation: rainbow-slide 3s linear infinite;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-</style>

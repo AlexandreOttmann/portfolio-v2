@@ -23,7 +23,8 @@ export default defineAppConfig({
   },
   ui: {
     colors: {
-      primary: 'emerald',
+      // Neutral: the one accent is the spectrum (main.css), not a UI color.
+      primary: 'neutral',
       neutral: 'neutral',
     },
     notifications: {

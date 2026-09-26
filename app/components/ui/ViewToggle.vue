@@ -116,34 +116,16 @@ function setCanvasView() {
     left: 4px;
     bottom: 4px;
     width: calc(50% - 4px);
-    background: linear-gradient(90deg,
-            #ff0080,
-            #ff8c00,
-            #40e0d0,
-            #4169e1,
-            #9370db,
-            #ff1493,
-            #ff0080);
+    background-image: var(--spectrum);
     background-size: 200% 100%;
     opacity: 0.5;
-    animation: rainbow-slide 3s linear infinite;
+    animation: spectrum-slide var(--spectrum-speed) linear infinite;
     border-radius: 8px;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow:
         0 4px 6px -1px rgba(255, 0, 128, 0.3),
         0 2px 4px -1px rgba(255, 140, 0, 0.2);
     z-index: 1;
-}
-
-/* Rainbow gradient animation */
-@keyframes rainbow-slide {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    100% {
-        background-position: 200% 50%;
-    }
 }
 
 /* Responsive adjustments */

@@ -22,14 +22,12 @@ defineProps({
 </script>
 
 <template>
-  <Plasma
+  <GlassSurface
     :as="NuxtLink"
     :to="path"
     :aria-label="title"
-    :radius="16"
-    :lean="false"
-    :fuse="false"
-    class="flex cursor-pointer flex-col gap-2 p-2 pb-3"
+    interactive
+    class="flex flex-col gap-2 p-2 pb-3"
   >
     <div class="overflow-hidden rounded-xl">
       <NuxtImg
@@ -44,7 +42,7 @@ defineProps({
       <h3 class="text-lg font-semibold">
         {{ title }}
       </h3>
-      <span class="text-xs text-muted">{{ date }}</span>
+      <span class="tag-mono mt-1 self-start">{{ date }}</span>
     </div>
-  </Plasma>
+  </GlassSurface>
 </template>
