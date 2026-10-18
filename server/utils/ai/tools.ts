@@ -50,7 +50,7 @@ function jobMatchVerdict(met: number, partial: number, total: number): JobMatchV
 const tools = [
   defineTool({
     name: 'get_project_details',
-    description: 'Get the full story of one of Alex\'s projects (context, role, what he built, stack, link) and show its card to the visitor. Use it whenever the visitor asks about a specific project or experience (Odysway, Crown, Quanted Square, EONI, Oni Auction…).',
+    description: 'Get the full story of one of Alex\'s projects (context, role, what he built, stack, link) and show its card to the visitor. Use it whenever the visitor asks about a specific project or experience (Eledone, Odysway, Crown, Quanted Square, EONI, Oni Auction…).',
     input: z.object({
       slug: z.string().describe('Project slug, as listed in the "Projects" section of your context (e.g. "odysway").'),
     }),

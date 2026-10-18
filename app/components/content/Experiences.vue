@@ -17,7 +17,7 @@ defineProps({
     <div class="flex flex-col gap-4">
       <div
         v-for="experience in experiences"
-        :key="experience.title"
+        :key="`${experience.company}-${experience.date}`"
       >
         <h4 class="font-semibold">
           {{ experience.title }}

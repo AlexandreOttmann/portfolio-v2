@@ -4,7 +4,7 @@
   "link": "https://github.com/AlexandreOttmann/EONI",
   "release": "2026",
   "featured": true,
-  "home": true,
+  "home": false,
   "content": "RAG & AI storefront platform. Full RAG pipeline (crawling, pgvector HNSW, reranking) with real-time LLM streaming.",
   "stack": [
     "Nuxt 4",

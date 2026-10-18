@@ -1,6 +1,12 @@
 title: Works Canvas
 description: A canvas featuring all my works that i'm proud of.
 items:
+  - title: Eledone
+    link: https://eledone-ai.com/
+    image: /projects/eledone.svg
+    width: 480
+    height: 270
+    src: en/projects/0.eledone/data
   - title: Quanted Square
     link: https://shelve.cloud
     image: /projects/quantedsquare.png
@@ -43,12 +49,6 @@ items:
     width: 480
     height: 270
     src: en/projects/7.koober/data
-  - title: What's next?
-    link: https://alexottmann.com
-    image: /sunset-yuzu.webp
-    width: 480
-    height: 270
-    src: en/projects/8.alexottmann/data
   - title: Ecovoit'
     link:  'https://github.com/AlexandreOttmann/2309-wns-jaune-eco-voit'
     image: /projects/ecovoit.png

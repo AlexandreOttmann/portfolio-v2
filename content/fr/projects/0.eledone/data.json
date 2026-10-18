@@ -1,0 +1,17 @@
+{
+  "name": "Eledone",
+  "image": "/projects/eledone.svg",
+  "link": "https://eledone-ai.com/",
+  "release": "Mai 2026",
+  "featured": true,
+  "home": true,
+  "content": "AI Platform Engineer : des agents IA qui automatisent la saisie de commandes B2B (OCR + LLM → matching ERP), sur Python/Django et GCP.",
+  "stack": [
+    "Python",
+    "Django",
+    "GCP",
+    "LLM",
+    "OCR",
+    "Pydantic"
+  ]
+}

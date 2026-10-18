@@ -1,6 +1,6 @@
 # ALEXANDRE OTTMANN
-## Développeur Fullstack IA appliquée avec temps réel et scalabilité
-**RAG, LLM, Kafka, Redis, Vue & Node**
+## Développeur Fullstack IA Appliquée
+**Realtime, Automation & Scalabilité**
 
 ---
 
@@ -16,11 +16,11 @@
 ---
 
 ### RÉSUMÉ
-J’ai conçu et livré des systèmes critiques (enchères temps réel, dashboards data, migrations complexes), améliorant performance, conversion et maintenabilité en production. Actuellement en transition vers l’Applied AI / GenAI, avec la création de projets production-grade combinant RAG, streaming LLM et architectures distribuées (Kafka, Redis, vector search).
+Je conçois et livre des systèmes critiques (enchères temps réel, dashboards data, migrations complexes), améliorant performance, conversion et maintenabilité en production. Je me concentre depuis 1 an sur l’automatisation agentique des process internes d’entreprises pour alléger les charges des collaborateurs.
 
 ---
 
-### PROJETS CLÉS ACTUELS (AI / SCALABILITÉ)
+### PROJETS PERSONNELS ACTUELS (AI / SCALABILITÉ)
 
 #### **EONI — Plateforme RAG & AI storefront**
 - **Pipeline RAG complet :** crawling → embeddings → vector search (pgvector HNSW) → reranking → génération LLM.
@@ -38,6 +38,14 @@ J’ai conçu et livré des systèmes critiques (enchères temps réel, dashboar
 
 ### EXPÉRIENCES PROFESSIONNELLES
 
+#### **AI Platform Engineer** — **Eledone** (B2B Automations)
+*Mai 2026 - Présent*
+- Automatisation de saisie de commandes B2B : OCR + LLM → matching ERP, en production chez des dizaines de clients B2B.
+- GCP + Python/Django.
+- Mise en place d’une Software Factory autonome, gestion autonome agentique du suivi client.
+- Refonte de process, onboarding, évolution de l’implémentation client, automatisation des tâches internes, documentation et mémoire interne.
+- Refonte modulaire du backend, gain de performance et réduction des durées de déploiement chez les clients.
+
 #### **Développeur Fullstack** — **Odysway** (Refonte, migration & évolution)
 *2023 - Présent*
 - Migration complète d’un backoffice de Nuxt 2 → Nuxt 3 (performance & maintenabilité).
@@ -45,9 +53,10 @@ J’ai conçu et livré des systèmes critiques (enchères temps réel, dashboar
 - Développement de dashboards data (D3) pour la prise de décision métier.
 - Implémentation d'un nouveau backoffice de gestion catalogue et stocks custom.
 - Mise en place d’un tracking complet (GTM, Algolia) pour la conversion et la découvrabilité.
+- Déploiement d’Ulysse : outil propriétaire et customisé avec automatisations qui remplace entièrement CMS/CRM.
 
 #### **Développeur Fullstack & Analyste** — **Quanted Square** (Cabinet tech)
-*2023 - 2026*
+*2023 - Janv 2026*
 - Réalisation d’audits techniques (due diligence) pour startups et fonds d’investissement (scalabilité, sécurité, dette technique).
 - Contribution aux choix d’architecture (frontend, backend, APIs) sur plusieurs produits.
 - Mise en production continue via GitHub CI/CD sur différentes applications.
@@ -56,7 +65,7 @@ J’ai conçu et livré des systèmes critiques (enchères temps réel, dashboar
 *2023 - 2024*
 - Conception et livraison d’une plateforme d’enchères temps réel (Vue / Node / Supabase).
 - Implémentation d’updates temps réel (WebSockets) → réduction de la latence perçue.
-- Développement d’un moteur de négociation temps réel pour équipes procurement industrielles.
+- Développement d’un moteur de négociation temps réel pour équipes procurement industrielles, intégrant des fonctionnalités d’IA pour automatiser des processus historiquement gérés via Excel, emails et réunions.
 - Collaboration produit et design → amélioration UX et lisibilité.
 
 #### **Responsable Audiovisuel** — **Koober & Freelance**
@@ -69,12 +78,12 @@ J’ai conçu et livré des systèmes critiques (enchères temps réel, dashboar
 
 ### STACK TECHNIQUE
 
-- **Frontend :** Vue.js (Nuxt 2/3/4), React (Next), TypeScript, Tailwind, Vuetify
-- **Backend :** Node.js (Express, Fastify), APIs REST, Python (FastAPI)
+- **Frontend :** Vue.js (Nuxt 2/3/4), React (Next), TypeScript, Tailwind, ShadCN, Vuetify, GTM
+- **Backend :** Node.js (Express, Fastify), APIs REST, Python (Django, FastAPI)
 - **Data :** PostgreSQL, MongoDB, Supabase, Redis, GraphQL, MySQL
-- **Infra :** Docker, Kubernetes, AWS, Heroku, Github CI/CD
+- **Infra :** Docker, Kubernetes, AWS, Heroku, Github CI/CD, GCP (Google Cloud Platform)
 - **Realtime :** WebSockets, Kafka
-- **AI :** RAG, vector search (pgvector), LLM APIs (OpenAI, Anthropic)
+- **AI :** RAG, vector search (pgvector), LLM APIs (OpenAI, Anthropic), Pydantic, PyTorch
 - **Qualité :** Tests (Playwright, pytest, Cypress), validation (Zod)
 - **Tools/CMS :** SanityCMS, ButterCMS, ActiveCampaign, Stripe, Figma, Strapi, Algolia, D3
 

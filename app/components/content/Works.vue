@@ -21,9 +21,9 @@
         <UiViewToggle v-model="isCanvasView" />
       </div>
     </template>
-    <ProjectCanvasContainer v-if="isCanvasView" data-pilot="projects" :projects="projects.filter((p) => !p.home || ['EONI', 'Oni Auction'].includes(p.name))" @select="openProject" />
+    <ProjectCanvasContainer v-if="isCanvasView" data-pilot="projects" :projects="worksProjects" @select="openProject" />
     <div v-else data-pilot="projects" class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-      <Motion v-for="project, index in projects.filter((p) => !p.home || ['EONI', 'Oni Auction'].includes(p.name))" :key="project.name" as="div" :initial="{
+      <Motion v-for="project, index in worksProjects" :key="project.name" as="div" :initial="{
         scale: 1.1,
         opacity: 0,
         filter: 'blur(20px)',
@@ -55,6 +55,7 @@ const { data: projects } = await useAsyncData('projects_home_' + locale.value, a
   watch: [locale],
 })
 console.log('projects', projects.value)
+const worksProjects = computed(() => (projects.value ?? []).filter(p => !p.homeOnly))
 const selectedProject = ref<Collections['projects_en'] | Collections['projects_fr'] | null>(null)
 const isDialogOpen = ref(false)
 

@@ -28,6 +28,8 @@ const commonProjectSchema = z.object({
   date: z.string().nonempty(),
   featured: z.boolean().optional(),
   home: z.boolean().optional(),
+  // Shown on the home page only (current work), not on the works page.
+  homeOnly: z.boolean().optional(),
   content: z.string().optional(),
   stack: z.array(z.string().nonempty()).optional(),
 })

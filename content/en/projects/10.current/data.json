@@ -1,10 +1,15 @@
 {
-    "name": "Odysway",
-    "image": "/projects/quantedsquare.png",
-    "link": "https://github.com/QuantedSquare/odysway-v2",
-    "release": "Today",
-    "featured": true,
-    "home": true,
-    "content": "Indexing and setting up Algolia for Odysway, GA4 / Meta tag plan",
-    "stack": []
+  "name": "Odysway",
+  "image": "/projects/odysway.png",
+  "link": "https://www.odysway.com/",
+  "release": "Ongoing",
+  "featured": true,
+  "home": true,
+  "homeOnly": true,
+  "content": "Freelance mission on the side: rolling out Ulysse, an in-house tool with automations that fully replaces the CMS and the CRM.",
+  "stack": [
+    "Nuxt",
+    "Supabase",
+    "Automations"
+  ]
 }

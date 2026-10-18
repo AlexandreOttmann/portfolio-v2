@@ -73,9 +73,15 @@
     },
     {
         "year": 2025,
-        "icon": "i-material-symbols:brightness-5-rounded",
-        "title": "Today x Us",
-        "description": "The QuantedSquare adventure is ending, and I'm heading towards new horizons, looking for a new career opportunity!",
+        "icon": "i-material-symbols:school-outline-rounded",
+        "title": "Heading into applied AI",
+        "description": "The QuantedSquare adventure ends in late 2025. I use the transition to dive into applied AI (RAG, agents, Python) with EONI and Oni Auction, while keeping Odysway as a freelance client."
+    },
+    {
+        "year": 2026,
+        "icon": "i-game-icons:octopus",
+        "title": "Eledone",
+        "description": "Since May 2026, I'm an AI Platform Engineer at Eledone, a startup automating B2B order entry with AI agents. On the menu: OCR + LLM, a Software Factory and Python on GCP.",
         "active": true
     }
 ]
