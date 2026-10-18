@@ -11,8 +11,6 @@ export type ChatMode = 'closed' | 'open' | 'docked' | 'minimized'
 // Shared across pages: the chat lives in app.vue, outside <NuxtPage>.
 const mode = ref<ChatMode>('closed')
 const status = ref('')
-/** Project the works page should open (Nuxt Content stem). */
-const pendingProjectStem = ref<string | null>(null)
 /** Section the assistant is showing: the Petit-Oni companion flies next to it. */
 const pilotTarget = shallowRef<HTMLElement | null>(null)
 let pilotTimer: ReturnType<typeof setTimeout> | undefined
@@ -71,16 +69,15 @@ export function useSitePilot() {
       return
     }
 
-    const worksPath = localePath(PILOT_PAGES.works.path)
-    pendingProjectStem.value = action.stem
-    if (route.path !== worksPath) await navigateTo(worksPath)
+    const projectPath = localePath(`${PILOT_PAGES.works.path}/${action.slug}`)
+    if (route.path !== projectPath) await navigateTo(projectPath)
+    else window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return {
     mode,
     status,
     isDesktop,
-    pendingProjectStem,
     pilotTarget,
     isDocked: computed(() => mode.value === 'docked' && isDesktop.value),
     run,

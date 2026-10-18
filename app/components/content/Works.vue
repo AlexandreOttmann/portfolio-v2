@@ -21,7 +21,7 @@
         <UiViewToggle v-model="isCanvasView" />
       </div>
     </template>
-    <ProjectCanvasContainer v-if="isCanvasView" data-pilot="projects" :projects="worksProjects" @select="openProject" />
+    <ProjectCanvasContainer v-if="isCanvasView" data-pilot="projects" :projects="worksProjects" @select="openFromCanvas" />
     <div v-else data-pilot="projects" class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <Motion v-for="project, index in worksProjects" :key="project.name" as="div" :initial="{
         scale: 1.1,
@@ -35,15 +35,15 @@
           duration: 0.6,
           delay: (0.1) * (index),
         }">
-        <ProjectCard :project="project" @select="openProject" />
+        <ProjectCard :project="project" :slug="slugOf(project)" />
       </Motion>
     </div>
-    <ProjectDialog v-if="selectedProject" v-model:open="isDialogOpen" :project="selectedProject" />
   </section>
 </template>
 
 <script setup lang="ts">
 import type { Collections } from '@nuxt/content'
+import { projectSlugs } from '~~/shared/utils/projects'
 
 const { locale } = useI18n()
 
@@ -56,32 +56,23 @@ const { data: projects } = await useAsyncData('projects_home_' + locale.value, a
 })
 console.log('projects', projects.value)
 const worksProjects = computed(() => (projects.value ?? []).filter(p => !p.homeOnly))
-const selectedProject = ref<Collections['projects_en'] | Collections['projects_fr'] | null>(null)
-const isDialogOpen = ref(false)
 
-function openProject(project: any) {
-  selectedProject.value = project
-  isDialogOpen.value = true
+// Project pages live at /works/<slug> (same slugs as the assistant's tools).
+const slugByStem = computed(() => {
+  const list = projects.value ?? []
+  const slugs = projectSlugs(list.map(p => p.stem))
+  return new Map(list.map((p, k) => [p.stem, slugs[k]!]))
+})
+const slugOf = (project: { stem: string }) => slugByStem.value.get(project.stem) ?? ''
+
+// Canvas item clicked: a project morphs into its page, an article opens its own page.
+const { openProject } = useProjectTransition()
+function openFromCanvas(item: { src: string }, element?: HTMLElement | null) {
+  if (item.src.includes('/articles/')) return navigateTo(`/${item.src}`)
+  const slug = slugByStem.value.get(item.src)
+  if (slug) openProject(slug, element)
 }
 
-// The assistant can ask to open a project (from any page, it navigates here first).
-const { pendingProjectStem } = useSitePilot()
-watch([pendingProjectStem, projects], ([stem, list]) => {
-  if (!stem || !list) return
-  const project = list.find(p => p.stem === stem)
-  pendingProjectStem.value = null
-  if (!project) return
-  // Re-open cleanly when another project is already shown.
-  isDialogOpen.value = false
-  nextTick(() => openProject(project))
-}, { immediate: true })
-
-// The other visitors (and Petit-Oni) see which project is open.
-const { focus } = usePresence()
-watch([selectedProject, isDialogOpen], ([project, open]) => {
-  focus.value = project && open ? `project:${projectSlug(project.stem)}` : null
-})
-onBeforeUnmount(() => (focus.value = null))
-
-const isCanvasView = ref(true)
+// Kept across visits of the page, so coming back from a project lands on the same view.
+const isCanvasView = useState('works-canvas-view', () => true)
 </script>

@@ -44,7 +44,8 @@ export type PilotPage = keyof typeof PILOT_PAGES
 /** Something the assistant does on the site, executed by the chat widget. */
 export type ChatSiteAction
   = | { kind: 'navigate', page: PilotPage, target?: string, label: string }
-    | { kind: 'open-project', stem: string, label: string }
+    /** Opens the project's page (/works/<slug>). */
+    | { kind: 'open-project', slug: string, label: string }
 
 export type JobMatchVerdict = 'excellent' | 'good' | 'partial' | 'low'
 

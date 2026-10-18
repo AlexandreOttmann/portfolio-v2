@@ -131,7 +131,7 @@ const tools = [
   }),
   defineTool({
     name: 'open_project_on_site',
-    description: 'Open a project\'s detail panel on the website (image, stack, full write-up) while the chat moves to the side. Use it when the visitor wants to see a project, or after describing a project when showing it adds value.',
+    description: 'Open a project\'s page on the website (image, stack, full write-up) while the chat moves to the side. Use it when the visitor wants to see a project, or after describing a project when showing it adds value.',
     input: z.object({
       slug: z.string().describe('Project slug from the "Projects" section of your context.'),
     }),
@@ -139,8 +139,8 @@ const tools = [
       const project = (await listProjects(event, locale)).find(p => p.slug === slug.toLowerCase())
       if (!project) return { content: `No project with slug "${slug}".`, isError: true }
       return {
-        content: `The ${project.name} panel is now open on the site. Refer to it briefly instead of repeating its content.`,
-        ui: { type: 'site-action', action: { kind: 'open-project', stem: project.stem, label: (locale === 'fr' ? 'Ouverture de ' : 'Opening ') + project.name } },
+        content: `The ${project.name} page is now open on the site. Refer to it briefly instead of repeating its content.`,
+        ui: { type: 'site-action', action: { kind: 'open-project', slug: project.slug, label: (locale === 'fr' ? 'Ouverture de ' : 'Opening ') + project.name } },
       }
     },
   }),

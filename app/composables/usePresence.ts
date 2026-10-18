@@ -1,4 +1,5 @@
 import type { Collections } from '@nuxt/content'
+import { projectSlugs } from '~~/shared/utils/projects'
 
 /**
  * Live presence: who else is on the portfolio right now. Each visitor joins
@@ -63,8 +64,6 @@ const myColor = Math.floor(Math.random() * GHOST_COLORS.length)
 const connected = ref(false)
 /** The other visitors. */
 const peers = shallowRef<PeerState[]>([])
-/** What the visitor looks at beyond the page (an open project dialog), set by the page. */
-const focus = ref<string | null>(null)
 /** Latest cursor of each visitor; read every frame by PresenceLayer, so not reactive. */
 const cursors = new Map<string, { page: string, point: PresencePoint, at: number }>()
 const reactionHook = createEventHook<ReactionMessage & { mine?: boolean }>()
@@ -83,16 +82,12 @@ export function pageOf(path: string) {
   return path.split('/').filter(Boolean).slice(1).join('/') || 'home'
 }
 
+/** What the visitor looks at: a project page (/works/<slug>), an article, or just a page. */
 function viewingOf(path: string) {
   const [section, slug] = pageOf(path).split('/')
+  if (section === 'works' && slug) return `project:${slug}`
   if (section === 'articles' && slug) return `article:${slug}`
   return `page:${section}`
-}
-
-export function projectSlug(stem: string) {
-  // "fr/projects/12.oniauction/data" -> "oniauction", like the assistant's slugs.
-  const dir = stem.split('/').at(-2) ?? stem
-  return dir.replace(/^\d+\./, '').toLowerCase()
 }
 
 export function encodePoint(clientX: number, clientY: number): PresencePoint {
@@ -222,10 +217,14 @@ function loadLabels(locale: 'fr' | 'en') {
     labels = Promise.all([
       queryCollection(`projects_${locale}` as keyof Collections).select('name' as never, 'stem' as never).all(),
       queryCollection(`articles_${locale}` as keyof Collections).select('title' as never, 'path' as never).all(),
-    ]).then(([projects, articles]) => new Map([
-      ...(projects as unknown as Array<{ name: string, stem: string }>).map(p => [`project:${projectSlug(p.stem)}`, p.name] as const),
-      ...(articles as unknown as Array<{ title: string, path: string }>).map(a => [`article:${a.path.split('/').pop()}`, a.title] as const),
-    ])).catch(() => new Map())
+    ]).then(([projects, articles]) => {
+      const list = projects as unknown as Array<{ name: string, stem: string }>
+      const slugs = projectSlugs(list.map(p => p.stem))
+      return new Map([
+        ...list.map((p, k) => [`project:${slugs[k]}`, p.name] as const),
+        ...(articles as unknown as Array<{ title: string, path: string }>).map(a => [`article:${a.path.split('/').pop()}`, a.title] as const),
+      ])
+    }).catch(() => new Map())
   }
   return labels
 }
@@ -238,7 +237,7 @@ export function usePresence() {
   const hidden = useLocalStorage('presence-hidden', false)
 
   const page = computed(() => pageOf(route.path))
-  const viewing = computed(() => focus.value ?? viewingOf(route.path))
+  const viewing = computed(() => viewingOf(route.path))
   const count = computed(() => peers.value.length + 1)
   const othersOnPage = computed(() => peers.value.filter(peer => peer.page === page.value).length)
   const lang = () => (locale.value === 'en' ? 'en' : 'fr')
@@ -354,7 +353,6 @@ export function usePresence() {
     page,
     othersOnPage,
     othersViewing,
-    focus,
     hidden,
     cursors,
     notice,

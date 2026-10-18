@@ -28,7 +28,7 @@ const STATUS = {
 
 const openProject = (project: ChatJobMatch['requirements'][number]['projects'][number]) => run({
   kind: 'open-project',
-  stem: project.stem,
+  slug: project.slug,
   label: t('Ouverture de ', 'Opening ') + project.name,
 })
 </script>

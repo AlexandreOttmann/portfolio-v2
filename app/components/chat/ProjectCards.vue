@@ -8,7 +8,7 @@ const { run } = useSitePilot()
 
 const showOnSite = (project: ChatProjectCard) => run({
   kind: 'open-project',
-  stem: project.stem,
+  slug: project.slug,
   label: (locale.value === 'fr' ? 'Ouverture de ' : 'Opening ') + project.name,
 })
 </script>

@@ -1,5 +1,6 @@
 import type { H3Event } from 'h3'
 import { queryCollection, queryCollectionSearchSections } from '@nuxt/content/server'
+import { projectDir, projectSlugs } from '../../../shared/utils/projects'
 
 /**
  * Knowledge base of the portfolio assistant.
@@ -57,14 +58,6 @@ interface RawDoc {
 // Content only changes on deploy, so one build per server instance is enough.
 const profileCache = new Map<Locale, Promise<string>>()
 
-// 'fr/projects/3.odysway/data' → { dir: '3.odysway', name: 'odysway' }
-const PROJECT_DIR_RE = /projects\/((?:(\d+)\.)?([^/]+))\/(?:data|content)$/
-
-function projectDir(stem = '') {
-  const match = PROJECT_DIR_RE.exec(stem)
-  return { dir: match?.[1] ?? stem, order: match?.[2], name: (match?.[3] ?? stem).toLowerCase() }
-}
-
 function lastSegment(stemOrPath = ''): string {
   return stemOrPath.split('/').filter(Boolean).pop() ?? stemOrPath
 }
@@ -98,14 +91,9 @@ async function first(event: H3Event, collection: string): Promise<RawDoc | null>
 
 async function listProjectsWithDir(event: H3Event, locale: Locale) {
   const docs = await all(event, `projects_${locale}`)
-  const seen = new Set<string>()
-  return docs.map((doc) => {
-    const { dir, order, name } = projectDir(doc.stem)
-    // Two folders can share a name (e.g. 5.portfolio and 8.portfolio): keep slugs unique.
-    const slug = seen.has(name) && order ? `${name}-${order}` : name
-    seen.add(slug)
-    return { dir, project: toProjectSummary(doc, slug) }
-  })
+  // Same slugs as the /works/<slug> pages.
+  const slugs = projectSlugs(docs.map(doc => doc.stem ?? ''))
+  return docs.map((doc, k) => ({ dir: projectDir(doc.stem).dir, project: toProjectSummary(doc, slugs[k]!) }))
 }
 
 function toProjectSummary(doc: RawDoc, slug: string): ProjectSummary {
