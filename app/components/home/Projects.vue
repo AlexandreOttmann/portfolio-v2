@@ -12,7 +12,7 @@
         <div
           class="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-[#ff0080] via-[#ff8c00] to-[#40e0d0] opacity-0 blur transition duration-500 group-hover:opacity-45" />
 
-        <NuxtLink :to="project.link" target="_blank"
+        <NuxtLink :to="project.link" target="_blank" data-oni-curious
           class="relative flex h-full flex-col justify-between rounded-xl bg-black/5 dark:bg-white/5 p-6 backdrop-blur-xl border border-black/10 dark:border-white/10 transition-all duration-300 hover:bg-black/10 dark:hover:bg-white/10 animate-float"
           :style="{ animationDelay: `${index * 0.5}s` }">
           <div class="flex flex-col gap-3">

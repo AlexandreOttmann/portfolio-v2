@@ -12,7 +12,7 @@
                         :style="{ top: timelineHorizontalLineTop, width: `${displayAsActiveIndex * props.itemWidth}px` }" />
                 </template>
 
-                <div v-for="(event, index) in props.events" :key="`event-node-${index}`"
+                <div v-for="(event, index) in props.events" :key="`event-node-${index}`" data-oni-curious
                     class="absolute top-0 group isolate" :class="[displayAsActiveIndex === index ? 'z-30' : 'z-0']"
                     :style="{ left: `${index * props.itemWidth}px`, width: `${props.itemWidth}px`, height: '100%' }"
                     tabindex="0" @mouseenter="handlePointerEnterItem(index)" @mouseleave="handlePointerLeaveItem()"

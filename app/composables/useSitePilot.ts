@@ -13,6 +13,9 @@ const mode = ref<ChatMode>('closed')
 const status = ref('')
 /** Project the works page should open (Nuxt Content stem). */
 const pendingProjectStem = ref<string | null>(null)
+/** Section the assistant is showing: the Petit-Oni companion flies next to it. */
+const pilotTarget = shallowRef<HTMLElement | null>(null)
+let pilotTimer: ReturnType<typeof setTimeout> | undefined
 
 const HIGHLIGHT_MS = 4000
 
@@ -34,6 +37,9 @@ function highlight(element: HTMLElement) {
   void element.offsetWidth
   element.classList.add('pilot-highlight')
   setTimeout(() => element.classList.remove('pilot-highlight'), HIGHLIGHT_MS)
+  pilotTarget.value = element
+  clearTimeout(pilotTimer)
+  pilotTimer = setTimeout(() => (pilotTarget.value = null), HIGHLIGHT_MS)
 }
 
 export function useSitePilot() {
@@ -75,6 +81,7 @@ export function useSitePilot() {
     status,
     isDesktop,
     pendingProjectStem,
+    pilotTarget,
     isDocked: computed(() => mode.value === 'docked' && isDesktop.value),
     run,
     reveal,

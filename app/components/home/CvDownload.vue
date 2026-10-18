@@ -18,7 +18,10 @@ const downloadCv = () => {
 </script>
 
 <template>
-  <div class="flex flex-col items-center gap-6 w-full max-w-2xl">
+  <div
+    class="flex flex-col items-center gap-6 w-full max-w-2xl"
+    data-oni-curious
+  >
     <div class="flex flex-col items-center gap-2">
       <h3 class="font-newsreader italic text-white-shadow text-3xl">
         {{ locale === 'fr' ? 'Téléchargez mon CV' : 'Download my CV' }}

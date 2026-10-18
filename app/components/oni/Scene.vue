@@ -3,7 +3,7 @@ import { useLoop, useTres } from '@tresjs/core'
 import { PMREMGenerator, type WebGLRenderer } from 'three'
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
 import type { OniState } from '~~/shared/types/chat'
-import { createPetitOni, type OniPalette } from '~/lib/petitOni3d'
+import { createPetitOni, type OniMood, type OniPalette } from '~/lib/petitOni3d'
 
 /**
  * Animates the 3D Petit-Oni from the chat agent's state, mirroring the SVG
@@ -12,12 +12,18 @@ import { createPetitOni, type OniPalette } from '~/lib/petitOni3d'
 const props = defineProps<{
   state: OniState
   palette: OniPalette
-  /** Pointer position relative to the oni, from -1 to 1 on each axis (y up). */
-  pointer: { x: number, y: number }
+  /**
+   * Where it looks, from -1 to 1 on each axis (y up), and `lean`, its horizontal
+   * speed from -1 to 1 (it leans into its moves). Read every frame, so the
+   * companion can mutate it without re-rendering.
+   */
+  pointer: { x: number, y: number, lean?: number }
   hovered: boolean
   /** Off-screen: stop rendering. */
   active: boolean
   reducedMotion: boolean
+  /** Companion moods, only shown while the agent is idle. */
+  mood?: OniMood | null
 }>()
 
 const emit = defineEmits<{ ready: [] }>()
@@ -58,11 +64,14 @@ onBeforeRender(({ delta }) => {
   const t = props.reducedMotion ? 0 : time
   const since = time - stateAt
   const { state, pointer, hovered } = props
+  const lean = pointer.lean ?? 0
+  const mood = state === 'idle' ? props.mood : null
 
   // Targets: pointer tracking, then the current mood on top.
   let rx = -pointer.y * 0.28
-  const ry = pointer.x * 0.4
-  let rz = Math.sin(t * 1.1) * 0.05
+  let ry = pointer.x * 0.4 + lean * 0.3
+  let rz = Math.sin(t * 1.1) * 0.05 - lean * 0.35
+  let float = Math.sin(t * 1.5) * 0.08
   let eyeX = pointer.x * 0.07 + Math.sin(t * 0.45) * Math.sin(t * 1.3) * 0.05
   let eyeY = pointer.y * 0.05
   let eyeScale = hovered ? 1.1 : 1
@@ -111,6 +120,28 @@ onBeforeRender(({ delta }) => {
       eyeX = -0.22
       hornTilt = -0.1
       break
+    case 'idle':
+      if (mood === 'sleeping') {
+        // Eyes shut, head down, slow breathing.
+        rx = 0.32
+        ry = 0
+        rz = 0.12
+        eyeOpen = 0.08
+        eyeX = 0
+        eyeY = -0.05
+        browY = -0.04
+        glow = 0.55 + 0.25 * Math.sin(t * 1.2)
+        float = Math.sin(t * 0.9) * 0.05
+      }
+      else if (mood === 'curious') {
+        // Leans in, wide eyes, ears up.
+        eyeScale = 1.16
+        browY = 0.12
+        ear = 1.08
+        rx -= 0.08
+        glow = 1.3
+      }
+      break
     case 'error':
       eyeOpen = 0.4
       browY = -0.08
@@ -121,7 +152,7 @@ onBeforeRender(({ delta }) => {
   }
 
   // Random blinks, sometimes twice in a row (not while looking around or half-closed).
-  if (!props.reducedMotion && time > nextBlink && state !== 'thinking' && state !== 'error') {
+  if (!props.reducedMotion && time > nextBlink && state !== 'thinking' && state !== 'error' && mood !== 'sleeping') {
     blinkUntil = time + 0.13
     nextBlink = time + (Math.random() < 0.3 ? 0.3 : 1.2 + Math.random() * 2.3)
   }
@@ -143,7 +174,7 @@ onBeforeRender(({ delta }) => {
   v.orb = damp(v.orb, orb, 5, dt)
   v.wave = damp(v.wave, wave, 6, dt)
 
-  oni.root.position.set(shake, Math.sin(t * 1.5) * 0.08 + hop, 0)
+  oni.root.position.set(shake, float + hop, 0)
   oni.head.rotation.set(v.rx, v.ry, v.rz)
 
   oni.eyes.position.set(v.eyeX, v.eyeY, 0)

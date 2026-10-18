@@ -13,7 +13,7 @@ const isDark = computed(() => color.value === 'dark')
 </script>
 
 <template>
-  <div :aria-label="project.name + ' project details'"
+  <div :aria-label="project.name + ' project details'" data-oni-curious
     class="group relative flex cursor-pointer flex-col gap-1 rounded-lg border bg-muted p-1 shadow-2xl shadow-zinc-950/50 backdrop-blur-sm"
     :class="isDark ? 'border-white/10' : 'border-inverted/10'" @click="$emit('select', project)">
     <div class="flex gap-1 px-1 py-[2px]">

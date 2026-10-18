@@ -9,25 +9,10 @@
         class="rainbow-spotlight absolute -top-8 left-1/2 size-72 -translate-x-1/2 rounded-full blur-[120px] lg:-top-8 lg:size-[32rem] lg:blur-[200px]"
       />
 
-      <!-- profile picture, with Petit-Oni (the AI assistant) floating next to it -->
+      <!-- profile picture, with the perch of Petit-Oni (the AI assistant companion, see OniCompanion) -->
       <div class="relative">
         <HomeProfilePicture />
-        <div class="absolute -top-10 left-[calc(50%+1.5rem)] z-20 size-40 sm:-top-20 sm:left-[calc(50%+3rem)] sm:size-72">
-          <!-- Flat SVG until the 3D one has rendered its first frame (or without WebGL) -->
-          <ChatPetitOniAvatar
-            v-if="!oniReady"
-            variant="color"
-            class="absolute inset-[22%] w-[56%]"
-          />
-          <ClientOnly>
-            <LazyHomeOniCanvas
-              v-if="webgl"
-              class="size-full transition-opacity duration-500"
-              :class="oniReady ? 'opacity-100' : 'opacity-0'"
-              @ready="oniReady = true"
-            />
-          </ClientOnly>
-        </div>
+        <OniPerch class="absolute -top-10 left-[calc(50%+1.5rem)] z-20 size-40 sm:-top-20 sm:left-[calc(50%+3rem)] sm:size-72" />
       </div>
       <Motion
         :initial="{
@@ -119,18 +104,6 @@
 <script setup>
 const color = useColorMode()
 const isDark = computed(() => color.value === 'dark')
-
-// The 3D Petit-Oni needs WebGL 2: otherwise the SVG one stays.
-const webgl = ref(false)
-const oniReady = ref(false)
-onMounted(() => {
-  try {
-    webgl.value = !!document.createElement('canvas').getContext('webgl2')
-  }
-  catch {
-    webgl.value = false
-  }
-})
 </script>
 
 <style scoped>

@@ -23,6 +23,7 @@ defineProps({
   <NuxtLink
     :to="path"
     :aria-label="title"
+    data-oni-curious
     class="flex cursor-pointer flex-col gap-2"
   >
     <div class="overflow-hidden rounded-md border border-white/10 shadow-md shadow-zinc-950/50 transition-colors duration-200 hover:border-white/20">
