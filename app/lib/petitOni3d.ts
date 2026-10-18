@@ -109,6 +109,9 @@ function sparkleGeometry(size: number) {
   return new ExtrudeGeometry(shape, { depth: size * 0.15, bevelEnabled: true, bevelSize: size * 0.08, bevelThickness: size * 0.08, bevelSegments: 2 }).center()
 }
 
+/** What the companion feels on its own, outside of the chat agent's states. */
+export type OniMood = 'sleeping' | 'curious'
+
 export interface OniPalette {
   line: string
   eyes: string

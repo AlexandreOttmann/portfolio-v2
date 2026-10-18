@@ -36,7 +36,7 @@ const variant = ref<'color' | 'mono'>(useAppConfig().petitOni.variant)
           class="w-56"
         />
         <ClientOnly>
-          <LazyHomeOniCanvas
+          <LazyOniCanvas
             :state="current"
             class="size-72"
           />

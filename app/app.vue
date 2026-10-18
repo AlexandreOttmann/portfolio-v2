@@ -6,7 +6,10 @@ const color = useColorMode()
 const isDark = computed(() => color.value === 'dark')
 const { locale } = useI18n()
 const route = useRoute()
-console.log(route)
+
+// Petit-Oni companion (3D, WebGL 2), follows the visitor across pages.
+const webgl = ref(false)
+onMounted(() => (webgl.value = supportsWebGL()))
 </script>
 
 <template>
@@ -24,6 +27,9 @@ console.log(route)
         <NuxtLayout>
           <NuxtPage />
           <HomeAiChat />
+          <ClientOnly>
+            <LazyOniCompanion v-if="webgl" />
+          </ClientOnly>
         </NuxtLayout>
       </UApp>
       <Toaster close-button />
