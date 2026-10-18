@@ -45,6 +45,14 @@ export default defineNuxtConfig({
 
   css: ['~/assets/style/main.css'],
 
+  vue: {
+    compilerOptions: {
+      // TresJS (3D Petit-Oni): <Tres*> tags and <primitive> are Three.js objects, not Vue components.
+      // Same rule as @tresjs/core's templateCompilerOptions.
+      isCustomElement: tag => (/^Tres[A-Z]/.test(tag) && !['TresCanvas', 'TresCanvasContext', 'TresLeches', 'TresScene', 'TresPortal'].includes(tag)) || tag === 'primitive',
+    },
+  },
+
   site: {
     url: 'https://alexottmann.com',
     defaultLocale: 'fr',
