@@ -8,7 +8,7 @@ import { buildSystemPrompt } from '../utils/ai/prompt'
 import { runTool, TERMINAL_TOOLS, toolDefinitions } from '../utils/ai/tools'
 import { enforceRateLimit } from '../utils/rate-limit'
 import { useServerSupabase } from '../utils/supabase'
-import type { ChatStreamEvent } from '../../shared/types/chat'
+import type { ChatRouteReason, ChatStreamEvent, ChatTrace, ChatUsage } from '../../shared/types/chat'
 
 // Everyday questions go to the cheap model; job offers (the analysis a recruiter
 // judges Alex on, and a rare request) go to the stronger one.
@@ -79,9 +79,33 @@ function toApiMessages(messages: Array<{ role: 'user' | 'assistant', content: st
   return result
 }
 
-function estimateCost(model: string, usage: { input: number, cacheWrite: number, cacheRead: number, output: number }) {
+function estimateCost(model: string, usage: ChatUsage) {
   const [input, output] = PRICING[model] ?? [5, 25]
   return (usage.input * input + usage.cacheWrite * input * 1.25 + usage.cacheRead * input * 0.1 + usage.output * output) / 1_000_000
+}
+
+/** Tool inputs and outputs shown in the glass box panel are shortened. */
+const TRACE_PREVIEW_CHARS = 280
+
+function preview(value: unknown) {
+  const text = typeof value === 'string' ? value : JSON.stringify(value) ?? ''
+  return text.length > TRACE_PREVIEW_CHARS ? `${text.slice(0, TRACE_PREVIEW_CHARS)}…` : text
+}
+
+function usageOf(message: Anthropic.Beta.BetaMessage): ChatUsage {
+  return {
+    input: message.usage.input_tokens,
+    cacheWrite: message.usage.cache_creation_input_tokens ?? 0,
+    cacheRead: message.usage.cache_read_input_tokens ?? 0,
+    output: message.usage.output_tokens,
+  }
+}
+
+function addUsage(total: ChatUsage, usage: ChatUsage) {
+  total.input += usage.input
+  total.cacheWrite += usage.cacheWrite
+  total.cacheRead += usage.cacheRead
+  total.output += usage.output
 }
 
 export default defineEventHandler(async (event) => {
@@ -125,6 +149,7 @@ export default defineEventHandler(async (event) => {
   const question = messages.at(-1)!.content
   const hasLink = LINK_RE.test(question)
   const isJobOffer = intent === 'job-offer' || hasLink || question.length >= JOB_OFFER_MIN_CHARS
+  const routeReason: ChatRouteReason = intent === 'job-offer' ? 'job-offer' : hasLink ? 'link' : isJobOffer ? 'long-message' : 'question'
   const model = isJobOffer ? MATCHER_MODEL : CHAT_MODEL
   const tools = hasLink ? [...toolDefinitions, webFetchTool(model)] : toolDefinitions
   // First message that is one of the welcome questions: same answer for everyone.
@@ -146,19 +171,22 @@ export default defineEventHandler(async (event) => {
     async start(controller) {
       const recorded: ChatStreamEvent[] = []
       const send = (payload: ChatStreamEvent) => {
-        if (cacheable) recorded.push(payload)
+        // Traces describe this request only: a cached answer is replayed without them.
+        if (cacheable && payload.type !== 'trace') recorded.push(payload)
         if (!abort.signal.aborted) controller.enqueue(encoder.encode(`${JSON.stringify(payload)}\n`))
       }
+      const trace = (payload: ChatTrace) => send({ type: 'trace', trace: payload })
 
       let answer = ''
       let failed = false
       let cachedReplay = false
-      const usage = { input: 0, cacheWrite: 0, cacheRead: 0, output: 0 }
+      const usage: ChatUsage = { input: 0, cacheWrite: 0, cacheRead: 0, output: 0 }
 
       const suggestFollowUps = async (history: Anthropic.Beta.BetaMessageParam[]) => {
         // Forced tool choice is rejected by these models: they keep the prompt-only behavior.
         if (/^claude-(opus-5-5|fable-5-1)/.test(model)) return
         try {
+          trace({ kind: 'model-start', step: 'follow-ups' })
           const message = await anthropic.beta.messages.create({
             model: model,
             max_tokens: 400,
@@ -169,10 +197,8 @@ export default defineEventHandler(async (event) => {
             thinking: { type: 'disabled' },
             messages: [...history, { role: 'user', content: 'Suggest follow-up questions for the visitor.' }],
           }, { signal: abort.signal })
-          usage.input += message.usage.input_tokens
-          usage.cacheWrite += message.usage.cache_creation_input_tokens ?? 0
-          usage.cacheRead += message.usage.cache_read_input_tokens ?? 0
-          usage.output += message.usage.output_tokens
+          addUsage(usage, usageOf(message))
+          trace({ kind: 'model-end', step: 'follow-ups', usage: usageOf(message), stopReason: message.stop_reason })
           const toolUse = message.content.find((block): block is Anthropic.Beta.BetaToolUseBlock => block.type === 'tool_use')
           if (!toolUse) return
           const output = await runTool(toolUse.name, toolUse.input, { event, locale })
@@ -203,6 +229,7 @@ export default defineEventHandler(async (event) => {
           ? answerCacheKey(model, locale, question, createHash('sha256').update(systemText).update(JSON.stringify(tools)).digest('hex'))
           : null
         const cached = cacheKey ? getCachedAnswer(cacheKey) : null
+        trace({ kind: 'route', model, reason: routeReason, cached: !!cached })
         if (cached) {
           cachedReplay = true
           answer = cached.filter(e => e.type === 'text').map(e => e.delta).join('')
@@ -216,6 +243,7 @@ export default defineEventHandler(async (event) => {
         let finalMessage: Anthropic.Beta.BetaMessage | null = null
 
         for (let step = 0; step < MAX_STEPS; step++) {
+          trace({ kind: 'model-start', step: step + 1 })
           const response = anthropic.beta.messages.stream({
             model: model,
             max_tokens: MAX_TOKENS,
@@ -246,10 +274,8 @@ export default defineEventHandler(async (event) => {
           })
 
           const message = await response.finalMessage()
-          usage.input += message.usage.input_tokens
-          usage.cacheWrite += message.usage.cache_creation_input_tokens ?? 0
-          usage.cacheRead += message.usage.cache_read_input_tokens ?? 0
-          usage.output += message.usage.output_tokens
+          addUsage(usage, usageOf(message))
+          trace({ kind: 'model-end', step: step + 1, usage: usageOf(message), stopReason: message.stop_reason })
 
           if (message.stop_reason === 'refusal') {
             send({ type: 'text', delta: locale === 'fr' ? '\n\nJe ne peux pas répondre à cette demande.' : '\n\nI can\'t help with that request.' })
@@ -273,6 +299,7 @@ export default defineEventHandler(async (event) => {
             send({ type: 'tool-start', id: toolUse.id, name: toolUse.name })
             const output = await runTool(toolUse.name, toolUse.input, { event, locale })
             send({ type: 'tool-end', id: toolUse.id, name: toolUse.name, ok: !output.isError, ui: output.ui })
+            trace({ kind: 'tool-io', id: toolUse.id, input: preview(toolUse.input), output: preview(output.content) })
             if (output.ui?.type === 'suggestions') suggested = true
             return {
               type: 'tool_result' as const,
@@ -308,6 +335,7 @@ export default defineEventHandler(async (event) => {
         send({ type: 'tool-end', id: 'contact', name: 'show_contact_options', ok: true, ui: { type: 'contact' } })
       }
       finally {
+        trace({ kind: 'usage', usage, cost: cachedReplay ? 0 : estimateCost(model, usage) })
         send({ type: 'done' })
         // Log before closing: serverless functions may be frozen once the response ends.
         if (!failed || answer) await logInteraction(model, question, answer, usage, cachedReplay)
@@ -327,7 +355,7 @@ export default defineEventHandler(async (event) => {
   return sendStream(event, stream)
 })
 
-async function logInteraction(model: string, prompt: string, answer: string, usage: { input: number, cacheWrite: number, cacheRead: number, output: number }, cachedReplay = false) {
+async function logInteraction(model: string, prompt: string, answer: string, usage: ChatUsage, cachedReplay = false) {
   const promptTokens = usage.input + usage.cacheWrite + usage.cacheRead
   const estimatedCost = estimateCost(model, usage)
   console.log(cachedReplay

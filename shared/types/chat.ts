@@ -79,8 +79,35 @@ export type ChatStreamEvent
   = | { type: 'text', delta: string }
     | { type: 'tool-start', id: string, name: string }
     | { type: 'tool-end', id: string, name: string, ok: boolean, ui?: ChatUiPayload }
+    | { type: 'trace', trace: ChatTrace }
     | { type: 'error', message: string }
     | { type: 'done' }
+
+/** Tokens of one model call, or of a whole answer. */
+export interface ChatUsage {
+  input: number
+  cacheWrite: number
+  cacheRead: number
+  output: number
+}
+
+/** Why the server picked its model: job offers go to the stronger one. */
+export type ChatRouteReason = 'question' | 'job-offer' | 'link' | 'long-message'
+
+/** A model round trip: numbered steps of the answer, or the extra follow-up suggestions call. */
+export type ChatModelStep = number | 'follow-ups'
+
+/**
+ * Behind the scenes of an answer, for the chat's "glass box" panel. Never
+ * cached with the answer: a replayed answer only gets a fresh route and usage.
+ */
+export type ChatTrace
+  = | { kind: 'route', model: string, reason: ChatRouteReason, cached: boolean }
+    | { kind: 'model-start', step: ChatModelStep }
+    | { kind: 'model-end', step: ChatModelStep, usage: ChatUsage, stopReason: string | null }
+    /** What a tool received and returned, shortened. */
+    | { kind: 'tool-io', id: string, input: string, output: string }
+    | { kind: 'usage', usage: ChatUsage, cost: number }
 
 /** What the Petit-Oni avatar is doing, derived from the stream and the input. */
 export type OniState = 'idle' | 'listening' | 'thinking' | 'speaking' | 'showing' | 'navigating' | 'error'
