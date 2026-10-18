@@ -16,6 +16,8 @@ date: 02/12/2025
 image: /sunset-yuzu.webp
 readingTime: "3"
 ---
+> **Update — May 2026:** this transition period ended when I joined **Eledone** as an AI Platform Engineer. The article below tells the story of the break that led there.
+
 
 # Looking for a New Opportunity: A Year to Grow
 

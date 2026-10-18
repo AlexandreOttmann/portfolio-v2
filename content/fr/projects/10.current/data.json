@@ -1,10 +1,15 @@
 {
   "name": "Odysway",
-  "image": "/projects/quantedsquare.png",
-  "link": "https://github.com/QuantedSquare/odysway-v2",
-  "release": "09/12/2025",
+  "image": "/projects/odysway.png",
+  "link": "https://www.odysway.com/",
+  "release": "En cours",
   "featured": true,
   "home": true,
-  "content": "Indexage et mise en place d'Algolia pour Odysway, plan de taggage GA4 / Meta",
-  "stack": []
+  "homeOnly": true,
+  "content": "Mission freelance en parallèle : déploiement d'Ulysse, un outil propriétaire avec automatisations qui remplace entièrement le CMS et le CRM.",
+  "stack": [
+    "Nuxt",
+    "Supabase",
+    "Automatisations"
+  ]
 }

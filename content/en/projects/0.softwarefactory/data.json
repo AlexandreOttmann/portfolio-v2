@@ -1,0 +1,14 @@
+{
+  "name": "Software Factory",
+  "image": "/projects/eledone.svg",
+  "link": "https://eledone-ai.com/",
+  "release": "Ongoing",
+  "home": true,
+  "homeOnly": true,
+  "content": "At Eledone: building an autonomous Software Factory, with AI agents handling customer follow-up, internal tasks and documentation.",
+  "stack": [
+    "AI agents",
+    "LLM",
+    "Python"
+  ]
+}

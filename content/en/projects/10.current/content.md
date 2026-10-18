@@ -1,7 +1,7 @@
-## Looking for New Opportunities
+## Odysway — ongoing freelance mission
 
-I am currently seeking a new **full-time position** and using this transition period to strengthen and expand my technical skill set. I am actively training in **Cyber Security** (via TryHackMe) and improving my **Python** proficiency to prepare for opportunities in **Data Science** and further broaden my technical capabilities.
+Alongside my role at **Eledone**, I keep working as a **freelancer** for the travel agency **Odysway**, with whom I have been collaborating since 2023.
 
-In parallel, I continue to work on several **freelance projects**, including ongoing collaborations with the travel agency **Odysway**, with whom I’ve been working for over two years.
+The current project: **Ulysse**, a custom in-house tool with its own automations that **fully replaces the agency's CMS and CRM**. The team now manages its catalogue, its content and its customer relationships from a single tool built for its business.
 
-My goal is to quickly join a company where I can **thrive**, contribute to meaningful projects, and keep growing professionally.
+The full story of my work for Odysway (Nuxt migrations, payments, data, tracking) is in the **Odysway** project.

@@ -114,6 +114,23 @@ export default defineNuxtConfig({
 
   hooks: {
     'nitro:config': (config) => {
+      // Nitro's dev storage watches the whole rootDir, and its default
+      // `**/node_modules/**` ignore never matches once a path has a dot segment
+      // (`.claude/worktrees/*`, `.pnpm`): `nuxt dev` then watches every file in
+      // node_modules and dies with EMFILE. Ignore these folders by absolute path.
+      const rootDir = config.rootDir!
+      config.devStorage ||= {}
+      config.devStorage.root = {
+        driver: 'fs',
+        readOnly: true,
+        base: rootDir,
+        ignore: [
+          '**/node_modules/**',
+          '**/.git/**',
+          ...['node_modules', '.git', '.claude', '.nuxt', '.output', '.data'].map(dir => `${rootDir}/${dir}`),
+        ],
+      }
+
       if (process.env.NUXT_PRIVATE_RESEND_API_KEY) {
         config.handlers?.push({
           method: 'post',

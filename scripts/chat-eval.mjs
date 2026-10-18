@@ -42,6 +42,7 @@ Requirements: 7+ years of professional backend development in Java; deep experti
 // One question per project, in both languages: the right card must be shown
 // and the answer must contain facts from that project's write-up.
 const projectCases = [
+  { cards: ['eledone'], fr: 'Que fait Alex chez Eledone ?', en: 'What does Alex do at Eledone?', mentions: [['commande', 'order'], ['erp'], ['python', 'django', 'gcp', 'google cloud']] },
   { cards: ['quantedsquare'], fr: 'Qu\'a fait Alex chez Quanted Square ?', en: 'What did Alex do at Quanted Square?', mentions: [['due diligence', 'audit'], ['crown', 'odysway']] },
   { cards: ['odysway', 'current'], fr: 'Parle-moi du projet Odysway', en: 'Tell me about the Odysway project', mentions: [['voyage', 'travel'], ['nuxt'], ['stripe', 'supabase', 'sanity']] },
   { cards: ['crown'], fr: 'C\'est quoi Crown ?', en: 'What is Crown?', mentions: [['enchere', 'auction'], ['temps reel', 'real-time', 'realtime'], ['nuxt', 'supabase', 'vuetify']] },
@@ -64,13 +65,14 @@ const cases = [
   { group: 'profile', locale: 'fr', question: 'Montre-moi ses projets IA', tools: ['list_projects', 'get_project_details'], cards: ['eoni'] },
   { group: 'profile', locale: 'en', question: 'Has he worked with Kafka?', tools: ['search_portfolio', 'get_project_details', 'list_projects'], mentions: [['oni auction', 'kafka']] },
   { group: 'profile', locale: 'fr', question: 'Quel est son parcours scolaire ?', mentions: [['wild code school'], ['o\'clock', 'oclock'], ['abbey road']] },
-  { group: 'profile', locale: 'fr', question: 'Quand a-t-il quitté Quanted Square ?', mentions: [['decembre 2025', 'fin 2025']] },
+  { group: 'profile', locale: 'fr', question: 'Quand a-t-il quitté Quanted Square ?', mentions: [['decembre 2025', 'fin 2025', 'janvier 2026', 'debut 2026']] },
   { group: 'profile', locale: 'en', question: 'Where is he based and can he work remotely?', mentions: [['paris'], ['remote', 'distance']] },
   { group: 'contact', locale: 'fr', question: 'Combien coûte un projet avec lui ?', tools: ['show_contact_options'], cards: ['contact'], mentions: [['2000', '2 000', '2k']] },
   { group: 'contact', locale: 'en', question: 'What are his rates?', tools: ['show_contact_options'], cards: ['contact'], mentions: [['450']] },
   { group: 'contact', locale: 'en', question: 'Is he available for a freelance mission?', tools: ['show_contact_options'], cards: ['contact'] },
   { group: 'profile', locale: 'en', question: 'What is his dog called?', mentions: [['yuzu']] },
-  { group: 'profile', locale: 'fr', question: 'Sur quoi travaille-t-il en ce moment ?', mentions: [['eoni', 'oni auction', 'realtime ai ops', 'odysway', 'tryhackme', 'python']] },
+  { group: 'profile', locale: 'fr', question: 'Sur quoi travaille-t-il en ce moment ?', mentions: [['eledone'], ['software factory', 'commande', 'odysway', 'ulysse']] },
+  { group: 'profile', locale: 'en', question: 'Where does Alex work now? Is he looking for a job?', mentions: [['eledone']], forbidden: ['he is looking for a new job', 'currently looking for a full-time'] },
   { group: 'contact', locale: 'fr', question: 'Je voudrais l\'embaucher, comment le contacter ?', tools: ['show_contact_options'], cards: ['contact'] },
   { group: 'contact', locale: 'en', question: 'Can I download his CV?', tools: ['show_contact_options'], cards: ['contact'] },
   { group: 'pilot', locale: 'fr', question: 'Montre-moi le projet Crown sur le site', actions: ['open-project:crown'] },

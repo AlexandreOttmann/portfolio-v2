@@ -26,6 +26,21 @@
       "icon": "custom:supabase"
     },
     {
+      "name": "Python",
+      "link": "https://www.python.org/",
+      "icon": "devicon:python"
+    },
+    {
+      "name": "Django",
+      "link": "https://www.djangoproject.com/",
+      "icon": "simple-icons:django"
+    },
+    {
+      "name": "Google Cloud",
+      "link": "https://cloud.google.com/",
+      "icon": "devicon:googlecloud"
+    },
+    {
       "name": "Docker",
       "link": "https://docker.com/",
       "icon": "custom:docker"

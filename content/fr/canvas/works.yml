@@ -1,6 +1,12 @@
 title: Works Canvas
 description: Un canvas présentant toutes mes réalisations.
 items:
+  - title: Eledone
+    link: https://eledone-ai.com/
+    image: /projects/eledone.svg
+    width: 480
+    height: 270
+    src: fr/projects/0.eledone/data
   - title: Quanted Square
     link: https://shelve.cloud
     image: /projects/quantedsquare.png
@@ -43,12 +49,6 @@ items:
     width: 480
     height: 270
     src: fr/projects/7.koober/data
-  - title: Prochaine étape ?
-    link: https://alexottmann.com
-    image: /sunset-yuzu.webp
-    width: 480
-    height: 270
-    src: fr/articles/current
   - title: Portfolio v1
     link: https://portfolio-template.nuxt.dev/
     image: /projects/portfolio-v1.png

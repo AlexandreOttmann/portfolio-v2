@@ -1,7 +1,7 @@
-# À la recherche de nouveaux challenges
+## Odysway — mission freelance en cours
 
-Actuellement en recherche d’une nouvelle opportunité **à temps plein**, je mets à profit cette période pour approfondir mes compétences et élargir mon expertise technique. Je me forme notamment en **cyber­sécurité** (via TryHackMe) et je monte en compétences en **Python**, dans l’objectif de me préparer au marché de la **Data Science** et de renforcer ma polyvalence technique.
+En parallèle de mon poste chez **Eledone**, je continue à travailler en **freelance** pour l'agence de voyage **Odysway**, avec qui je collabore depuis 2023.
 
-En parallèle, je poursuis plusieurs **missions freelance**, notamment pour l’agence de voyage **Odysway**, avec qui je collabore depuis plus de deux ans.
+Le chantier du moment : **Ulysse**, un outil propriétaire et sur mesure, avec ses propres automatisations, qui **remplace entièrement le CMS et le CRM** de l'agence. L'équipe gère désormais son catalogue, ses contenus et sa relation client depuis un seul outil pensé pour son métier.
 
-Mon objectif est de rejoindre rapidement une entreprise dans laquelle je pourrai **m’épanouir**, contribuer à des projets stimulants, et continuer à évoluer en tant que développeur.
+L'historique complet de mon travail pour Odysway (migrations Nuxt, paiements, data, tracking) est dans la fiche **Odysway**.

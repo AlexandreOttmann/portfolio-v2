@@ -3,19 +3,19 @@
         "year": 2010,
         "icon": "i-heroicons-paint-brush",
         "title": "Des débuts artistiques",
-        "description": "Je commence mes premières études par le conservatoire nationale en clarinette, bien loin de m'imaginer les futurs rebondissements"
+        "description": "Je commence mes premières études par le conservatoire national en clarinette, bien loin de m'imaginer les futurs rebondissements"
     },
     {
         "year": 2014,
         "icon": "i-heroicons-code-bracket-square",
         "title": "L'étincelle du code",
-        "description": "Mon premier contact avec le monde du développement, un an au sein de l'école d'ingénieursEXIA CESI"
+        "description": "Mon premier contact avec le monde du développement, un an au sein de l'école d'ingénieurs EXIA CESI"
     },
     {
         "year": 2016,
         "icon": "i-material-symbols:looks-one-outline",
-        "title": "Turning Point #1, ingénieurie du son",
-        "description": "Changement de carrière, bachelor en ingénieurie du son à l'Abbey Road Institue Paris/Londres"
+        "title": "Turning Point #1, ingénierie du son",
+        "description": "Changement de carrière, bachelor en ingénierie du son à l'Abbey Road Institute Paris/Londres"
     },
     {
         "year": 2018,
@@ -27,7 +27,7 @@
         "year": 2019,
         "icon": "i-material-symbols:book-2-outline-rounded",
         "title": "Ma première startup",
-        "description": "3 ans à Koober, une app mobile comme reponsable audiovisuel à gérer la création et une équipe de voix off"
+        "description": "3 ans à Koober, une app mobile comme responsable audiovisuel à gérer la création et une équipe de voix off"
     },
     {
         "year": 2022,
@@ -39,7 +39,7 @@
         "year": 2023,
         "icon": "i-material-symbols:japanese-flag-rounded",
         "title": "Japon",
-        "description": "Mon diplôme empauché, mon alternance pour l'année suivante trouvée, je n'ai pas longtemps réfléchi avant de décider à partir un mois au Japon"
+        "description": "Mon diplôme en poche, mon alternance pour l'année suivante trouvée, je n'ai pas longtemps réfléchi avant de décider à partir un mois au Japon"
     },
     {
         "year": 2023,
@@ -57,7 +57,7 @@
         "year": 2024,
         "icon": "i-material-symbols:crop-square-outline",
         "title": "QuantedSquare",
-        "description": "Je ne serai jamais assez reconnaissant envers QuantedSquare, Julien et Fabien pour m'avoir embauché après 1 an d'alternanceet fait confiance tout en me permettant d'apprendre à un rythme effréné ! 🫶"
+        "description": "Je ne serai jamais assez reconnaissant envers QuantedSquare, Julien et Fabien pour m'avoir embauché après 1 an d'alternance et fait confiance tout en me permettant d'apprendre à un rythme effréné ! 🫶"
     },
     {
         "year": 2025,
@@ -73,9 +73,15 @@
     },
     {
         "year": 2025,
-        "icon": "i-material-symbols:brightness-5-rounded",
-        "title": "Aujourd'hui x Nous",
-        "description": "L'aventure QuantedSquare se termine, et je me dirige vers de nouveaux horizons, à la recherche d'une nouvelle opportunité de carrière !",
+        "icon": "i-material-symbols:school-outline-rounded",
+        "title": "Cap sur l'IA appliquée",
+        "description": "L'aventure QuantedSquare se termine fin 2025. J'en profite pour plonger dans l'IA appliquée (RAG, agents, Python) avec EONI et Oni Auction, tout en continuant Odysway en freelance."
+    },
+    {
+        "year": 2026,
+        "icon": "i-game-icons:octopus",
+        "title": "Eledone",
+        "description": "Depuis mai 2026, je suis AI Platform Engineer chez Eledone, une startup qui automatise la saisie de commandes B2B avec des agents IA. Au programme : OCR + LLM, Software Factory et Python sur GCP.",
         "active": true
     }
 ]

@@ -26,3 +26,10 @@ Here is a non-exhaustive overview of my work on the Odysway travel agency platfo
 
 - Deep optimization of **SEO**, accessibility, and runtime performance.
 - Development of a **custom travel booking system** tailored to Odysway’s business processes.
+
+### 🗂️ Back-office, data & Ulysse
+
+- New custom **catalogue and stock management back-office**, making the team's day-to-day easier.
+- **Data dashboards (D3)** to support business decisions.
+- Full tracking (**GTM**) and **Algolia** search to improve conversion and trip discoverability.
+- **Ulysse** (ongoing, freelance): an in-house tool with its own automations that fully replaces the CMS and the CRM.
