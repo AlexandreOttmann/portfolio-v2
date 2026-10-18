@@ -1,10 +1,29 @@
 import type { ChatMode } from './useSitePilot'
-import type { ChatRequestBody, ChatStreamEvent, ChatUiPayload, OniState } from '~~/shared/types/chat'
+import type { ChatModelStep, ChatRequestBody, ChatRouteReason, ChatStreamEvent, ChatTrace, ChatUiPayload, ChatUsage, OniState } from '~~/shared/types/chat'
 import { PRESET_QUESTIONS } from '~~/shared/presets'
 
 export type ChatPart
   = | { type: 'text', text: string }
     | { type: 'tool', id: string, name: string, state: 'running' | 'done' | 'error', ui?: ChatUiPayload }
+
+/** One bar of the glass box timeline. Times are ms since the question was sent. */
+export type TraceStep
+  = | { kind: 'model', id: string, step: ChatModelStep, startMs: number, endMs?: number, usage?: ChatUsage, stopReason?: string | null }
+    | { kind: 'tool', id: string, name: string, startMs: number, endMs?: number, ok?: boolean, input?: string, output?: string }
+
+/** Behind the scenes of an answer (glass box panel), measured in the browser from the stream. */
+export interface MessageTrace {
+  /** performance.now() when the question was sent. */
+  startedAt: number
+  firstTokenMs?: number
+  totalMs?: number
+  model?: string
+  reason?: ChatRouteReason
+  cached?: boolean
+  steps: TraceStep[]
+  usage?: ChatUsage
+  cost?: number
+}
 
 export interface Message {
   id: string
@@ -12,6 +31,7 @@ export interface Message {
   parts: ChatPart[]
   /** Follow-up questions offered as buttons under the answer. */
   suggestions?: string[]
+  trace?: MessageTrace
   timestamp: Date
 }
 
@@ -29,6 +49,8 @@ const offerMode = ref(false)
 const isLoading = ref(false)
 const showBubble = ref(false)
 const hasInteracted = ref(false)
+// Glass box panels under the answers: folded by default, one switch for all of them.
+const showTrace = ref(false)
 
 let abortController: AbortController | null = null
 
@@ -154,8 +176,60 @@ export const useAiChat = () => {
     }, 0)
   }
 
+  const applyTrace = (trace: MessageTrace, event: ChatTrace) => {
+    const now = Math.round(performance.now() - trace.startedAt)
+    switch (event.kind) {
+      case 'route':
+        trace.model = event.model
+        trace.reason = event.reason
+        trace.cached = event.cached
+        break
+      case 'model-start':
+        trace.steps.push({ kind: 'model', id: `model-${event.step}`, step: event.step, startMs: now })
+        break
+      case 'model-end': {
+        const step = trace.steps.find(s => s.id === `model-${event.step}`)
+        if (step?.kind === 'model') Object.assign(step, { endMs: now, usage: event.usage, stopReason: event.stopReason })
+        break
+      }
+      case 'tool-io': {
+        const step = trace.steps.find(s => s.id === event.id)
+        if (step?.kind === 'tool') Object.assign(step, { input: event.input, output: event.output })
+        break
+      }
+      case 'usage':
+        trace.usage = event.usage
+        trace.cost = event.cost
+        break
+    }
+  }
+
+  /** Tool calls on the glass box timeline (visible ones and follow-up suggestions alike). */
+  const traceTool = (trace: MessageTrace, event: Extract<ChatStreamEvent, { type: 'tool-start' | 'tool-end' }>) => {
+    const now = Math.round(performance.now() - trace.startedAt)
+    const step = trace.steps.find(s => s.id === event.id)
+    if (event.type === 'tool-start') {
+      if (!step) trace.steps.push({ kind: 'tool', id: event.id, name: event.name, startMs: now })
+    }
+    else if (step?.kind === 'tool') {
+      Object.assign(step, { endMs: now, ok: event.ok })
+    }
+    else {
+      trace.steps.push({ kind: 'tool', id: event.id, name: event.name, startMs: now, endMs: now, ok: event.ok })
+    }
+  }
+
   const applyEvent = (assistant: Message, event: ChatStreamEvent) => {
+    const trace = assistant.trace
+    if (trace) {
+      if (event.type === 'text' && trace.firstTokenMs === undefined) trace.firstTokenMs = Math.round(performance.now() - trace.startedAt)
+      if (event.type === 'tool-start' || event.type === 'tool-end') traceTool(trace, event)
+      if (event.type === 'done') trace.totalMs = Math.round(performance.now() - trace.startedAt)
+    }
     switch (event.type) {
+      case 'trace':
+        if (trace) applyTrace(trace, event.trace)
+        break
       case 'text': {
         markSpeaking()
         const last = assistant.parts.at(-1)
@@ -221,7 +295,7 @@ export const useAiChat = () => {
       .filter(m => m.content)
 
     messages.value.push({ id: newId(), role: 'user', parts: [{ type: 'text', text: content }], timestamp: new Date() })
-    messages.value.push({ id: newId(), role: 'assistant', parts: [], timestamp: new Date() })
+    messages.value.push({ id: newId(), role: 'assistant', parts: [], trace: { startedAt: performance.now(), steps: [] }, timestamp: new Date() })
     if (messages.value.length > MAX_MESSAGES) {
       messages.value = messages.value.slice(-MAX_MESSAGES)
     }
@@ -288,6 +362,9 @@ export const useAiChat = () => {
     finally {
       isLoading.value = false
       abortController = null
+      if (assistant.trace && assistant.trace.totalMs === undefined) {
+        assistant.trace.totalMs = Math.round(performance.now() - assistant.trace.startedAt)
+      }
       // Drop an answer that never received anything (e.g. stopped immediately).
       if (assistant.parts.length === 0) {
         messages.value = messages.value.filter(m => m.id !== assistant.id)
@@ -343,6 +420,7 @@ export const useAiChat = () => {
     messages,
     inputMessage,
     isLoading,
+    showTrace,
     avatarState,
     mode,
     status: pilot.status,

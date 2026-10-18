@@ -271,6 +271,13 @@
                     <p class="text-[10px] mt-1.5 text-right opacity-50">
                       {{ message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
                     </p>
+                    <!-- How the answer was made: one switch opens every panel -->
+                    <ChatTraceView
+                      v-if="message.role === 'assistant' && message.trace?.model"
+                      v-model:open="showTrace"
+                      :trace="message.trace"
+                      :live="isLoading && message.id === messages.at(-1)?.id"
+                    />
                   </div>
                 </div>
               </TransitionGroup>
@@ -494,6 +501,7 @@ const {
   messages,
   inputMessage,
   isLoading,
+  showTrace,
   avatarState,
   mode,
   status,
