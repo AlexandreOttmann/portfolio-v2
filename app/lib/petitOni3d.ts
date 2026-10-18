@@ -72,20 +72,31 @@ function parsePath(d: string) {
   return { segments, vertices }
 }
 
-/** A stroked path as one geometry: a tube per segment, a sphere at each vertex (round caps and joins). */
+/**
+ * A stroked path as one geometry: a tube per segment, a sphere at each vertex
+ * (round caps and joins). Pieces are merged in drawing order (cap, segment,
+ * joint, segment…), so growing the draw range draws the stroke like a pen.
+ */
 function strokeGeometry(paths: string[], radius = LINE_RADIUS) {
   const parts: BufferGeometry[] = []
+  const sphereAt = (vertex: Vector3) => new SphereGeometry(radius, 14, 10).translate(vertex.x, vertex.y, vertex.z)
   for (const d of paths) {
     const { segments, vertices } = parsePath(d)
-    for (const segment of segments) {
+    parts.push(sphereAt(vertices[0]!))
+    segments.forEach((segment, k) => {
       const straight = segment instanceof LineCurve3
       parts.push(new TubeGeometry(segment, straight ? 2 : 24, radius, 14, false))
-    }
-    for (const vertex of vertices) {
-      parts.push(new SphereGeometry(radius, 14, 10).translate(vertex.x, vertex.y, vertex.z))
-    }
+      if (vertices[k + 1]) parts.push(sphereAt(vertices[k + 1]!))
+    })
   }
   return mergeGeometries(parts)!
+}
+
+/** Shows the first `progress` (0 to 1) of a stroke, in drawing order. */
+export function drawStroke(mesh: Mesh, progress: number) {
+  const total = mesh.geometry.index?.count ?? 0
+  const count = progress >= 1 ? Infinity : Math.floor((total * Math.max(0, progress)) / 3) * 3
+  mesh.geometry.setDrawRange(0, count)
 }
 
 /** Mesh whose origin sits at `pivot` (SVG coords), so it scales and rotates around it. */

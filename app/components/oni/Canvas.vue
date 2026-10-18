@@ -16,13 +16,19 @@ const props = withDefaults(defineProps<{
   hovered?: boolean
   /** Stop rendering (hidden, off-screen). */
   active?: boolean
+  /** Play the arrival intro (see OniScene). */
+  intro?: boolean
 }>(), {
   pointer: () => ({ x: 0, y: 0 }),
   mood: null,
   hovered: false,
   active: true,
+  intro: false,
 })
-const emit = defineEmits<{ ready: [] }>()
+const emit = defineEmits<{ ready: [], introDone: [] }>()
+
+// During the intro the CSS glow waits for the neon to be on.
+const powered = ref(!props.intro)
 
 const color = useColorMode()
 const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
@@ -36,7 +42,7 @@ const bright = computed(() => props.hovered || props.mood === 'curious' || ['thi
 <template>
   <div
     class="oni3d"
-    :class="{ 'oni3d--bright': bright, 'oni3d--dim': mood === 'sleeping' }"
+    :class="{ 'oni3d--bright': bright && powered, 'oni3d--dim': mood === 'sleeping', 'oni3d--off': !powered }"
     :style="{ '--oni-glow': glowColor }"
   >
     <TresCanvas
@@ -54,7 +60,10 @@ const bright = computed(() => props.hovered || props.mood === 'curious' || ['thi
         :active="active"
         :reduced-motion="reducedMotion"
         :mood="mood"
+        :intro="intro"
         @ready="emit('ready')"
+        @powered="powered = true"
+        @intro-done="emit('introDone')"
       />
     </TresCanvas>
   </div>
@@ -69,6 +78,10 @@ const bright = computed(() => props.hovered || props.mood === 'curious' || ['thi
 
 .oni3d--bright :deep(canvas) {
   filter: drop-shadow(0 0 8px var(--oni-glow)) drop-shadow(0 0 28px var(--oni-glow)) drop-shadow(0 0 48px var(--oni-glow));
+}
+
+.oni3d--off :deep(canvas) {
+  filter: none;
 }
 
 .oni3d--dim :deep(canvas) {
