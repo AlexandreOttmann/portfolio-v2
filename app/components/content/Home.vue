@@ -14,19 +14,13 @@
         <HomeProfilePicture />
         <OniPerch class="absolute -top-10 left-[calc(50%+1.5rem)] z-20 size-40 sm:-top-20 sm:left-[calc(50%+3rem)] sm:size-72" />
       </div>
+      <!-- Revealed once Petit-Oni's arrival intro is over, while it flies to its perch -->
       <Motion
-        :initial="{
-          scale: 1.1,
-          opacity: 0,
-          filter: 'blur(20px)',
-        }"
-        :animate="{
-          scale: 1,
-          opacity: 1,
-          filter: 'blur(0px)',
-        }"
+        :initial="HERO_HIDDEN"
+        :animate="intro === 'playing' ? HERO_HIDDEN : HERO_SHOWN"
         :transition="{
           duration: 0.6,
+          delay: introPlayed ? 0.35 : 0,
         }"
       >
         <div class="z-20 flex flex-col items-center justify-center">
@@ -104,6 +98,12 @@
 <script setup>
 const color = useColorMode()
 const isDark = computed(() => color.value === 'dark')
+
+const HERO_HIDDEN = { scale: 1.1, opacity: 0, filter: 'blur(20px)' }
+const HERO_SHOWN = { scale: 1, opacity: 1, filter: 'blur(0px)' }
+const { intro } = useOniCompanion()
+const introPlayed = ref(false)
+watch(intro, value => value === 'playing' && (introPlayed.value = true))
 </script>
 
 <style scoped>

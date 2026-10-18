@@ -28,7 +28,7 @@ const CURIOUS_ON_NEW_PAGE_MS = 1600
 
 const { avatarState, mode, setMode, isDesktop } = useAiChat()
 const { pilotTarget } = useSitePilot()
-const { perch, ready, stowed, visible } = useOniCompanion()
+const { perch, ready, stowed, visible, intro } = useOniCompanion()
 const { notice } = usePresence()
 const route = useRoute()
 const { locale } = useI18n()
@@ -50,6 +50,11 @@ const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(ma
 // Spring state: center of the oni in the viewport, its size and opacity.
 const body = { x: 0, y: 0, vx: 0, vy: 0, size: MAX_SIZE, vs: 0, opacity: 0 }
 let placed = false
+/** Just out of the intro: flies to its perch instead of snapping to it. */
+const landing = ref(false)
+watch(intro, (value, previous) => {
+  if (value === 'done' && previous === 'playing') landing.value = true
+})
 
 const cursor = { x: 0, y: 0, seen: false }
 let lastActivity = Date.now()
@@ -133,6 +138,12 @@ function decide(now: number): Target {
     return { x: spot.x, y: clamp(y, 90 + size / 2, vh - 140 - size / 2), size }
   }
 
+  // Intro: big, in the middle of the screen, in front of the curtain.
+  if (intro.value === 'playing') {
+    const size = Math.min(BASE, vw * 0.62)
+    return { x: vw / 2, y: vh * 0.45, size, opacity: 1, look: { x: vw / 2, y: vh * 0.45 }, stiffness: 900 }
+  }
+
   if (stowed.value) {
     const size = 96
     return { x: viewportRight - size * 0.18, y: vh * 0.62, size, opacity: 1, look: { x: -1e4, y: vh * 0.62 }, stiffness: 60 }
@@ -156,7 +167,8 @@ function decide(now: number): Target {
       opacity: 1,
       look: lookAtCursor,
       // Glued to the perch while the page scrolls.
-      stiffness: 900,
+      // Glued while the page scrolls, but a gentle flight there after the intro.
+      stiffness: landing.value ? 45 : 900,
       perched: true,
     }
   }
@@ -203,6 +215,8 @@ useRafFn(({ delta }) => {
 
   const target = decide(now)
   perched.value = !!target.perched
+  // Landed (or off somewhere else): back to normal.
+  if (landing.value && (!target.perched || (Math.hypot(target.x - body.x, target.y - body.y) < 3 && Math.abs(body.vx) + Math.abs(body.vy) < 30))) landing.value = false
 
   if (!placed || reducedMotion.value) {
     body.x = target.x
@@ -227,7 +241,7 @@ useRafFn(({ delta }) => {
   const opacity = ready.value ? target.opacity : 0
   body.opacity += (opacity - body.opacity) * (1 - Math.exp(-8 * dt))
   shown.value = body.opacity > 0.02
-  visible.value = shown.value && !stowed.value && body.opacity > 0.5
+  visible.value = shown.value && !stowed.value && intro.value !== 'playing' && body.opacity > 0.5
 
   const look = now < scrollLookUntil ? { x: target.look.x, y: body.y - scrollLookY * 400 } : target.look
   gaze.x = clamp((look.x - body.x) / 500, -1, 1)
@@ -280,7 +294,10 @@ const label = computed(() => {
 </script>
 
 <template>
-  <div class="pointer-events-none fixed inset-0 z-40 overflow-hidden">
+  <div
+    class="pointer-events-none fixed inset-0 overflow-hidden"
+    :class="intro === 'playing' || landing ? 'z-[110]' : 'z-40'"
+  >
     <div
       ref="root"
       class="absolute left-0 top-0 origin-center opacity-0 will-change-transform"
@@ -293,7 +310,9 @@ const label = computed(() => {
         :mood="mood"
         :hovered="hovered"
         :active="shown || !ready"
+        :intro="intro === 'playing'"
         @ready="ready = true"
+        @intro-done="intro === 'playing' && (intro = 'done')"
       />
       <!-- Hit area: the face only, so the transparent corners don't block the page. -->
       <button

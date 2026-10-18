@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useLoop, useTres } from '@tresjs/core'
-import { PMREMGenerator, type WebGLRenderer } from 'three'
+import { PMREMGenerator, type Mesh, type WebGLRenderer } from 'three'
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
 import type { OniState } from '~~/shared/types/chat'
-import { createPetitOni, type OniMood, type OniPalette } from '~/lib/petitOni3d'
+import { createPetitOni, drawStroke, type OniMood, type OniPalette } from '~/lib/petitOni3d'
 
 /**
  * Animates the 3D Petit-Oni from the chat agent's state, mirroring the SVG
@@ -24,9 +24,17 @@ const props = defineProps<{
   reducedMotion: boolean
   /** Companion moods, only shown while the agent is idle. */
   mood?: OniMood | null
+  /** Play the arrival intro from the first frame; set back to false to skip it. */
+  intro?: boolean
 }>()
 
-const emit = defineEmits<{ ready: [] }>()
+const emit = defineEmits<{
+  ready: []
+  /** Intro: the neon is on for good (the CSS glow can come in). */
+  powered: []
+  /** Intro over (played or skipped). */
+  introDone: []
+}>()
 
 const oni = createPetitOni(props.palette)
 watch(() => props.palette, palette => oni.setPalette(palette))
@@ -56,6 +64,57 @@ let nextBlink = 2
 let blinkUntil = -1
 let rendered = false
 watch(() => props.state, () => (stateAt = time))
+
+/*
+ * Intro, "Petit-Oni s'allume" (seconds from its first frame): the strokes are
+ * drawn like a pen on an unlit glass tube, the eyes pop in, the neon flickers
+ * on, then it blinks, looks at the visitor and hops.
+ */
+const INTRO_STROKES: [Mesh, number, number][] = [
+  [oni.brow, 0.1, 0.55],
+  [oni.horns[0], 0.35, 0.85],
+  [oni.horns[1], 0.35, 0.85],
+  [oni.ears[0], 0.6, 0.95],
+  [oni.ears[1], 0.6, 0.95],
+  [oni.mouth, 0.75, 1.3],
+]
+const INTRO_EYES = [1.15, 1.45] as const
+const INTRO_POWERED = 1.86
+const INTRO_AWAKE = 2.15
+const INTRO_BLINK = [2.3, 2.43] as const
+const INTRO_HOP = [2.42, 2.8] as const
+const INTRO_END = 2.8
+
+const clamp01 = (n: number) => Math.max(0, Math.min(1, n))
+const easeOutBack = (n: number) => 1 + 2.7 * (n - 1) ** 3 + 1.7 * (n - 1) ** 2
+
+/** Neon tube powering on: a few stutters, then a small surge that settles. */
+function flicker(at: number) {
+  if (at < 1.55) return 0
+  if (at < 1.62) return 0.9
+  if (at < 1.7) return 0.1
+  if (at < 1.74) return 0.8
+  if (at < INTRO_POWERED) return 0.15
+  const settle = clamp01((at - INTRO_POWERED) / 0.3)
+  return 1 + 0.4 * Math.sin(settle * Math.PI)
+}
+
+let introAt: number | null = null
+let introFinished = !props.intro
+let poweredSent = false
+if (props.intro) for (const [mesh] of INTRO_STROKES) drawStroke(mesh, 0)
+
+function finishIntro() {
+  if (introFinished) return
+  introFinished = true
+  for (const [mesh] of INTRO_STROKES) drawStroke(mesh, 1)
+  oni.setPalette(props.palette)
+  if (!poweredSent) emit('powered')
+  emit('introDone')
+}
+watch(() => props.intro, (playing) => {
+  if (!playing) finishIntro()
+})
 
 onBeforeRender(({ delta }) => {
   const dt = Math.min(delta, 0.1)
@@ -173,6 +232,47 @@ onBeforeRender(({ delta }) => {
   v.sparkle = damp(v.sparkle, sparkle, 8, dt)
   v.orb = damp(v.orb, orb, 5, dt)
   v.wave = damp(v.wave, wave, 6, dt)
+
+  let power = 1
+  if (!introFinished) {
+    introAt ??= time
+    const at = time - introAt
+    if (at >= INTRO_END) {
+      finishIntro()
+    }
+    else {
+      for (const [mesh, from, to] of INTRO_STROKES) drawStroke(mesh, (at - from) / (to - from))
+      // Faces the visitor while being drawn, then free to look at the pointer.
+      if (at < INTRO_AWAKE) {
+        v.rx = 0
+        v.ry = Math.sin(at * 1.4) * 0.12
+        v.rz = 0
+        v.eyeX = 0
+        v.eyeY = 0
+      }
+      v.eyeScale = easeOutBack(clamp01((at - INTRO_EYES[0]) / (INTRO_EYES[1] - INTRO_EYES[0])))
+      v.eyeOpen = at > INTRO_BLINK[0] && at < INTRO_BLINK[1] ? 0.1 : 1
+      v.browY = 0
+      v.mouth = 1
+      v.sparkle = at > INTRO_POWERED && at < 2.4 ? 1 : 0
+      v.orb = 0
+      v.wave = 0
+      hop = at > INTRO_HOP[0] ? Math.sin(clamp01((at - INTRO_HOP[0]) / (INTRO_HOP[1] - INTRO_HOP[0])) * Math.PI) * 0.35 : 0
+      float *= clamp01(at / INTRO_END)
+      shake = 0
+      power = flicker(at)
+      v.glow = power
+      // Unlit glass tube until the power comes in.
+      const lit = 0.22 + 0.78 * Math.min(power, 1)
+      oni.materials.line.color.set(props.palette.line).multiplyScalar(lit)
+      oni.materials.eyes.color.set(props.palette.eyes).multiplyScalar(lit)
+      oni.materials.eyes.emissiveIntensity = props.palette.glow * 0.6 * Math.min(power, 1)
+      if (!poweredSent && at >= INTRO_POWERED) {
+        poweredSent = true
+        emit('powered')
+      }
+    }
+  }
 
   oni.root.position.set(shake, float + hop, 0)
   oni.head.rotation.set(v.rx, v.ry, v.rz)

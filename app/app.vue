@@ -7,9 +7,14 @@ const isDark = computed(() => color.value === 'dark')
 const { locale } = useI18n()
 const route = useRoute()
 
-// Petit-Oni companion (3D, WebGL 2), follows the visitor across pages.
+// Petit-Oni companion (3D, WebGL 2), follows the visitor across pages,
+// after an arrival intro on the first visit of the home page.
+useHead({ script: [{ key: 'oni-intro', innerHTML: INTRO_HEAD_SCRIPT, tagPosition: 'head' }] })
 const webgl = ref(false)
-onMounted(() => (webgl.value = supportsWebGL()))
+onMounted(() => {
+  webgl.value = supportsWebGL()
+  startOniIntro(webgl.value)
+})
 </script>
 
 <template>
@@ -35,6 +40,7 @@ onMounted(() => (webgl.value = supportsWebGL()))
         </NuxtLayout>
       </UApp>
       <Toaster close-button />
+      <OniCurtain />
 
       <MarqueeBg
         v-if="!route.path.includes('works')"
