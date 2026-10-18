@@ -55,12 +55,15 @@ useEventListener(window, 'touchmove', skip, { passive: true })
   </div>
 </template>
 
-<style scoped>
+<!-- Not scoped: Vue compiles `:global(html[…]) .oni-curtain` to `html[…]` alone, which hid the whole page. -->
+<style>
 /* The head script decided the intro won't play: never paint the curtain. */
-:global(html[data-oni-intro='skip']) .oni-curtain {
+html[data-oni-intro='skip'] .oni-curtain {
   display: none;
 }
+</style>
 
+<style scoped>
 /* Safety net if JavaScript never takes over. */
 .oni-curtain {
   animation: oni-curtain-failsafe 0.6s ease 7s forwards;
