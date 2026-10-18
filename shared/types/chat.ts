@@ -118,4 +118,6 @@ export interface ChatRequestBody {
   /** Sent in "Évaluer une offre d'emploi" mode: the server uses the matcher model. */
   intent?: 'job-offer'
   messages: Array<{ role: 'user' | 'assistant', content: string }>
+  /** Other visitors on the site right now (usePresence), and what they look at (`project:<slug>`, `article:<slug>`). */
+  live?: { others: number, viewing: string[] }
 }

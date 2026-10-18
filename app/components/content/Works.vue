@@ -76,5 +76,12 @@ watch([pendingProjectStem, projects], ([stem, list]) => {
   nextTick(() => openProject(project))
 }, { immediate: true })
 
+// The other visitors (and Petit-Oni) see which project is open.
+const { focus } = usePresence()
+watch([selectedProject, isDialogOpen], ([project, open]) => {
+  focus.value = project && open ? `project:${projectSlug(project.stem)}` : null
+})
+onBeforeUnmount(() => (focus.value = null))
+
 const isCanvasView = ref(true)
 </script>

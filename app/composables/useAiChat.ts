@@ -116,6 +116,7 @@ export const useAiChat = () => {
   const { locale } = useI18n()
   const pilot = useSitePilot()
   const { mode } = pilot
+  const presence = usePresence()
 
   const t = (fr: string, en: string) => locale.value === 'fr' ? fr : en
 
@@ -310,6 +311,9 @@ export const useAiChat = () => {
       locale: locale.value === 'en' ? 'en' : 'fr',
       messages: [...history, { role: 'user', content }],
       ...(isJobOffer ? { intent: 'job-offer' as const } : {}),
+      ...(presence.connected.value && presence.count.value > 1
+        ? { live: { others: presence.count.value - 1, viewing: presence.othersViewing.value.slice(0, 8) } }
+        : {}),
     }
 
     try {

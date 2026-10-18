@@ -9,6 +9,8 @@ import type { Ref } from 'vue'
 const perch = shallowRef<HTMLElement | null>(null)
 /** The 3D oni has drawn its first frame: the perch can drop its flat SVG. */
 const ready = ref(false)
+/** The companion is on screen (it can say something, see PresenceLive). */
+const visible = ref(false)
 let stowed: Ref<boolean> | undefined
 
 /** The 3D oni needs WebGL 2; without it the perch keeps the SVG and there is no companion. */
@@ -24,5 +26,5 @@ export function supportsWebGL() {
 export function useOniCompanion() {
   // Put away by the visitor: it only peeks from the edge of the screen. Remembered across visits.
   stowed ??= useLocalStorage('petit-oni-stowed', false)
-  return { perch, ready, stowed }
+  return { perch, ready, stowed, visible }
 }

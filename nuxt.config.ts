@@ -92,6 +92,10 @@ export default defineNuxtConfig({
       resend: !!process.env.NUXT_PRIVATE_RESEND_API_KEY,
       // Petit-Oni animation gallery (/oni-lab): always on in dev, opt-in elsewhere.
       oniLab: false,
+      // Live presence (usePresence): Supabase Realtime with the publishable key,
+      // safe to expose. Without it, presence is off (local tabs only in dev).
+      supabaseUrl: 'https://jobpwmdcwtsjsqwzfifb.supabase.co',
+      supabaseKey: '',
     },
   },
 

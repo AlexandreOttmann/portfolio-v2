@@ -29,6 +29,8 @@ onMounted(() => (webgl.value = supportsWebGL()))
           <HomeAiChat />
           <ClientOnly>
             <LazyOniCompanion v-if="webgl" />
+            <!-- Other visitors, live (ghost cursors, counter, reactions) -->
+            <PresenceLive />
           </ClientOnly>
         </NuxtLayout>
       </UApp>
