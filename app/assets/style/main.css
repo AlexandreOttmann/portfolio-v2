@@ -208,3 +208,35 @@ body {
     outline-offset: 4px;
   }
 }
+
+/* Page transitions (View Transitions API, nuxt.config experimental.viewTransition).
+   A project card morphs into its page header, see useProjectTransition. */
+::view-transition-group(*) {
+  animation-duration: 0.55s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+}
+
+/* Images keep their crop while the box morphs, instead of stretching. */
+.project-vt-image {
+  view-transition-class: project-image;
+}
+
+::view-transition-old(*.project-image),
+::view-transition-new(*.project-image) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
