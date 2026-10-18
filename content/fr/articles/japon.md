@@ -125,3 +125,26 @@ Des bains brûlants qui effacent la fatigue. Le bruit des festivals d’été. L
 Et surtout : l’envie d’y retourner. Parce qu’un mois ne suffit pas. Parce qu’un été là-bas vous marque pour longtemps.
 
 ![DSCF9711.JPG](/articles_photo/DSCF9711.JPG)
+
+# 📷 **La galerie**
+
+::photo-gallery
+---
+title: Galerie du Japon
+images:
+  - src: /articles_photo/DSCF9362.JPG
+  - src: /articles_photo/DSCF9283.JPG
+  - src: /articles_photo/DSCF9041.JPG
+  - src: /articles_photo/DSCF9404.JPG
+  - src: /articles_photo/DSCF9671.JPG
+  - src: /articles_photo/DSCF1378.JPG
+  - src: /articles_photo/DSCF1393.JPG
+  - src: /articles_photo/DSCF9985.JPG
+  - src: /articles_photo/DSCF0067.JPG
+  - src: /articles_photo/DSCF1580.JPG
+  - src: /articles_photo/DSCF0053.JPG
+  - src: /articles_photo/DSCF9553.JPG
+  - src: /articles_photo/DSCF9428.JPG
+  - src: /articles_photo/DSCF9711.JPG
+---
+::

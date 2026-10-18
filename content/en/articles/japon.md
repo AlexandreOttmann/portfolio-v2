@@ -125,3 +125,26 @@ Scalding baths that erase exhaustion. The sound of summer festivals. Lanterns da
 And above all: the desire to return. Because a month isn’t enough. Because a summer there marks you for a long time.
 
 ![DSCF9711.JPG](/articles_photo/DSCF9711.JPG)
+
+# 📷 **The gallery**
+
+::photo-gallery
+---
+title: Japan gallery
+images:
+  - src: /articles_photo/DSCF9362.JPG
+  - src: /articles_photo/DSCF9283.JPG
+  - src: /articles_photo/DSCF9041.JPG
+  - src: /articles_photo/DSCF9404.JPG
+  - src: /articles_photo/DSCF9671.JPG
+  - src: /articles_photo/DSCF1378.JPG
+  - src: /articles_photo/DSCF1393.JPG
+  - src: /articles_photo/DSCF9985.JPG
+  - src: /articles_photo/DSCF0067.JPG
+  - src: /articles_photo/DSCF1580.JPG
+  - src: /articles_photo/DSCF0053.JPG
+  - src: /articles_photo/DSCF9553.JPG
+  - src: /articles_photo/DSCF9428.JPG
+  - src: /articles_photo/DSCF9711.JPG
+---
+::
