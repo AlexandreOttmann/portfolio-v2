@@ -159,6 +159,8 @@ export const collections = {
         title: z.string(),
         description: z.string(),
         active: z.boolean().optional(),
+        // Turning point: a little 3D object on the scrollytelling timeline.
+        prop: z.enum(['clarinet', 'mixer', 'torii', 'yuzu']).optional(),
       }),
     ),
   }),
@@ -172,6 +174,8 @@ export const collections = {
         title: z.string(),
         description: z.string(),
         active: z.boolean().optional(),
+        // Turning point: a little 3D object on the scrollytelling timeline.
+        prop: z.enum(['clarinet', 'mixer', 'torii', 'yuzu']).optional(),
       }),
     ),
   }),

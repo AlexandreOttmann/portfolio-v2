@@ -2,6 +2,7 @@
     {
         "year": 2010,
         "icon": "i-heroicons-paint-brush",
+        "prop": "clarinet",
         "title": "Artistic Beginnings",
         "description": "I started my first studies at the national conservatory in clarinet, far from imagining the future twists and turns"
     },
@@ -14,6 +15,7 @@
     {
         "year": 2016,
         "icon": "i-material-symbols:looks-one-outline",
+        "prop": "mixer",
         "title": "Turning Point #1, Sound Engineering",
         "description": "Career change, bachelor's degree in sound engineering at Abbey Road Institute Paris/London"
     },
@@ -38,6 +40,7 @@
     {
         "year": 2023,
         "icon": "i-material-symbols:japanese-flag-rounded",
+        "prop": "torii",
         "title": "Japan",
         "description": "With my diploma in hand and my apprenticeship for the following year secured, I didn't think long before deciding to leave for a month in Japan"
     },
@@ -50,6 +53,7 @@
     {
         "year": 2024,
         "icon": "i-streamline-flex:dog-1",
+        "prop": "yuzu",
         "title": "Yuzu",
         "description": "2024 is the year Yuzu arrived! My little Shiba Inu who changed my life!"
     },

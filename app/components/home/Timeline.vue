@@ -1,188 +1,246 @@
-<template>
-    <div>
-        <div ref="scrollContainer" class="max-w-full mx-auto overflow-x-auto overflow-y-hidden select-none px-6"
-            :class="[timelineTrackHeightClass]" style="padding-bottom: 18rem;">
-            <div class="relative mx-auto" :class="[timelineTrackHeightClass]"
-                :style="{ width: `${timelineInnerWidth}px` }">
-                <template v-if="props.showHorizontalLines">
-                    <div v-if="props.events.length > 1" class="absolute left-0 h-px bg-neutral-700"
-                        :style="{ top: timelineHorizontalLineTop, width: `calc(${timelineInnerWidth}px - ${props.itemWidth}px)` }" />
-                    <div v-if="props.events.length > 0 && displayAsActiveIndex >= 0"
-                        class="absolute left-0 h-px bg-primary transition-all duration-400 ease-out"
-                        :style="{ top: timelineHorizontalLineTop, width: `${displayAsActiveIndex * props.itemWidth}px` }" />
-                </template>
-
-                <div v-for="(event, index) in props.events" :key="`event-node-${index}`" data-oni-curious
-                    class="absolute top-0 group isolate" :class="[displayAsActiveIndex === index ? 'z-30' : 'z-0']"
-                    :style="{ left: `${index * props.itemWidth}px`, width: `${props.itemWidth}px`, height: '100%' }"
-                    tabindex="0" @mouseenter="handlePointerEnterItem(index)" @mouseleave="handlePointerLeaveItem()"
-                    @focusin="handlePointerEnterItem(index)" @focusout="handlePointerLeaveItem()">
-                    <span v-if="shouldDisplayYear(event.year, index)"
-                        class="absolute top-0 left-0 font-serif italic -translate-x-1/2 text-xs font-medium text-muted whitespace-nowrap">
-                        {{ event.year }}
-                    </span>
-
-                    <div class="absolute left-0 transition-all duration-300 ease-out transform origin-top"
-                        :style="{ top: timelineHorizontalLineTop }" :class="[
-                            displayAsActiveIndex === index
-                                ? `${props.mainTickHeightActive} ${props.tickThicknessActive} rainbow-gradient`
-                                : `${props.mainTickHeightBase} group-hover:${props.mainTickHeightHover}`,
-                            index <= displayAsActiveIndex
-                                ? `${props.tickThicknessActive} rainbow-gradient`
-                                : `${props.tickThicknessBase} bg-accented`
-                        ]" />
-
-                    <div v-if="index < props.events.length - 1">
-                        <div v-for="tickNumber in numberOfIntermediateTicks" :key="`subtick-${index}-${tickNumber}`"
-                            class="absolute transition-colors duration-300 ease-out" :class="[
-                                props.intermediateTickHeight,
-                                index < displayAsActiveIndex ? `${props.tickThicknessActive} rainbow-gradient` : `${props.tickThicknessBase} bg-accented`
-                            ]"
-                            :style="{ top: timelineHorizontalLineTop, left: `${(tickNumber * props.itemWidth / (numberOfIntermediateTicks + 1))}px` }" />
-                    </div>
-
-                    <div class="absolute left-0 -translate-x-1/2 flex items-center justify-center size-10 transition-all duration-300 ease-out"
-                        :style="{ top: displayAsActiveIndex === index ? iconActivePushedTop : iconDefaultTop }" :class="[
-                            displayAsActiveIndex === index ? 'text-highlighted' :
-                                index < displayAsActiveIndex ? 'text-muted' :
-                                    'text-muted/50'
-                        ]">
-                        <UIcon :name="event.icon" class="text-xl size-5" />
-                    </div>
-
-                    <div class="absolute transition-all duration-300 ease-out z-20" :class="[
-                        detailsContainerWidthClass,
-                        displayAsActiveIndex === index ? 'opacity-100' : 'opacity-0',
-                        props.events.length === 1 ? 'left-0 -translate-x-1/2 text-center' :
-                            index === 0 ? 'left-0 text-left' :
-                                index === 1 ? (props.events.length === 2 ? 'left-0 -translate-x-full text-right' : 'left-0 text-left') :
-                                    index === props.events.length - 1 ? 'left-0 -translate-x-full text-right' :
-                                        index === props.events.length - 2 ? 'left-0 -translate-x-full text-right' :
-                                            'left-0 -translate-x-1/2 text-center'
-                    ]" :style="{ top: displayAsActiveIndex === index ? detailsActivePushedTop : detailsDefaultTop }">
-                        <h4 class="mb-1 text-base font-semibold text-highlighted">
-                            {{ event.title }}
-                        </h4>
-                        <p class="text-sm leading-snug text-muted">
-                            {{ event.description }}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
 <script setup lang="ts">
+import type { TimelineProp } from '~/lib/timelineProps3d'
+
+/**
+ * The journey as a scrollytelling frise. The section is as tall as the
+ * journey; its frame sticks to the screen while the page scrolls through it,
+ * the frise slides from the first event to today, and the current event is
+ * told underneath. Turning points carry a little 3D object (HomeTimelineStage)
+ * instead of an icon.
+ */
 interface TimelineEvent {
-    year: number
-    icon: string
-    title: string
-    description: string
-    active?: boolean
+  year: number
+  icon: string
+  title: string
+  description: string
+  prop?: TimelineProp
 }
 
-const props = withDefaults(defineProps<{
-    events: TimelineEvent[]
-    tickThicknessBase?: string
-    tickThicknessActive?: string
-    intermediateTickHeight?: string
-    mainTickHeightBase?: string
-    mainTickHeightHover?: string
-    mainTickHeightActive?: string
-    showHorizontalLines?: boolean
-    itemWidth?: number
-}>(), {
-    tickThicknessBase: 'w-0.5',
-    tickThicknessActive: 'w-0.5',
-    intermediateTickHeight: 'h-2',
-    mainTickHeightBase: 'h-6',
-    mainTickHeightHover: 'h-8',
-    mainTickHeightActive: 'h-12',
-    showHorizontalLines: false,
-    itemWidth: 55,
-})
+const props = defineProps<{ events: TimelineEvent[] }>()
 
-const initialActivePropIndex = computed(() => {
-    console.log('events', props.events)
-    const idx = props.events.findIndex(event => event.active === true)
-    return idx !== -1 ? idx : -1
-})
+/** Scroll distance per event, in % of the screen height. */
+const STEP_VH = 22
+/** Space between two ticks on the frise, in CSS pixels. */
+const ITEM_WIDTH = 76
+const INTERMEDIATE_TICKS = 5
 
-const hoveredIndex = ref(-1)
+const { locale } = useI18n()
+const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
 
-const displayAsActiveIndex = computed(() => {
-    return hoveredIndex.value !== -1 ? hoveredIndex.value : initialActivePropIndex.value
-})
+const section = ref<HTMLElement | null>(null)
+const frise = ref<HTMLElement | null>(null)
+const track = ref<HTMLElement | null>(null)
 
-function handlePointerEnterItem(index: number) {
-    hoveredIndex.value = index
+const count = computed(() => props.events.length)
+const last = computed(() => Math.max(count.value - 1, 0))
+
+/**
+ * Where the frise is, in events (0 = first event). Read every frame by the 3D
+ * stage, so it is a plain object; `current` is the only reactive part.
+ */
+const position = { progress: 0, itemWidth: ITEM_WIDTH }
+const current = ref(0)
+const event = computed(() => props.events[current.value])
+const items = computed(() => props.events.flatMap((e, index) => (e.prop ? [{ index, prop: e.prop }] : [])))
+
+const webgl = ref(false)
+const stageReady = ref(false)
+const onScreen = useElementVisibility(section)
+onMounted(() => (webgl.value = supportsWebGL()))
+
+/** Scroll progress through the section, from 0 (top reaches the top of the screen) to 1. */
+function target() {
+  const rect = section.value?.getBoundingClientRect()
+  if (!rect) return 0
+  const distance = rect.height - window.innerHeight
+  if (distance <= 0) return 0
+  return Math.min(1, Math.max(0, -rect.top / distance)) * last.value
 }
 
-function handlePointerLeaveItem() {
-    hoveredIndex.value = -1
-}
-
-const shouldDisplayYear = (eventYear: number, index: number): boolean => {
-    if (index === 0) return true
-    if (index > 0 && props.events[index - 1]) {
-        return eventYear !== props.events[index - 1]?.year
-    }
-    return true
-}
-
-const detailsContainerWidthClass = 'w-[240px]'
-const timelineTrackHeightClass = 'h-60'
-const numberOfIntermediateTicks = 7
-
-const timelineInnerWidth = computed(() => {
-    return props.events.length * props.itemWidth
+let placed = false
+useRafFn(({ delta }) => {
+  if (!onScreen.value && placed) return
+  const goal = target()
+  const dt = Math.min(delta / 1000, 1 / 30)
+  position.progress = !placed || reducedMotion.value
+    ? goal
+    : position.progress + (goal - position.progress) * (1 - Math.exp(-10 * dt))
+  placed = true
+  current.value = Math.round(position.progress)
+  if (track.value && frise.value) {
+    // The current point of the frise stays at the center.
+    const x = frise.value.clientWidth / 2 - position.progress * ITEM_WIDTH
+    track.value.style.transform = `translate3d(${x}px, 0, 0)`
+  }
 })
 
-const timelineHorizontalLineTop = '1.5rem'
+/** Scrolls the page to the moment of the journey where `index` is current. */
+function goTo(index: number) {
+  if (!section.value) return
+  const top = section.value.getBoundingClientRect().top + window.scrollY
+  const distance = section.value.offsetHeight - window.innerHeight
+  window.scrollTo({ top: top + (distance * index) / Math.max(last.value, 1), behavior: reducedMotion.value ? 'auto' : 'smooth' })
+}
 
-const iconDefaultTop = computed(() => `calc(${timelineHorizontalLineTop} + 1rem + 0.5rem)`)
-const iconActivePushedTop = computed(() => `calc(${timelineHorizontalLineTop} + 2.5rem + 0.5rem)`)
-
-const detailsDefaultTop = computed(() => `calc(${iconDefaultTop.value} + 2.5rem)`)
-const detailsActivePushedTop = computed(() => `calc(${iconActivePushedTop.value} + 2.5rem)`)
-
-const scrollContainer = ref<HTMLElement | null>(null)
-
-onMounted(() => {
-    // Scroll to end on mobile devices on mount
-    if (window.innerWidth < 768 && scrollContainer.value) {
-        scrollContainer.value.scrollLeft = scrollContainer.value.scrollWidth
-    }
-})
+const isTurningPoint = (e: TimelineEvent) => !!e.prop && webgl.value && stageReady.value
+const showYear = (index: number) => index === 0 || props.events[index]!.year !== props.events[index - 1]!.year
+const pad = (n: number) => String(n).padStart(2, '0')
+const label = computed(() => locale.value === 'fr' ? 'Parcours' : 'Journey')
 </script>
 
+<template>
+  <section
+    ref="section"
+    class="relative"
+    :style="{ height: `calc(100svh + ${last * STEP_VH}svh)` }"
+  >
+    <div class="sticky top-0 flex h-svh flex-col justify-center">
+      <header class="mb-2 flex items-baseline justify-between px-2 text-xs text-muted">
+        <span class="font-serif italic text-sm">{{ label }}</span>
+        <span class="tabular-nums tracking-widest">{{ pad(current + 1) }} / {{ pad(count) }}</span>
+      </header>
+
+      <div
+        ref="frise"
+        class="frise relative select-none"
+        aria-hidden="true"
+      >
+        <!-- 3D objects of the turning points, over their ticks -->
+        <div class="relative h-36">
+          <ClientOnly>
+            <LazyHomeTimelineStage
+              v-if="webgl && items.length"
+              class="absolute inset-0 transition-opacity duration-700"
+              :class="stageReady ? 'opacity-100' : 'opacity-0'"
+              :items="items"
+              :track="position"
+              :active="onScreen"
+              @ready="stageReady = true"
+            />
+          </ClientOnly>
+        </div>
+
+        <div
+          ref="track"
+          class="relative h-20 will-change-transform"
+        >
+          <div
+            class="absolute left-0 top-0 h-px bg-accented"
+            :style="{ width: `${last * ITEM_WIDTH}px` }"
+          />
+          <div
+            v-for="(e, index) in events"
+            :key="index"
+            class="absolute top-0"
+            :style="{ left: `${index * ITEM_WIDTH}px` }"
+          >
+            <UIcon
+              v-if="!isTurningPoint(e)"
+              :name="e.icon"
+              class="absolute -top-9 left-0 size-5 -translate-x-1/2 transition-all duration-300"
+              :class="index === current ? 'scale-150 text-highlighted' : index < current ? 'text-muted' : 'text-muted/50'"
+            />
+            <button
+              type="button"
+              tabindex="-1"
+              class="absolute -left-3 top-0 h-14 w-6 cursor-pointer"
+              @click="goTo(index)"
+            />
+            <div
+              class="pointer-events-none absolute left-0 top-0 w-0.5 -translate-x-1/2 transition-all duration-300"
+              :class="[
+                index === current ? 'h-10' : 'h-5',
+                index <= current ? 'rainbow-gradient' : 'bg-accented',
+              ]"
+            />
+            <template v-if="index < last">
+              <div
+                v-for="tick in INTERMEDIATE_TICKS"
+                :key="tick"
+                class="pointer-events-none absolute top-0 h-2 w-px"
+                :class="index < current ? 'rainbow-gradient' : 'bg-accented'"
+                :style="{ left: `${(tick * ITEM_WIDTH) / (INTERMEDIATE_TICKS + 1)}px` }"
+              />
+            </template>
+            <span
+              v-if="showYear(index)"
+              class="absolute left-0 top-12 -translate-x-1/2 font-serif text-xs italic transition-colors duration-300"
+              :class="index === current ? 'text-highlighted' : 'text-muted'"
+            >
+              {{ e.year }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- The current chapter -->
+      <div
+        class="relative mx-auto min-h-48 w-full max-w-xl px-4 text-center"
+        data-oni-curious
+        aria-live="polite"
+      >
+        <Transition
+          mode="out-in"
+          enter-active-class="transition duration-300 ease-out"
+          enter-from-class="opacity-0 translate-y-3 blur-sm"
+          leave-active-class="transition duration-150 ease-in"
+          leave-to-class="opacity-0 -translate-y-2 blur-sm"
+        >
+          <div
+            v-if="event"
+            :key="current"
+          >
+            <p class="font-serif text-5xl italic text-highlighted/90 sm:text-6xl">
+              {{ event.year }}
+            </p>
+            <h3 class="mt-3 text-base font-semibold text-highlighted">
+              {{ event.title }}
+            </h3>
+            <p class="mt-1 text-sm leading-relaxed text-muted text-pretty">
+              {{ event.description }}
+            </p>
+          </div>
+        </Transition>
+      </div>
+    </div>
+
+    <!-- The whole journey, for screen readers and keyboard users -->
+    <ol class="sr-only">
+      <li
+        v-for="(e, index) in events"
+        :key="index"
+      >
+        <button
+          type="button"
+          @click="goTo(index)"
+        >
+          {{ e.year }}, {{ e.title }}
+        </button>
+        <p>{{ e.description }}</p>
+      </li>
+    </ol>
+  </section>
+</template>
 
 <style scoped>
-.group:focus {
-    outline: none;
+/* The frise fades out on both sides. */
+.frise {
+  mask-image: linear-gradient(to right, transparent, black 18%, black 82%, transparent);
 }
 
-/* Rainbow gradient animation */
 @keyframes rainbow-slide {
-    0% {
-        background-position: 0% 50%;
-    }
+  0% {
+    background-position: 0% 50%;
+  }
 
-    100% {
-        background-position: 200% 50%;
-    }
+  100% {
+    background-position: 200% 50%;
+  }
 }
 
 .rainbow-gradient {
-    background: linear-gradient(90deg,
-            #ff0080,
-            #ff8c00,
-            #40e0d0,
-            #4169e1,
-            #9370db,
-            #ff1493,
-            #ff0080);
-    background-size: 200% 100%;
-    animation: rainbow-slide 3s linear infinite;
+  background: linear-gradient(90deg, #ff0080, #ff8c00, #40e0d0, #4169e1, #9370db, #ff1493, #ff0080);
+  background-size: 200% 100%;
+  animation: rainbow-slide 3s linear infinite;
 }
 </style>
