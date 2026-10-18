@@ -38,7 +38,7 @@
           :class="[
             isMobile ? 'cursor-default' : 'cursor-pointer',
             index % 2 === 0 ? 'rotate-1' : '-rotate-1',
-          ]" data-canvas-item @click="onItemClick" @mouseenter="hoveredItemIndex = index"
+          ]" data-canvas-item @pointerdown="pressed = $event.currentTarget as HTMLElement" @click="onItemClick" @mouseenter="hoveredItemIndex = index"
           @mouseleave="hoveredItemIndex = null">
           <div class="absolute inset-0 rounded-2xl bg-gradient-to-br p-1 border-2 border-default/50">
             <div class="relative size-full overflow-hidden rounded-xl">
@@ -126,7 +126,7 @@
 import type { CanvasItem } from '~~/modules/infinite-canvas/types'
 import type { Collections } from '@nuxt/content'
 
-const props = defineProps({
+defineProps({
   projects: {
     type: Array as () => (Collections['projects_en'] | Collections['projects_fr'])[],
     required: true,
@@ -155,18 +155,12 @@ const isMobile = computed(() => {
   return isMobileDevice(navigator.userAgent, window.innerWidth)
 })
 
+// The item pressed last: it morphs into the project page (the canvas repeats items, so only this one).
+const pressed = ref<HTMLElement | null>(null)
+
 const handleItemClick = (item: CanvasItem) => {
   // Desktop-only click handling
-  if (import.meta.client) {
-    if (item.src.includes('/articles/')) {
-      emit('select', item)
-      return
-    }
-    else {
-      const selectedProject = props.projects.find((project: Collections['projects_en'] | Collections['projects_fr']) => project.stem === item.src)
-      emit('select', selectedProject)
-    }
-  }
+  if (import.meta.client) emit('select', item, pressed.value)
 }
 
 const imageUrls = computed(() => data.value?.items.map((item: any) => item.image))
