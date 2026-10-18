@@ -35,6 +35,12 @@ const variant = ref<'color' | 'mono'>(useAppConfig().petitOni.variant)
           variant="mono"
           class="w-56"
         />
+        <ClientOnly>
+          <LazyHomeOniCanvas
+            :state="current"
+            class="size-72"
+          />
+        </ClientOnly>
       </div>
       <div class="flex flex-wrap justify-center gap-2">
         <UButton
