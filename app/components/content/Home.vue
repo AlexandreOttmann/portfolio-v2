@@ -16,7 +16,7 @@
           <!-- Flat SVG until the 3D one has rendered its first frame (or without WebGL) -->
           <ChatPetitOniAvatar
             v-if="!oniReady"
-            :variant="isDark ? oniVariant : 'color'"
+            variant="color"
             class="absolute inset-[22%] w-[56%]"
           />
           <ClientOnly>
@@ -119,7 +119,6 @@
 <script setup>
 const color = useColorMode()
 const isDark = computed(() => color.value === 'dark')
-const oniVariant = useAppConfig().petitOni.variant
 
 // The 3D Petit-Oni needs WebGL 2: otherwise the SVG one stays.
 const webgl = ref(false)

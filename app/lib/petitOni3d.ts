@@ -118,9 +118,8 @@ export interface OniPalette {
 }
 
 export const ONI_PALETTES = {
-  color: { line: '#F75474', eyes: '#2626A0', shine: '#ffffff', glow: 0.55 },
-  mono: { line: '#ffffff', eyes: '#ffffff', shine: '#0b0b0f', glow: 0.35 },
-  /** Light theme: white lines would vanish on a white page. */
+  dark: { line: '#F75474', eyes: '#2626A0', shine: '#ffffff', glow: 0.55 },
+  /** Softer glow on a white page. */
   light: { line: '#F75474', eyes: '#2626A0', shine: '#ffffff', glow: 0.15 },
 } satisfies Record<string, OniPalette>
 

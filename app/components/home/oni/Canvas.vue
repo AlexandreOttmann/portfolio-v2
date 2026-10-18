@@ -18,13 +18,10 @@ const { avatarState, setMode } = useAiChat()
 const state = computed(() => props.state ?? avatarState.value)
 const { locale } = useI18n()
 const color = useColorMode()
-const variant = useAppConfig().petitOni.variant
 
-const palette = computed(() => color.value === 'dark' ? ONI_PALETTES[variant] : ONI_PALETTES.light)
-const glowColor = computed(() => {
-  if (color.value !== 'dark') return 'rgb(247 84 116 / 0.3)'
-  return variant === 'mono' ? 'rgb(255 255 255 / 0.45)' : 'rgb(247 84 116 / 0.55)'
-})
+// Always pink and blue: the white (mono) chat variant looks flat in 3D.
+const palette = computed(() => color.value === 'dark' ? ONI_PALETTES.dark : ONI_PALETTES.light)
+const glowColor = computed(() => color.value === 'dark' ? 'rgb(247 84 116 / 0.55)' : 'rgb(247 84 116 / 0.3)')
 
 const wrapper = ref<HTMLElement | null>(null)
 const visible = useElementVisibility(wrapper)
