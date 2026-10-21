@@ -4,7 +4,7 @@ import { checkBotId } from 'botid/server'
 import { z } from 'zod/v4'
 import { answerCacheKey, getCachedAnswer, isPresetQuestion, replayAnswer, setCachedAnswer } from '../utils/ai/answer-cache'
 import { buildProfileContext, type Locale } from '../utils/ai/knowledge'
-import { buildSystemPrompt } from '../utils/ai/prompt'
+import { buildLiveNote, buildSystemPrompt } from '../utils/ai/prompt'
 import { runTool, TERMINAL_TOOLS, toolDefinitions } from '../utils/ai/tools'
 import { enforceRateLimit } from '../utils/rate-limit'
 import { useServerSupabase } from '../utils/supabase'
@@ -41,6 +41,10 @@ const bodySchema = z.object({
     role: z.enum(['user', 'assistant']),
     content: z.string().trim().max(8000),
   })).min(1).max(24),
+  live: z.object({
+    others: z.number().int().min(1).max(1000),
+    viewing: z.array(z.string().regex(/^(project|article):[a-z0-9-]{1,60}$/)).max(8),
+  }).optional(),
 }).refine(({ messages }) => messages.at(-1)?.role === 'user', 'The last message must come from the user')
   .refine(({ messages }) => (messages.at(-1)?.content.length ?? 0) <= MAX_QUESTION_CHARS, 'Message too long')
   .refine(({ messages }) => messages.reduce((sum, m) => sum + m.content.length, 0) <= MAX_TOTAL_CHARS, 'Conversation too long')
@@ -145,7 +149,7 @@ export default defineEventHandler(async (event) => {
   if (!parsed.success) {
     throw createError({ statusCode: 400, statusMessage: 'Invalid chat request' })
   }
-  const { locale, messages, intent } = parsed.data
+  const { locale, messages, intent, live } = parsed.data
   const question = messages.at(-1)!.content
   const hasLink = LINK_RE.test(question)
   const isJobOffer = intent === 'job-offer' || hasLink || question.length >= JOB_OFFER_MIN_CHARS
@@ -224,6 +228,8 @@ export default defineEventHandler(async (event) => {
           text: systemText,
           cache_control: { type: 'ephemeral' },
         }]
+        // Who else is on the site right now: after the cache breakpoint, so the cached prefix stays stable.
+        if (live && !cacheable) system.push({ type: 'text', text: buildLiveNote(live) })
 
         const cacheKey = cacheable
           ? answerCacheKey(model, locale, question, createHash('sha256').update(systemText).update(JSON.stringify(tools)).digest('hex'))

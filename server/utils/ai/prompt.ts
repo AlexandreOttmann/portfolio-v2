@@ -6,6 +6,17 @@ const LANGUAGE: Record<Locale, string> = {
 }
 
 /**
+ * Other visitors on the site right now (live presence, anonymous), appended
+ * after the cached system prompt. Slugs are validated by the API schema.
+ */
+export function buildLiveNote(live: { others: number, viewing: string[] }): string {
+  const viewing = live.viewing.map(key => key.replace(':', ' ')).join(', ')
+  return `# Right now on the site
+${live.others} other anonymous visitor${live.others > 1 ? 's are' : ' is'} browsing the portfolio at the same moment (their cursors appear as little ghost onis).${viewing ? ` Someone is currently looking at: ${viewing} (slugs).` : ''}
+Mention it only when it fits naturally (e.g. "someone else is looking at Oni Auction right now") or when asked; never invent more about them, they are anonymous.`
+}
+
+/**
  * System prompt: stable instructions first, then the compiled profile. The
  * whole block is cached, so it must not contain anything request-specific.
  */

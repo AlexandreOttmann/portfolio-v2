@@ -2,84 +2,98 @@
     {
         "year": 2010,
         "icon": "i-heroicons-paint-brush",
+        "prop": "clarinet",
         "title": "Des débuts artistiques",
         "description": "Je commence mes premières études par le conservatoire national en clarinette, bien loin de m'imaginer les futurs rebondissements"
     },
     {
         "year": 2014,
         "icon": "i-heroicons-code-bracket-square",
+        "prop": "laptop",
         "title": "L'étincelle du code",
         "description": "Mon premier contact avec le monde du développement, un an au sein de l'école d'ingénieurs EXIA CESI"
     },
     {
         "year": 2016,
         "icon": "i-material-symbols:looks-one-outline",
+        "prop": "mixer",
         "title": "Turning Point #1, ingénierie du son",
         "description": "Changement de carrière, bachelor en ingénierie du son à l'Abbey Road Institute Paris/Londres"
     },
     {
         "year": 2018,
         "icon": "i-solar:headphones-round-bold",
+        "prop": "headphones",
         "title": "Début de freelancing",
         "description": "En 2018 je commence le freelancing comme ingénieur du son, à travailler sur podcast, pubs, musique, livres audios... J'y ai passé 4-5 ans à travers de multiples missions variées ! "
     },
     {
         "year": 2019,
         "icon": "i-material-symbols:book-2-outline-rounded",
+        "prop": "book",
         "title": "Ma première startup",
         "description": "3 ans à Koober, une app mobile comme responsable audiovisuel à gérer la création et une équipe de voix off"
     },
     {
         "year": 2022,
         "icon": "i-material-symbols:looks-two-outline",
+        "prop": "clock",
         "title": "Turning Point #2, Web development & O'Clock",
         "description": "Malheureusement Koober a été liquidée, et j'ai décidé sans hésitation de me tourner vers le développement web à l'école O'Clock"
     },
     {
         "year": 2023,
         "icon": "i-material-symbols:japanese-flag-rounded",
+        "prop": "torii",
         "title": "Japon",
         "description": "Mon diplôme en poche, mon alternance pour l'année suivante trouvée, je n'ai pas longtemps réfléchi avant de décider à partir un mois au Japon"
     },
     {
         "year": 2023,
         "icon": "i-heroicons-rocket-launch",
+        "prop": "rocket",
         "title": "Wild Code School, Quanted Square et Alternance",
         "description": "De retour du Japon j'ai commencé directement mon alternance de 1an à Quanted Square tout en étant en formation à la Wild Code School pour préparer le title de Concepteur d'application"
     },
     {
         "year": 2024,
         "icon": "i-streamline-flex:dog-1",
+        "prop": "yuzu",
         "title": "Yuzu",
         "description": "2024 est l'année de l'arrivée de Yuzu ! Ma petite Shiba Inu qui a changé ma vie !"
     },
     {
         "year": 2024,
         "icon": "i-material-symbols:crop-square-outline",
+        "prop": "cube",
         "title": "QuantedSquare",
         "description": "Je ne serai jamais assez reconnaissant envers QuantedSquare, Julien et Fabien pour m'avoir embauché après 1 an d'alternance et fait confiance tout en me permettant d'apprendre à un rythme effréné ! 🫶"
     },
     {
         "year": 2025,
         "icon": "i-material-symbols:travel",
+        "prop": "plane",
         "title": "Odysway",
         "description": "Mon premier grand projet en tant que développeur, contribuer au développement de Odysway, une agence de voyage en ligne"
     },
     {
         "year": 2025,
         "icon": "i-material-symbols:crown-outline",
+        "prop": "crown",
         "title": "Crown",
         "description": "Premier projet de zéro avec QuantedSquare, nous avons construit Crown, une app d'enchère en temps réel pour le procurement / les industriels"
     },
     {
         "year": 2025,
         "icon": "i-material-symbols:school-outline-rounded",
+        "prop": "cap",
         "title": "Cap sur l'IA appliquée",
         "description": "L'aventure QuantedSquare se termine fin 2025. J'en profite pour plonger dans l'IA appliquée (RAG, agents, Python) avec EONI et Oni Auction, tout en continuant Odysway en freelance."
     },
     {
         "year": 2026,
         "icon": "i-game-icons:octopus",
+        "prop": "octopus",
         "title": "Eledone",
         "description": "Depuis mai 2026, je suis AI Platform Engineer chez Eledone, une startup qui automatise la saisie de commandes B2B avec des agents IA. Au programme : OCR + LLM, Software Factory et Python sur GCP.",
         "active": true

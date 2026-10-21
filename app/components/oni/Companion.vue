@@ -28,7 +28,8 @@ const CURIOUS_ON_NEW_PAGE_MS = 1600
 
 const { avatarState, mode, setMode, isDesktop } = useAiChat()
 const { pilotTarget } = useSitePilot()
-const { perch, ready, stowed, intro } = useOniCompanion()
+const { perch, ready, stowed, visible, intro } = useOniCompanion()
+const { notice } = usePresence()
 const route = useRoute()
 const { locale } = useI18n()
 const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
@@ -39,6 +40,8 @@ const hovered = ref(false)
 const mood = ref<OniMood | null>(null)
 const shown = ref(false)
 const perched = ref(false)
+/** Its speech bubble (what it notices about the other visitors). */
+const bubble = ref<HTMLElement | null>(null)
 /** Mutated every frame and read by the scene every frame: no re-render. */
 const gaze = { x: 0, y: 0, lean: 0 }
 
@@ -97,6 +100,13 @@ useEventListener(window, 'touchstart', wake, { passive: true })
 watch(() => route.path, () => {
   wake()
   curiousUntil = Date.now() + CURIOUS_ON_NEW_PAGE_MS
+})
+
+// It has something to say about the other visitors: wakes up, all ears.
+watch(notice, (value) => {
+  if (!value) return
+  wake()
+  curiousUntil = Date.now() + CURIOUS_ON_NEW_PAGE_MS * 2
 })
 
 interface Target { x: number, y: number, size: number, opacity: number, look: { x: number, y: number }, stiffness: number, perched?: boolean }
@@ -231,6 +241,7 @@ useRafFn(({ delta }) => {
   const opacity = ready.value ? target.opacity : 0
   body.opacity += (opacity - body.opacity) * (1 - Math.exp(-8 * dt))
   shown.value = body.opacity > 0.02
+  visible.value = shown.value && !stowed.value && intro.value !== 'playing' && body.opacity > 0.5
 
   const look = now < scrollLookUntil ? { x: target.look.x, y: body.y - scrollLookY * 400 } : target.look
   gaze.x = clamp((look.x - body.x) / 500, -1, 1)
@@ -244,6 +255,16 @@ useRafFn(({ delta }) => {
   if (overlay.value) {
     overlay.value.style.transform = `translate3d(${body.x + body.size * 0.28}px, ${body.y - body.size * 0.42}px, 0)`
     overlay.value.style.opacity = String(body.opacity)
+  }
+  // The bubble: beside the oni, toward the middle of the screen; above it, or below when there is no room.
+  if (bubble.value) {
+    const { offsetWidth: w, offsetHeight: h } = bubble.value
+    const vw = window.innerWidth
+    const toRight = body.x < vw / 2
+    const x = clamp(toRight ? body.x + body.size * 0.25 : body.x - body.size * 0.25 - w, 12, vw - w - 12)
+    const above = body.y - body.size * 0.45 - h
+    const y = above >= 12 ? above : body.y + body.size * 0.4
+    bubble.value.style.transform = `translate3d(${x}px, ${y}px, 0)`
   }
 })
 
@@ -307,6 +328,24 @@ const label = computed(() => {
         @blur="leave"
       />
     </div>
+
+    <!-- What it notices about the other visitors (see usePresence) -->
+    <Transition
+      enter-active-class="transition-opacity duration-300 ease-out"
+      enter-from-class="opacity-0"
+      leave-active-class="transition-opacity duration-200 ease-in"
+      leave-to-class="opacity-0"
+    >
+      <p
+        v-if="notice && visible"
+        ref="bubble"
+        :key="notice.at"
+        class="pointer-events-none absolute left-0 top-0 w-56 rounded-2xl border border-default bg-elevated/90 p-3 text-xs text-highlighted shadow-xl backdrop-blur"
+        role="status"
+      >
+        {{ notice.text }}
+      </p>
+    </Transition>
 
     <div
       ref="overlay"

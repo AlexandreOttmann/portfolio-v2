@@ -159,6 +159,8 @@ export const collections = {
         title: z.string(),
         description: z.string(),
         active: z.boolean().optional(),
+        // The little 3D object drawn above the event on the timeline (app/lib/timelineProps3d.ts).
+        prop: z.enum(['clarinet', 'laptop', 'mixer', 'headphones', 'book', 'clock', 'torii', 'rocket', 'yuzu', 'cube', 'plane', 'crown', 'cap', 'octopus']).optional(),
       }),
     ),
   }),
@@ -172,6 +174,8 @@ export const collections = {
         title: z.string(),
         description: z.string(),
         active: z.boolean().optional(),
+        // The little 3D object drawn above the event on the timeline (app/lib/timelineProps3d.ts).
+        prop: z.enum(['clarinet', 'laptop', 'mixer', 'headphones', 'book', 'clock', 'torii', 'rocket', 'yuzu', 'cube', 'plane', 'crown', 'cap', 'octopus']).optional(),
       }),
     ),
   }),
