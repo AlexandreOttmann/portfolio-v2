@@ -7,7 +7,7 @@ import type { TimelineProp } from '~/lib/timelineProps3d'
 /** Transparent WebGL canvas over the timeline's frise, with its 3D objects and their neon glow. */
 defineProps<{
   items: Array<{ index: number, prop: TimelineProp }>
-  track: { progress: number, itemWidth: number }
+  track: { progress: number, velocity: number, itemWidth: number }
   active: boolean
 }>()
 const emit = defineEmits<{ ready: [] }>()

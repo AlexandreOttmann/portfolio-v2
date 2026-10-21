@@ -7,14 +7,15 @@ import { createTimelineProps, type TimelineProp } from '~/lib/timelineProps3d'
 
 /**
  * The timeline's 3D objects, drawn in one canvas laid over the frise. Each
- * object sits above the tick of its event: the frise scrolls by `track.progress`
- * events, so the object is `(index - progress) * itemWidth` pixels from the
- * center. It grows and turns to face the visitor when its event is current.
+ * object sits above the tick of its event: the frise is moved by
+ * `track.progress` events, so the object is `(index - progress) * itemWidth`
+ * pixels from the center. It grows and turns to face the visitor when its
+ * event is current, and spins along when the frise is scrubbed.
  */
 const props = defineProps<{
   items: Array<{ index: number, prop: TimelineProp }>
-  /** Mutated every frame by the timeline (no re-render): position on the frise, in events. */
-  track: { progress: number, itemWidth: number }
+  /** Mutated every frame by the timeline (no re-render): position on the frise and its speed, in events (per second). */
+  track: { progress: number, velocity: number, itemWidth: number }
   palette: OniPalette
   active: boolean
   reducedMotion: boolean
@@ -66,8 +67,9 @@ onBeforeRender(({ delta }) => {
       (-height / 2 + BOTTOM_PX + px / 2) * unit,
       0,
     )
-    // Slowly turning on the frise, facing the visitor (with a sway) when current.
-    item.spin += dt * (props.reducedMotion ? 0 : 0.6 * (1 - focus))
+    // Slowly turning on the frise, facing the visitor (with a sway) when current; whirls when scrubbed.
+    const whirl = Math.max(-7, Math.min(7, props.track.velocity * 2.5))
+    item.spin += props.reducedMotion ? 0 : dt * (0.6 * (1 - focus) - whirl)
     root.rotation.y = item.spin * (1 - focus) + Math.sin(t * 0.8) * 0.35 * focus
     root.rotation.x = 0.12 * focus
     root.visible = Math.abs(distance * props.track.itemWidth) < sizes.width.value / 2 + LARGE_PX
